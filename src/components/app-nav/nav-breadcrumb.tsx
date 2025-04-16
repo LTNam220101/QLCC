@@ -74,7 +74,7 @@ const NavBreadcrumb = () => {
           ) : (
             <Fragment key={index}>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">
+                <BreadcrumbLink href={breadcrumb.href || "/"}>
                   {breadcrumb.displayName}
                 </BreadcrumbLink>
               </BreadcrumbItem>

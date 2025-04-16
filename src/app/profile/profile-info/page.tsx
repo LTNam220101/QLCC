@@ -1,8 +1,9 @@
 "use client";
 import InfoRow from "@/components/info-row";
+import DeleteAccountModal from "@/components/profile/delete-account-modal";
 import ProfileNav from "@/components/profile/profile-nav";
 import { Button } from "@/components/ui/button";
-import { KeyRound, Pencil, Trash2 } from "lucide-react";
+import { KeyRound, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -13,7 +14,7 @@ const ProfileInfo = () => {
   };
   return (
     <div>
-      <ProfileNav title="Thông tin tài khoản">
+      <ProfileNav title="Thông tin tài khoản" backUrl="/">
         <Button className="flex items-center my-[10px]" onClick={changeProfile}>
           <Pencil />
           Sửa
@@ -53,13 +54,7 @@ const ProfileInfo = () => {
         </div>
 
         <div className="flex flex-col w-[136px] gap-[30px] mt-[30px]">
-          <Button
-            variant="warning"
-            className="flex items-center gap-2 font-medium"
-          >
-            <Trash2 />
-            Xoá tài khoản
-          </Button>
+          <DeleteAccountModal />
           <Button
             variant="default"
             className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 font-medium"
