@@ -30,6 +30,7 @@ const breadcrumbNameMap: Record<string, string> = {
   profile: "Tài khoản",
   "profile-info": "Thông tin tài khoản",
   "change-profile": "Sửa thông tin tài khoản",
+  "change-password": "Đổi mật khẩu",
 };
 const NavBreadcrumb = () => {
   const pathname = usePathname();

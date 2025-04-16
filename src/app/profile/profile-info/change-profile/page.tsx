@@ -1,38 +1,38 @@
-"use client";
+"use client"
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import ProfileNav from "@/components/profile/profile-nav";
-import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import ProfileNav from "@/components/profile/profile-nav"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Pencil, Calendar as CalendarIcon } from "lucide-react";
-import React from "react";
-import { Input } from "@/components/ui/input";
+  FormMessage
+} from "@/components/ui/form"
+import { Pencil, Calendar as CalendarIcon } from "lucide-react"
+import React from "react"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import InfoRow from "@/components/info-row";
+  SelectValue
+} from "@/components/ui/select"
+import InfoRow from "@/components/info-row"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { Calendar } from "@/components/ui/calendar";
-import { vi } from "date-fns/locale";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { Calendar } from "@/components/ui/calendar"
+import { vi } from "date-fns/locale"
 
 const formSchema = z.object({
   phoneNumber: z
@@ -47,18 +47,18 @@ const formSchema = z.object({
     .min(2, "Họ và tên phải có ít nhất 2 ký tự")
     .max(100, "Họ và tên không được quá 100 ký tự"),
   dateOfBirth: z.date({
-    required_error: "Vui lòng chọn ngày sinh",
+    required_error: "Vui lòng chọn ngày sinh"
   }),
   email: z.string().email("Email không hợp lệ").optional().or(z.literal("")),
   department: z.string({
-    required_error: "Vui lòng chọn phòng ban",
+    required_error: "Vui lòng chọn phòng ban"
   }),
   idNumber: z.string().optional(),
   idIssueDate: z.date().optional(),
   idIssuePlace: z.string().optional(),
-  gender: z.enum(["male", "female", "other"]).optional(),
-});
-type FormValues = z.infer<typeof formSchema>;
+  gender: z.enum(["male", "female", "other"]).optional()
+})
+type FormValues = z.infer<typeof formSchema>
 
 // Mock data for the form
 const defaultValues: Partial<FormValues> = {
@@ -68,26 +68,26 @@ const defaultValues: Partial<FormValues> = {
   email: "example@gmail.com",
   department: "it",
   idNumber: "123456789012",
-  gender: "male",
-};
+  gender: "male"
+}
 
 // Mock data for read-only fields
 const readOnlyData = {
   createdBy: "Admin",
   createdAt: "01/01/2023",
   updatedBy: "Admin",
-  updatedAt: "01/06/2023",
-};
+  updatedAt: "01/06/2023"
+}
 const ChangeProfile = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues,
-  });
+    defaultValues
+  })
 
   function onSubmit(data: FormValues) {
-    console.log(data);
+    console.log(data)
     // Here you would typically send the data to your API
-    alert("Thông tin đã được lưu thành công!");
+    alert("Thông tin đã được lưu thành công!")
   }
   return (
     <div>
@@ -345,7 +345,7 @@ const ChangeProfile = () => {
         </form>
       </Form>
     </div>
-  );
-};
+  )
+}
 
-export default ChangeProfile;
+export default ChangeProfile

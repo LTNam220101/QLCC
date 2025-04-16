@@ -1,17 +1,20 @@
-"use client";
-import InfoRow from "@/components/info-row";
-import DeleteAccountModal from "@/components/profile/delete-account-modal";
-import ProfileNav from "@/components/profile/profile-nav";
-import { Button } from "@/components/ui/button";
-import { KeyRound, Pencil } from "lucide-react";
-import { useRouter } from "next/navigation";
-import React from "react";
+"use client"
+import InfoRow from "@/components/info-row"
+import DeleteAccountModal from "@/components/profile/delete-account-modal"
+import ProfileNav from "@/components/profile/profile-nav"
+import { Button } from "@/components/ui/button"
+import { KeyRound, Pencil } from "lucide-react"
+import { useRouter } from "next/navigation"
+import React from "react"
 
 const ProfileInfo = () => {
-  const { push } = useRouter();
+  const { push } = useRouter()
   const changeProfile = () => {
-    push("/profile/profile-info/change-profile");
-  };
+    push("/profile/profile-info/change-profile")
+  }
+  const changePassword = () => {
+    push("/profile/change-password")
+  }
   return (
     <div>
       <ProfileNav title="Thông tin tài khoản" backUrl="/">
@@ -58,6 +61,7 @@ const ProfileInfo = () => {
           <Button
             variant="default"
             className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 font-medium"
+            onClick={changePassword}
           >
             <KeyRound />
             Đổi mật khẩu
@@ -65,7 +69,7 @@ const ProfileInfo = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProfileInfo;
+export default ProfileInfo
