@@ -8,7 +8,12 @@ const nextConfig: NextConfig = {
       {
         source: "/",
         destination: "/dashboard",
-        permanent: true,
+        permanent: false,
+      },
+      {
+        source: "/profile",
+        destination: "/profile/profile-info",
+        permanent: false,
       },
     ];
   },

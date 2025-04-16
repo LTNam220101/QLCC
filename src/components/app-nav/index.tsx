@@ -1,26 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 import {
   BookOpen,
   Bot,
   Command,
   Settings2,
   SquareTerminal,
-} from "lucide-react"
+} from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import { NavMain } from "./nav-main"
-import { NavUser } from "./nav-user"
+} from "@/components/ui/sidebar";
+import { NavMain } from "./nav-main";
 
 // This is sample data.
 const data = {
@@ -31,11 +28,6 @@ const data = {
   },
   navMain: [
     {
-      title: "TRANG CHỦ",
-      url: "/",
-      icon: SquareTerminal,
-      isActive: true,
-    },{
       title: "Thông tin toà nhà",
       url: "/dashboard",
       icon: SquareTerminal,
@@ -125,35 +117,33 @@ const data = {
       ],
     },
   ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="bg-[#9F7DF7]">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Command className="size-4" />
-                </div>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">Acme Inc</span>
-                  <span className="truncate text-xs">Enterprise</span>
-                </div>
-              </a>
-            </SidebarMenuButton>
+          <SidebarMenuItem className="flex items-center gap-2">
+            <div className="flex rounded-full size-[60px] items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground">
+              <Command className="size-[60px]" />
+            </div>
+            <div className="grid flex-1 text-left text-sm leading-tight">
+              <span className="truncate text-xl text-white">CÔNG TY A</span>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
+        <div className="flex items-center px-[18px] py-[14px] gap-[10px]">
+          <div className="w-8 h-8 border border-[#666666] rounded-lg flex items-center justify-center">
+            <Settings2 />
+          </div>
+          <span className="font-medium text-[#666]">TRANG CHỦ</span>
+        </div>
         <NavMain items={data.navMain} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={data.user} />
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

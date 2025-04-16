@@ -16,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import Link from "next/link";
 
 export function NavMain({
   items,
@@ -45,13 +46,13 @@ export function NavMain({
               <CollapsibleTrigger asChild>
                 <SidebarMenuButton tooltip={item.title}>
                   {item.icon && (
-                    <div className="w-8 h-8 border border-solid border-amber-100 flex items-center justify-center">
+                    <div className="w-8 h-8 border border-[#666666] bg-[#FCEBFF] rounded-lg flex items-center justify-center">
                       <item.icon />
                     </div>
                   )}
-                  <span>{item.title}</span>
+                  <span className="text-[#666]">{item.title}</span>
                   {item.items?.length && (
-                    <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                    <ChevronRight color="#3779F4" className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   )}
                 </SidebarMenuButton>
               </CollapsibleTrigger>
@@ -61,9 +62,9 @@ export function NavMain({
                     {item.items?.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
                         <SidebarMenuSubButton asChild>
-                          <a href={subItem.url}>
-                            <span>{subItem.title}</span>
-                          </a>
+                          <Link href={subItem.url}>
+                            <span className="text-[#666]">{subItem.title}</span>
+                          </Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}
