@@ -2,7 +2,7 @@ import React from "react";
 
 interface InfoRowProps {
   label: string;
-  value: string;
+  value: string | number;
   highlight?: boolean;
 }
 const InfoRow = ({ label, value }: InfoRowProps) => {

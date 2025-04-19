@@ -7,7 +7,12 @@ const nextConfig: NextConfig = {
       // Basic redirect
       {
         source: "/",
-        destination: "/dashboard",
+        destination: "/building-information/residents",
+        permanent: false,
+      },
+      {
+        source: "/building-information",
+        destination: "/building-information/residents",
         permanent: false,
       },
       {

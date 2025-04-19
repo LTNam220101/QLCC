@@ -17,6 +17,7 @@ const breadcrumbNameMap: Record<string, string> = {
   "building-information": "Thông tin toà nhà",
   residents: "Quản lý cư dân",
   apartments: "Quản lý căn hộ",
+  documents: "Quản lý tài liệu căn hộ",
   // Profile
   profile: "Tài khoản",
   "profile-info": "Thông tin tài khoản",

@@ -43,7 +43,7 @@ const data = {
         },
         {
           title: "Quản lý tài liệu căn hộ",
-          url: "/apartments",
+          url: "/documents",
         },
         {
           title: "Quản lý sổ tay cư dân",

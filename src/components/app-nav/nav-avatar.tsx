@@ -8,6 +8,7 @@ import {
 } from "../ui/dropdown-menu";
 import { KeyRound, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 
 const NavAvatar = () => {
   return (
@@ -32,10 +33,18 @@ const NavAvatar = () => {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-red text-md p-2 hover:text-red focus:text-red cursor-pointer">
-          <Link href="/login" className="flex items-center">
+          <div
+            className="flex items-center"
+            onClick={() => {
+              console.log("sign-out");
+              signOut({
+                redirectTo: "/login",
+              });
+            }}
+          >
             <LogOut color="red" className="size-4 mr-3" />
             Đăng xuất
-          </Link>
+          </div>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

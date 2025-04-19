@@ -3,10 +3,10 @@ import { buildings, getDisplayName, roles } from "./store/use-resident-store";
 import { Button } from "@/components/ui/button";
 import { Edit, Lock, Trash2 } from "lucide-react";
 import StatusBadge from "@/components/common/status-badge";
+import Link from "next/link";
 
 export const generateData = ({
   handleDeleteClick,
-  router,
 }: {
   handleDeleteClick?: (id: string) => void;
   router: any;
@@ -56,26 +56,18 @@ export const generateData = ({
     name: "Thao tác",
     render: (resident) => (
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() =>
-            router.push(`/building-information/residents/${resident.id}`)
-          }
-        >
-          <Lock className="h-4 w-4" color="#194FFF" />
-          <span className="sr-only">Chi tiết</span>
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() =>
-            router.push(`/building-information/residents/${resident.id}/edit`)
-          }
-        >
-          <Edit className="h-4 w-4" color="#194FFF" />
-          <span className="sr-only">Sửa</span>
-        </Button>
+        <Link href={`/building-information/residents/${resident.id}`}>
+          <Button variant="outline" size="icon">
+            <Lock className="h-4 w-4" color="#194FFF" />
+            <span className="sr-only">Chi tiết</span>
+          </Button>
+        </Link>
+        <Link href={`/building-information/residents/${resident.id}/edit`}>
+          <Button variant="outline" size="icon">
+            <Edit className="h-4 w-4" color="#194FFF" />
+            <span className="sr-only">Sửa</span>
+          </Button>
+        </Link>
         <Button
           variant="outline"
           size="icon"

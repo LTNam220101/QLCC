@@ -18,59 +18,61 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useApartmentStore } from "@/lib/store/use-apartment-store";
+import { useDocumentStore } from "@/lib/store/use-document-store";
 import { toast } from "sonner";
-import { generateData } from "@/lib/create-data-apartment-table";
 import TableData from "../common/table-data";
+import { generateData } from "@/lib/create-data-document-table";
 
-export function ApartmentTable() {
-  const router = useRouter();
+export function DocumentTable() {
   const {
-    filteredApartments,
+    filteredDocuments,
     currentPage,
     itemsPerPage,
     totalItems,
     deleteDialogOpen,
-    // apartmentToDelete,
+    // documentToDelete,
     setCurrentPage,
     setItemsPerPage,
     setDeleteDialogOpen,
-    setApartmentToDelete,
-    deleteApartment,
+    setDocumentToDelete,
+    deleteDocument,
     openDrawer,
-  } = useApartmentStore();
+  } = useDocumentStore();
 
-  // Xử lý xóa căn hộ
-  const handleDeleteClick = (id: string) => {
-    setApartmentToDelete(id);
+  // Xử lý xóa tài liệu
+  const handleDeleteClick = (id: number) => {
+    setDocumentToDelete(id);
     setDeleteDialogOpen(true);
   };
 
   const confirmDelete = () => {
-    deleteApartment();
-    toast("Đã xóa căn hộ khỏi hệ thống");
+    deleteDocument();
+    toast("Đã xóa tài liệu khỏi hệ thống");
   };
 
-  // Xử lý sửa căn hộ
+  // Xử lý sửa tài liệu
   const handleEditClick = (id: number) => {
-    const apartment = filteredApartments.find((apt) => apt.id === id);
-    if (apartment) {
-      openDrawer("edit", apartment);
+    const document = filteredDocuments.find((doc) => doc.id === id);
+    if (document) {
+      openDrawer("edit", document);
     }
   };
 
-  // Xử lý xem chi tiết căn hộ
+  // Xử lý xem chi tiết tài liệu
   const handleViewClick = (id: number) => {
-    router.push(`/apartments/${id}`);
+    const document = filteredDocuments.find((doc) => doc.id === id);
+    if (document) {
+      openDrawer("view", document);
+    }
   };
 
   // Tính toán phân trang
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const currentItems = filteredApartments.slice(startIndex, endIndex);
+  const currentItems = filteredDocuments.slice(startIndex, endIndex);
 
-  const columns = generateData({ router, handleDeleteClick, handleViewClick, handleEditClick });
+  const columns = generateData({ handleDeleteClick });
 
   return (
     <div className="space-y-4">
@@ -156,10 +158,10 @@ export function ApartmentTable() {
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Xác nhận xóa căn hộ</DialogTitle>
+            <DialogTitle>Xác nhận xóa tài liệu</DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn xóa căn hộ này? Hành động này không thể hoàn
-              tác.
+              Bạn có chắc chắn muốn xóa tài liệu này? Hành động này không thể
+              hoàn tác.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>

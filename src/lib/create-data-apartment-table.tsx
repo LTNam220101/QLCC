@@ -5,9 +5,11 @@ import { Edit, Lock, Trash2 } from "lucide-react";
 
 export const generateData = ({
   handleDeleteClick,
+  handleEditClick,
   router,
 }: {
   handleDeleteClick?: (id: string) => void;
+  handleEditClick?: (id: string) => void;
   router: any;
 }): Column<any>[] => [
   {
@@ -17,7 +19,7 @@ export const generateData = ({
   },
   {
     dataIndex: "apartmentNumber",
-    name: "Số căn hộ",
+    name: "Căn hộ",
   },
   {
     dataIndex: "apartment",
@@ -30,12 +32,15 @@ export const generateData = ({
     dataIndex: "area",
     name: "Diện tích",
     render: (resident) => {
-      return getDisplayName(resident.building, buildings);
+      return getDisplayName(resident.area, buildings);
     },
   },
   {
-    dataIndex: "vehicleCount",
-    name: "Số lượng phương tiện",
+    dataIndex: "createAt",
+    name: "Ngày tạo",
+    render: (resident) => {
+      return getDisplayName(resident.createAt, buildings);
+    },
   },
   {
     dataIndex: "note",
@@ -62,9 +67,7 @@ export const generateData = ({
         <Button
           variant="outline"
           size="icon"
-          onClick={() =>
-            router.push(`/building-information/apartments/${resident.id}/edit`)
-          }
+          onClick={() => handleEditClick?.(resident.id)}
         >
           <Edit className="h-4 w-4" color="#194FFF" />
           <span className="sr-only">Sửa</span>

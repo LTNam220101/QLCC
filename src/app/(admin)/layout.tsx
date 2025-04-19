@@ -1,14 +1,16 @@
+import { auth } from "@/auth";
 import { AppSidebar } from "@/components/app-nav";
 import NavBreadcrumb from "@/components/app-nav/nav-breadcrumb";
 import NavTrigger from "@/components/app-nav/nav-trigger";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await auth();
+  if (!session) return <div>Not authenticated</div>;
   return (
     <>
       <SidebarProvider>

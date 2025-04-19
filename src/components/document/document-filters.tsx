@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { Search, Trash2, Calendar as CalendarComponent } from "lucide-react";
+import { Calendar as CalendarComponent, Search, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,9 +12,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  useApartmentStore,
-  vehicleTypes,
-} from "@/lib/store/use-apartment-store";
+  useDocumentStore,
+  buildings,
+  documentStatuses,
+} from "@/lib/store/use-document-store";
 import {
   Popover,
   PopoverContent,
@@ -23,12 +24,11 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
-import { buildings } from "@/lib/store/use-resident-store";
+import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
 
-export function ApartmentFilters() {
-  const { filters, setFilter, clearFilters, applyFilters } =
-    useApartmentStore();
+export function DocumentFilters() {
+  const { filters, setFilter, clearFilters, applyFilters } = useDocumentStore();
 
   // Xử lý tìm kiếm
   const handleSearch = () => {
@@ -42,7 +42,15 @@ export function ApartmentFilters() {
 
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[14px] gap-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <Label className="mb-2">Tên tài liệu căn hộ</Label>
+          <Input
+            value={filters.name}
+            onChange={(e) => setFilter("name", e.target.value)}
+          />
+        </div>
+
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
@@ -64,25 +72,38 @@ export function ApartmentFilters() {
         </div>
 
         <div>
-          <Label className="mb-2">Căn hộ</Label>
-          <Input
-            value={filters.apartmentNumber}
-            onChange={(e) => setFilter("apartmentNumber", e.target.value)}
-          />
+          <Label className="mb-2">Trạng thái</Label>
+          <Select
+            value={filters.status}
+            onValueChange={(value) => setFilter("status", value)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Tất cả trạng thái</SelectItem>
+              {documentStatuses.map((status) => (
+                <SelectItem key={status.id} value={status.id}>
+                  {status.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div>
-          <Label className="mb-2">Ngày tạo (Từ - Đến)</Label>
+          <Label className="mb-2">Ngày hiệu lực (Từ - Đến)</Label>
           <Popover>
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                className="w-full justify-start text-left font-normal"
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !filters.effectiveDateRange && "text-muted-foreground"
+                )}
               >
-                {filters.dateRange
-                  ? format(filters.dateRange, "dd/MM/yyyy", { locale: vi })
-                  : null}
                 <CalendarComponent className="ml-auto h-4 w-4 opacity-50" />
+                {filters.effectiveDateRange}
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -95,19 +116,47 @@ export function ApartmentFilters() {
                       range.from,
                       "dd/MM/yyyy"
                     )} - ${format(range.to, "dd/MM/yyyy")}`;
-                    setFilter("dateRange", dateRange);
+                    setFilter("effectiveDateRange", dateRange);
                   }
                 }}
-                disabled={(date) =>
-                  date > new Date() || date < new Date("1900-01-01")
-                }
-                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
+        </div>
+
+        <div>
+          <Label className="mb-2">Ngày tạo (Từ - Đến)</Label>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className={cn(
+                  "w-full justify-start text-left font-normal",
+                  !filters.createdDateRange && "text-muted-foreground"
+                )}
+              >
+                <CalendarComponent className="ml-auto h-4 w-4 opacity-50" />
+                {filters.createdDateRange}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="range"
+                locale={vi}
+                onSelect={(range) => {
+                  if (range?.from && range?.to) {
+                    const dateRange = `${format(
+                      range.from,
+                      "dd/MM/yyyy"
+                    )} - ${format(range.to, "dd/MM/yyyy")}`;
+                    setFilter("createdDateRange", dateRange);
+                  }
+                }}
               />
             </PopoverContent>
           </Popover>
         </div>
       </div>
-
       {/* Nút tìm kiếm và xóa bộ lọc */}
       <div className="flex gap-2 mt-[21px]">
         <Button onClick={handleSearch}>

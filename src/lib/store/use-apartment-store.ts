@@ -19,10 +19,6 @@ export interface Apartment {
 export interface ApartmentFilters {
   building: string;
   apartmentNumber: string;
-  vehicleCount: string;
-  vehicleType: string;
-  area: string;
-  note: string;
   dateRange: string;
 }
 
@@ -161,10 +157,6 @@ export const useApartmentStore = create<ApartmentState>()(
         filters: {
           building: "",
           apartmentNumber: "",
-          vehicleCount: "",
-          vehicleType: "",
-          area: "",
-          note: "",
           dateRange: "",
         },
         currentPage: 1,
@@ -191,10 +183,6 @@ export const useApartmentStore = create<ApartmentState>()(
             filters: {
               building: "",
               apartmentNumber: "",
-              vehicleCount: "",
-              vehicleType: "",
-              area: "",
-              note: "",
               dateRange: "",
             },
           }),
@@ -218,32 +206,6 @@ export const useApartmentStore = create<ApartmentState>()(
                 .includes(filters.apartmentNumber.toLowerCase())
             );
           }
-
-          if (filters.vehicleCount) {
-            result = result.filter(
-              (apartment) =>
-                apartment.vehicleCount.toString() === filters.vehicleCount
-            );
-          }
-
-          if (filters.vehicleType) {
-            result = result.filter(
-              (apartment) => apartment.vehicleType === filters.vehicleType
-            );
-          }
-
-          if (filters.area) {
-            result = result.filter((apartment) =>
-              apartment.area.toString().includes(filters.area)
-            );
-          }
-
-          if (filters.note) {
-            result = result.filter((apartment) =>
-              apartment.note?.toLowerCase().includes(filters.note.toLowerCase())
-            );
-          }
-
           // Xử lý lọc theo khoảng thời gian nếu cần
 
           set({

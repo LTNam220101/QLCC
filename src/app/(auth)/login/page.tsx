@@ -20,6 +20,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CheckCircle2 } from "lucide-react";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { signIn } from "next-auth/react";
 
 // Định nghĩa schema xác thực form
 const loginSchema = z.object({
@@ -52,28 +53,23 @@ export default function LoginPage() {
   async function onSubmit(data: LoginFormValues) {
     setIsSubmitting(true);
     setLoginError(null);
-
-    try {
-      // Giả lập API call
-      console.log("Login data:", data);
-
-      // Giả lập delay xử lý
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-
-      // Giả lập đăng nhập thành công - trong thực tế sẽ gọi API
-      if (data.username === "admin" && data.password === "Password123") {
-        // Chuyển hướng đến trang dashboard sau khi đăng nhập thành công
-        router.push("/dashboard");
-      } else {
-        // Hiển thị lỗi đăng nhập
-        setLoginError("Tài khoản hoặc mật khẩu không chính xác");
-      }
-    } catch (error) {
-      console.error("Login error:", error);
-      setLoginError("Có lỗi xảy ra khi đăng nhập. Vui lòng thử lại sau.");
-    } finally {
-      setIsSubmitting(false);
+    // // Giả lập API call
+    // console.log("Login data:", data);
+    const user = await signIn("credentials", {
+      ...data,
+      redirect: false,
+    });
+    console.log("user >>>", user);
+    if (!!user?.error) {
+      // Hiển thị lỗi đăng nhập
+      setLoginError("Tài khoản hoặc mật khẩu không chính xác");
     }
+    // Giả lập đăng nhập thành công - trong thực tế sẽ gọi API
+    else {
+      // Chuyển hướng đến trang home sau khi đăng nhập thành công
+      router.push("/");
+    }
+    setIsSubmitting(false);
   }
 
   return (
