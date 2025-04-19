@@ -13,7 +13,7 @@ export default function ResidentsPage() {
       <PageHeader title="Quản lý cư dân">
         <Button size={"lg"} variant={"green"} className="my-[10px]">
           <Link
-            href="/building-infomation/residents/add"
+            href="/building-information/residents/add"
             className="flex items-center"
           >
             <Plus className="mr-2 size-6" />

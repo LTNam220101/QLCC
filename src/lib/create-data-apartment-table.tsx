@@ -7,7 +7,7 @@ export const generateData = ({
   handleDeleteClick,
   router,
 }: {
-  handleDeleteClick?: (id: number) => void;
+  handleDeleteClick?: (id: string) => void;
   router: any;
 }): Column<any>[] => [
   {
@@ -53,7 +53,7 @@ export const generateData = ({
           variant="outline"
           size="icon"
           onClick={() =>
-            router.push(`/building-infomation/residents/${resident.id}`)
+            router.push(`/building-information/apartments/${resident.id}`)
           }
         >
           <Lock className="h-4 w-4" color="#194FFF" />
@@ -63,7 +63,7 @@ export const generateData = ({
           variant="outline"
           size="icon"
           onClick={() =>
-            router.push(`/building-infomation/residents/${resident.id}/edit`)
+            router.push(`/building-information/apartments/${resident.id}/edit`)
           }
         >
           <Edit className="h-4 w-4" color="#194FFF" />

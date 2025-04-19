@@ -151,7 +151,7 @@ export default function AddResidentPage() {
     <div>
       <PageHeader
         title={<>Thêm mới cư dân</>}
-        backUrl={`/building-infomation/residents`}
+        backUrl={`/building-information/residents`}
       >
         <Button
           className="flex items-center my-[10px] rounded-md"

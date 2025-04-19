@@ -182,11 +182,11 @@ export default function ResidentDetailPage({
             <StatusBadge status={resident.status} className="ml-[14px]" />
           </>
         }
-        backUrl="/building-infomation/residents"
+        backUrl="/building-information/residents"
       >
         <Button className="my-[10px] rounded-md">
           <Link
-            href={`/building-infomation/residents/${id}/edit`}
+            href={`/building-information/residents/${id}/edit`}
             className="flex items-center"
           >
             <Edit className="mr-2 size-4" />

@@ -60,7 +60,7 @@ export const generateData = ({
           variant="outline"
           size="icon"
           onClick={() =>
-            router.push(`/building-infomation/residents/${resident.id}`)
+            router.push(`/building-information/residents/${resident.id}`)
           }
         >
           <Lock className="h-4 w-4" color="#194FFF" />
@@ -70,7 +70,7 @@ export const generateData = ({
           variant="outline"
           size="icon"
           onClick={() =>
-            router.push(`/building-infomation/residents/${resident.id}/edit`)
+            router.push(`/building-information/residents/${resident.id}/edit`)
           }
         >
           <Edit className="h-4 w-4" color="#194FFF" />

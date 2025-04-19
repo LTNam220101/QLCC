@@ -280,7 +280,7 @@ export default function EditResidentPage({
           }
         } else {
           // Nếu không tìm thấy, chuyển hướng về trang danh sách
-          router.push("/building-infomation/residents");
+          router.push("/building-information/residents");
         }
       } catch (error) {
         console.error("Error fetching resident:", error);
@@ -306,7 +306,7 @@ export default function EditResidentPage({
       toast("Thông tin cư dân đã được cập nhật");
 
       // Chuyển hướng về trang chi tiết
-      router.push(`/building-infomation/residents/${id}`);
+      router.push(`/building-information/residents/${id}`);
     } catch (error) {
       console.error("Error updating resident:", error);
       toast("Có lỗi xảy ra khi cập nhật cư dân");
@@ -332,7 +332,7 @@ export default function EditResidentPage({
             <StatusBadge status={resident.status} className="ml-[14px]" />
           </>
         }
-        backUrl={`/building-infomation/residents/${id}`}
+        backUrl={`/building-information/residents/${id}`}
       >
         <Button
           className="flex items-center my-[10px] rounded-md"

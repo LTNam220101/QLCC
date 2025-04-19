@@ -29,7 +29,7 @@ const data = {
   navMain: [
     {
       title: "Thông tin toà nhà",
-      url: "/building-infomation",
+      url: "/building-information",
       icon: SquareTerminal,
       isActive: true,
       items: [

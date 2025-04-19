@@ -14,18 +14,9 @@ import {
 // Map các đường dẫn URL sang tên hiển thị thân thiện
 const breadcrumbNameMap: Record<string, string> = {
   // Toà nhà
-  "building-infomation": "Thông tin toà nhà",
+  "building-information": "Thông tin toà nhà",
   residents: "Quản lý cư dân",
   apartments: "Quản lý căn hộ",
-  buildings: "Quản lý tòa nhà",
-  facilities: "Danh sách tiện ích",
-  "facility-bookings": "Đặt lịch sử dụng",
-  invoices: "Hóa đơn",
-  payments: "Thanh toán",
-  "fee-config": "Cấu hình phí",
-  staff: "Nhân viên",
-  roles: "Phân quyền",
-  settings: "Cài đặt hệ thống",
   // Profile
   profile: "Tài khoản",
   "profile-info": "Thông tin tài khoản",
