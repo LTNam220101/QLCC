@@ -266,7 +266,10 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="secondary"
       size="icon"
-      className={cn("size-11", className)}
+      className={cn(
+        "size-11 bg-transparent hover:bg-transparent shadow-none",
+        className
+      )}
       onClick={(event) => {
         onClick?.(event);
         toggleSidebar();
@@ -274,7 +277,6 @@ function SidebarTrigger({
       {...props}
     >
       <AlignJustify className="size-11" color="#666" />
-      <span className="sr-only">Toggle Sidebar</span>
     </Button>
   );
 }

@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-import ProfileNav from "@/components/profile/profile-nav"
+import PageHeader from "@/components/common/page-header"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -23,7 +23,7 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/components/ui/select"
-import InfoRow from "@/components/info-row"
+import InfoRow from "@/components/common/info-row"
 import {
   Popover,
   PopoverContent,
@@ -91,7 +91,7 @@ const ChangeProfile = () => {
   }
   return (
     <div>
-      <ProfileNav
+      <PageHeader
         title="Sửa thông tin tài khoản"
         backUrl="/profile/profile-info"
       >
@@ -102,9 +102,9 @@ const ChangeProfile = () => {
           <Pencil />
           Lưu
         </Button>
-      </ProfileNav>
+      </PageHeader>
       <Form {...form}>
-        <form id="account-form" className="mt-5">
+        <form id="account-form" className="mt-5 space-y-[30px]">
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-7 gap-y-2">
             {/* Phone Number */}
             <FormField

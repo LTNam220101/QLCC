@@ -5,18 +5,18 @@ import React from "react";
 import { Separator } from "../ui/separator";
 import { useRouter } from "next/navigation";
 
-const ProfileNav = ({
+const PageHeader = ({
   title,
-  backUrl = "/",
+  backUrl,
   children,
 }: {
-  title: string;
-  backUrl: string;
+  title: string | React.ReactNode;
+  backUrl?: string;
   children?: React.ReactNode;
 }) => {
   const { push } = useRouter();
   const handleBack = () => {
-    push(backUrl);
+    push(backUrl!);
   };
   return (
     <>
@@ -26,13 +26,15 @@ const ProfileNav = ({
         })}
       >
         <div className="flex items-center font-medium text-lg">
-          <div
-            className="mr-3 flex items-center font-normal text-sm text-[#666] cursor-pointer hover:text-[#3779F4]"
-            onClick={handleBack}
-          >
-            <MoveLeft color="#3779F4" className="mr-2" />
-            Quay lại
-          </div>
+          {!!backUrl && (
+            <div
+              className="mr-3 flex items-center font-normal text-sm text-[#666] cursor-pointer hover:text-[#3779F4]"
+              onClick={handleBack}
+            >
+              <MoveLeft color="#3779F4" className="mr-2" />
+              Quay lại
+            </div>
+          )}
           {title}
         </div>
         {children}
@@ -42,4 +44,4 @@ const ProfileNav = ({
   );
 };
 
-export default ProfileNav;
+export default PageHeader;

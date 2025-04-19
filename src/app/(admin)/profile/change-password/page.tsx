@@ -13,7 +13,7 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { PasswordInput } from "@/components/ui/password-input"
-import ProfileNav from "@/components/profile/profile-nav"
+import PageHeader from "@/components/common/page-header"
 import { Button } from "@/components/ui/button"
 import { Check } from "lucide-react"
 
@@ -45,7 +45,7 @@ const ChangePassword = () => {
   }
   return (
     <div>
-      <ProfileNav title="Đổi mật khẩu" backUrl="/profile/profile-info">
+      <PageHeader title="Đổi mật khẩu" backUrl="/profile/profile-info">
         <Button
           className="flex items-center my-[10px]"
           onClick={form.handleSubmit(onSubmit)}
@@ -53,11 +53,11 @@ const ChangePassword = () => {
           <Check />
           Lưu
         </Button>
-      </ProfileNav>
+      </PageHeader>
       <Form {...form}>
         <form
           id="account-form"
-          className="mt-5 w-[366px] flex flex-col gap-[10px]"
+          className="mt-5 w-[366px] flex flex-col gap-[30px]"
         >
           <FormField
             control={form.control}

@@ -1,28 +1,28 @@
-"use client"
-import InfoRow from "@/components/info-row"
-import DeleteAccountModal from "@/components/profile/delete-account-modal"
-import ProfileNav from "@/components/profile/profile-nav"
-import { Button } from "@/components/ui/button"
-import { KeyRound, Pencil } from "lucide-react"
-import { useRouter } from "next/navigation"
-import React from "react"
+"use client";
+import InfoRow from "@/components/common/info-row";
+import PageHeader from "@/components/common/page-header";
+import DeleteAccountModal from "@/components/profile/delete-account-modal";
+import { Button } from "@/components/ui/button";
+import { KeyRound, Pencil } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 const ProfileInfo = () => {
-  const { push } = useRouter()
+  const { push } = useRouter();
   const changeProfile = () => {
-    push("/profile/profile-info/change-profile")
-  }
+    push("/profile/profile-info/change-profile");
+  };
   const changePassword = () => {
-    push("/profile/change-password")
-  }
+    push("/profile/change-password");
+  };
   return (
     <div>
-      <ProfileNav title="Thông tin tài khoản" backUrl="/">
+      <PageHeader title="Thông tin tài khoản" backUrl="/">
         <Button className="flex items-center my-[10px]" onClick={changeProfile}>
           <Pencil />
           Sửa
         </Button>
-      </ProfileNav>
+      </PageHeader>
       <div className="space-y-8 mt-5 my-20">
         <div className="space-y-4">
           <h2 className="text-lg font-bold">Thông tin chung</h2>
@@ -69,7 +69,7 @@ const ProfileInfo = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfileInfo
+export default ProfileInfo;

@@ -13,8 +13,8 @@ import {
 
 // Map các đường dẫn URL sang tên hiển thị thân thiện
 const breadcrumbNameMap: Record<string, string> = {
-  // Phân hệ chính
-  dashboard: "Tổng quan",
+  // Toà nhà
+  "building-infomation": "Thông tin toà nhà",
   residents: "Quản lý cư dân",
   apartments: "Quản lý căn hộ",
   buildings: "Quản lý tòa nhà",
@@ -26,7 +26,7 @@ const breadcrumbNameMap: Record<string, string> = {
   staff: "Nhân viên",
   roles: "Phân quyền",
   settings: "Cài đặt hệ thống",
-
+  // Profile
   profile: "Tài khoản",
   "profile-info": "Thông tin tài khoản",
   "change-profile": "Sửa thông tin tài khoản",

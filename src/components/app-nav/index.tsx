@@ -29,7 +29,7 @@ const data = {
   navMain: [
     {
       title: "Thông tin toà nhà",
-      url: "/dashboard",
+      url: "/building-infomation",
       icon: SquareTerminal,
       isActive: true,
       items: [
@@ -122,7 +122,7 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="bg-[#9F7DF7]">
+      <SidebarHeader className="bg-purple">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
             <div className="flex rounded-full size-[60px] items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground">
