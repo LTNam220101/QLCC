@@ -541,26 +541,26 @@ export function DocumentDrawer() {
               <div className="p-4 bg-gray-50 font-medium border-r">
                 Người tạo
               </div>
-              <div className="p-4">{selectedDocument.createdBy}</div>
+              <div className="p-4">{selectedDocument.createBy}</div>
             </div>
             <div className="grid grid-cols-2 border-b">
               <div className="p-4 bg-gray-50 font-medium border-r">
                 Ngày tạo
               </div>
-              <div className="p-4">{selectedDocument.createdAt}</div>
+              <div className="p-4">{selectedDocument.createTime}</div>
             </div>
 
             <div className="grid grid-cols-2 md:border-r">
               <div className="p-4 bg-gray-50 font-medium border-r">
                 Người cập nhật
               </div>
-              <div className="p-4">{selectedDocument.updatedBy}</div>
+              <div className="p-4">{selectedDocument.updateBy}</div>
             </div>
             <div className="grid grid-cols-2">
               <div className="p-4 bg-gray-50 font-medium border-r">
                 Ngày cập nhật
               </div>
-              <div className="p-4">{selectedDocument.updatedAt}</div>
+              <div className="p-4">{selectedDocument.updateTime}</div>
             </div>
           </div>
         </div>

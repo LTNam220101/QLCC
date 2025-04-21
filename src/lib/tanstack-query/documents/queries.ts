@@ -44,10 +44,10 @@ const DocumentService = {
       id: newId,
       ...data,
       status: "active",
-      createdBy: "Admin",
-      createdAt: new Date().toISOString().split("T")[0],
-      updatedBy: "Admin",
-      updatedAt: new Date().toISOString().split("T")[0],
+      createBy: "Admin",
+      createTime: new Date().toISOString().split("T")[0],
+      updateBy: "Admin",
+      updateTime: new Date().toISOString().split("T")[0],
     }
 
     // Thêm vào danh sách mẫu
@@ -72,8 +72,8 @@ const DocumentService = {
     const updatedDocument = {
       ...mockDocuments[index],
       ...data,
-      updatedBy: "Admin",
-      updatedAt: new Date().toISOString().split("T")[0],
+      updateBy: "Admin",
+      updateTime: new Date().toISOString().split("T")[0],
     }
 
     mockDocuments[index] = updatedDocument
@@ -125,10 +125,10 @@ const mockDocuments = [
         url: "/documents/huong-dan-dang-xuat.pdf",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-01-10",
-    updatedBy: "Admin",
-    updatedAt: "2023-01-10",
+    createBy: "Admin",
+    createTime: "2023-01-10",
+    updateBy: "Admin",
+    updateTime: "2023-01-10",
   },
   {
     id: 2,
@@ -146,10 +146,10 @@ const mockDocuments = [
         url: "/documents/noi-quy-chung-cu.pdf",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-01-15",
-    updatedBy: "Admin",
-    updatedAt: "2023-02-20",
+    createBy: "Admin",
+    createTime: "2023-01-15",
+    updateBy: "Admin",
+    updateTime: "2023-02-20",
   },
   {
     id: 3,
@@ -174,10 +174,10 @@ const mockDocuments = [
         url: "/documents/huong-dan-su-dung-tien-ich.docx",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-02-05",
-    updatedBy: "Admin",
-    updatedAt: "2023-03-15",
+    createBy: "Admin",
+    createTime: "2023-02-05",
+    updateBy: "Admin",
+    updateTime: "2023-03-15",
   },
   {
     id: 4,
@@ -195,10 +195,10 @@ const mockDocuments = [
         url: "/documents/quy-dinh-pccc.pdf",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2022-03-10",
-    updatedBy: "Admin",
-    updatedAt: "2022-03-10",
+    createBy: "Admin",
+    createTime: "2022-03-10",
+    updateBy: "Admin",
+    updateTime: "2022-03-10",
   },
   {
     id: 5,
@@ -223,10 +223,10 @@ const mockDocuments = [
         url: "/documents/bieu-phi.xlsx",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-04-05",
-    updatedBy: "Admin",
-    updatedAt: "2023-04-05",
+    createBy: "Admin",
+    createTime: "2023-04-05",
+    updateBy: "Admin",
+    updateTime: "2023-04-05",
   },
 ]
 

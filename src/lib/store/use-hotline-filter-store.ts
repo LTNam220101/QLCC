@@ -1,36 +1,28 @@
-import { create } from "zustand"
-import { persist } from "zustand/middleware"
-import type { HotlineFilter } from "@/types/hotline"
+import { create } from "zustand";
+import { HotlineFilter } from "../../../types/hotlines";
 
 interface HotlineFilterState {
-  filter: HotlineFilter
-  setFilter: (filter: Partial<HotlineFilter>) => void
-  resetFilter: () => void
+  filter: HotlineFilter;
+  setFilter: (filter: Partial<HotlineFilter>) => void;
+  resetFilter: () => void;
 }
 
 const initialFilter: HotlineFilter = {
   status: undefined,
   name: undefined,
-  phoneNumber: undefined,
+  hotline: undefined,
   buildingId: undefined,
-  fromDate: undefined,
-  toDate: undefined,
-  page: 1,
-  limit: 20,
-}
+  createTimeFrom: undefined,
+  createTimeTo: undefined,
+  page: 0,
+  size: 20,
+};
 
-export const useHotlineFilterStore = create<HotlineFilterState>()(
-  persist(
-    (set) => ({
-      filter: initialFilter,
-      setFilter: (newFilter) =>
-        set((state) => ({
-          filter: { ...state.filter, ...newFilter },
-        })),
-      resetFilter: () => set({ filter: initialFilter }),
-    }),
-    {
-      name: "hotline-filter-storage",
-    },
-  ),
-)
+export const useHotlineFilterStore = create<HotlineFilterState>()((set) => ({
+  filter: initialFilter,
+  setFilter: (newFilter) =>
+    set((state) => ({
+      filter: { ...state.filter, ...newFilter },
+    })),
+  resetFilter: () => set({ filter: initialFilter }),
+}));

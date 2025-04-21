@@ -20,36 +20,24 @@ import {
 } from "@/components/ui/dialog";
 import { useApartmentStore } from "@/lib/store/use-apartment-store";
 import { toast } from "sonner";
-import { generateData } from "@/lib/create-data-apartment-table";
 import TableData from "../common/table-data";
+import { generateData } from "../../../utils/create-table/create-data-apartment-table";
+import { useApartments } from "@/lib/tanstack-query/apartments/queries";
 
 export function ApartmentTable() {
-  const router = useRouter();
-  const {
-    filteredApartments,
-    currentPage,
-    itemsPerPage,
-    totalItems,
-    deleteDialogOpen,
-    // apartmentToDelete,
-    setCurrentPage,
-    setItemsPerPage,
-    setDeleteDialogOpen,
-    setApartmentToDelete,
-    deleteApartment,
-    openDrawer,
-  } = useApartmentStore();
+  const { filters, setFilter, clearFilters } = useApartmentStore();
 
-  // Xử lý xóa căn hộ
-  const handleDeleteClick = (id: string) => {
-    setApartmentToDelete(id);
-    setDeleteDialogOpen(true);
-  };
+  const { data, isLoading, isError } = useApartments(filters);
+//   // Xử lý xóa căn hộ
+//   const handleDeleteClick = (id: string) => {
+//     setApartmentToDelete(id);
+//     setDeleteDialogOpen(true);
+//   };
 
-  const confirmDelete = () => {
-    deleteApartment();
-    toast("Đã xóa căn hộ khỏi hệ thống");
-  };
+//   const confirmDelete = () => {
+//     deleteApartment();
+//     toast("Đã xóa căn hộ khỏi hệ thống");
+//   };
 
   // Xử lý sửa căn hộ
   const handleEditClick = (id: number) => {
@@ -70,7 +58,12 @@ export function ApartmentTable() {
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
   const currentItems = filteredApartments.slice(startIndex, endIndex);
 
-  const columns = generateData({ router, handleDeleteClick, handleViewClick, handleEditClick });
+  const columns = generateData({
+    router,
+    handleDeleteClick,
+    handleViewClick,
+    handleEditClick,
+  });
 
   return (
     <div className="space-y-4">

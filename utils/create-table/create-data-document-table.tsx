@@ -1,15 +1,14 @@
 import { Column } from "@/components/common/table-data";
-import { buildings } from "./store/use-resident-store";
 import { Button } from "@/components/ui/button";
 import { Edit, Lock, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { buildings } from "@/lib/store/use-resident-store";
 
 export const generateData = ({
   handleDeleteClick,
 }: {
   handleDeleteClick?: (id: number) => void;
-  router: any;
 }): Column<any>[] => [
   {
     dataIndex: "index",
@@ -38,7 +37,7 @@ export const generateData = ({
     },
   },
   {
-    dataIndex: "createdBy",
+    dataIndex: "createBy",
     name: "Người tạo",
   },
   {

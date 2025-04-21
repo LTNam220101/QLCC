@@ -11,14 +11,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       async authorize(credentials) {
         const res = await sendRequest<IBackendRes<ILogin>>({
           method: "POST",
-          url: `${apiUrl}/auth/login`,
+          url: `/auth/login`,
           body: {
             ...credentials,
           },
         });
-        if (res.status === "error" && +res.error === 400) {
+        if (res.status === "error" && +res?.error === 400) {
           throw new Error("User not found");
-        } else if (res.status === "error" && +res.error === 503) {
+        } else if (res.status === "error" && +res?.error === 503) {
           throw new Error("Internal server error");
         }
         return res.data;

@@ -88,7 +88,7 @@ function TableData<T>({
                     >
                       {column.render
                         ? column.render(data, rowIndex)
-                        : data[column.dataIndex] ?? "-"}
+                        : data?.[column.dataIndex] ?? "-"}
                     </TableCell>
                   );
                 })}
@@ -99,4 +99,4 @@ function TableData<T>({
   );
 }
 
-export default React.memo(TableData);
+export default TableData;

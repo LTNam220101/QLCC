@@ -1,27 +1,31 @@
 import { Column } from "@/components/common/table-data";
-import { buildings, getDisplayName, roles } from "./store/use-resident-store";
 import { Button } from "@/components/ui/button";
 import { Edit, Lock, Trash2 } from "lucide-react";
 import StatusBadge from "@/components/common/status-badge";
 import Link from "next/link";
+import {
+  buildings,
+  getDisplayName,
+  roles,
+} from "@/lib/store/use-resident-store";
+import { Resident } from "../../types/residents";
 
 export const generateData = ({
   handleDeleteClick,
 }: {
-  handleDeleteClick?: (id: string) => void;
-  router: any;
-}): Column<any>[] => [
+  handleDeleteClick?: (resident: Resident) => void;
+}): Column<Resident>[] => [
   {
     dataIndex: "index",
     name: "STT",
     render: (_, index) => index + 1,
   },
   {
-    dataIndex: "name",
+    dataIndex: "fullName",
     name: "Họ và tên",
   },
   {
-    dataIndex: "phone",
+    dataIndex: "phoneNumber",
     name: "Số điện thoại",
   },
   {
@@ -71,7 +75,7 @@ export const generateData = ({
         <Button
           variant="outline"
           size="icon"
-          onClick={() => handleDeleteClick?.(resident.id)}
+          onClick={() => handleDeleteClick?.(resident)}
         >
           <Trash2 className="h-4 w-4" color="#FE0000" />
           <span className="sr-only">Xóa</span>

@@ -206,24 +206,24 @@ export default function DocumentDetailPage({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border rounded-md">
           <div className="grid grid-cols-2 border-b md:border-r">
             <div className="p-4 bg-gray-50 font-medium border-r">Người tạo</div>
-            <div className="p-4">{document.createdBy}</div>
+            <div className="p-4">{document.createBy}</div>
           </div>
           <div className="grid grid-cols-2 border-b">
             <div className="p-4 bg-gray-50 font-medium border-r">Ngày tạo</div>
-            <div className="p-4">{document.createdAt}</div>
+            <div className="p-4">{document.createTime}</div>
           </div>
 
           <div className="grid grid-cols-2 md:border-r">
             <div className="p-4 bg-gray-50 font-medium border-r">
               Người cập nhật
             </div>
-            <div className="p-4">{document.updatedBy}</div>
+            <div className="p-4">{document.updateBy}</div>
           </div>
           <div className="grid grid-cols-2">
             <div className="p-4 bg-gray-50 font-medium border-r">
               Ngày cập nhật
             </div>
-            <div className="p-4">{document.updatedAt}</div>
+            <div className="p-4">{document.updateTime}</div>
           </div>
         </div>
       </div>

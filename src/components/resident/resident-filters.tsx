@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Search, Trash2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,23 +22,58 @@ import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
 
 export function ResidentFilters() {
-  const { filters, setFilter, clearFilters, applyFilters } = useResidentStore();
+  const { filters, setFilter, clearFilters } = useResidentStore();
+  const [fullName, setFullName] = useState(filters.fullName || "");
+  const [phoneNumber, setPhoneNumber] = useState(filters.phoneNumber || "");
+  const [role, setRole] = useState(filters.role || "");
+  const [status, setStatus] = useState(filters.status || undefined);
+  const [manageBuildingList, setmanageBuildingList] = useState(
+    filters.manageBuildingList || []
+  );
+  const [manageApartmentList, setManageApartmentList] = useState(
+    filters.manageApartmentList || []
+  );
 
   // Lấy danh sách căn hộ theo tòa nhà đã chọn
   const filteredApartments =
-    filters.building && filters.building !== "all"
-      ? apartments.filter((apt) => apt.buildingId === filters.building)
+    filters.manageBuildingList && filters.manageBuildingList.length !== 0
+      ? apartments.filter(
+          (apt) => apt.buildingId === filters.manageBuildingList?.[0]
+        )
       : apartments;
 
   // Xử lý tìm kiếm
   const handleSearch = () => {
-    applyFilters();
+    setFilter({
+      fullName: fullName || undefined,
+      phoneNumber: phoneNumber || undefined,
+      role: role || undefined,
+      status: status || undefined,
+      manageBuildingList: manageBuildingList || undefined,
+      manageApartmentList: manageApartmentList || undefined,
+      page: 0,
+    });
   };
 
-  // Áp dụng bộ lọc khi component được mount
+  // Xóa bộ lọc
+  const clearFilter = () => {
+    setFullName("");
+    setPhoneNumber("");
+    setRole("");
+    setStatus(undefined);
+    setmanageBuildingList([]);
+    setManageApartmentList([]);
+    clearFilters();
+  };
+
   useEffect(() => {
-    applyFilters();
-  }, [applyFilters]);
+    setFullName(filters.fullName || "");
+    setPhoneNumber(filters.phoneNumber || "");
+    setRole(filters.role || "");
+    setStatus(filters.status);
+    setmanageBuildingList(filters.manageBuildingList || []);
+    setManageApartmentList(filters.manageApartmentList || []);
+  }, [filters]);
 
   return (
     <>
@@ -47,28 +82,25 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Họ và tên</Label>
             <Input
-              value={filters.name}
-              onChange={(e) => setFilter("name", e.target.value)}
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
             />
           </div>
           <div>
             <Label className="mb-2">Số điện thoại</Label>
             <Input
-              value={filters.phone}
-              onChange={(e) => setFilter("phone", e.target.value)}
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
           </div>
           <div>
             <Label className="mb-2">Vai trò</Label>
-            <Select
-              value={filters.role}
-              onValueChange={(value) => setFilter("role", value)}
-            >
+            <Select value={role} onValueChange={(value) => setRole(value)}>
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả vai trò</SelectItem>
+                <SelectItem value={"all"}>Tất cả vai trò</SelectItem>
                 {roles.map((role) => (
                   <SelectItem key={role.id} value={role.id}>
                     {role.name}
@@ -80,8 +112,8 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Trạng thái</Label>
             <Select
-              value={filters.status}
-              onValueChange={(value) => setFilter("status", value)}
+              value={`${status}`}
+              onValueChange={(value) => setStatus(+value)}
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -99,8 +131,8 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Toà nhà</Label>
             <Select
-              value={filters.building}
-              onValueChange={(value) => setFilter("building", value)}
+              value={manageBuildingList?.[0]}
+              onValueChange={(value) => setmanageBuildingList([value])}
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -118,9 +150,11 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Căn hộ</Label>
             <Select
-              value={filters.apartment}
-              onValueChange={(value) => setFilter("apartment", value)}
-              disabled={!filters.building || filters.building === "all"}
+              value={manageApartmentList?.[0]}
+              onValueChange={(value) => setManageApartmentList([value])}
+              disabled={
+                !manageBuildingList?.[0] || manageBuildingList?.[0] === ""
+              }
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -142,7 +176,11 @@ export function ResidentFilters() {
           <Button onClick={handleSearch}>
             <Search className="h-4 w-4" /> Tìm kiếm
           </Button>
-          <Button variant="outline" onClick={clearFilters} className="text-red hover:text-red">
+          <Button
+            variant="outline"
+            onClick={clearFilter}
+            className="text-red hover:text-red"
+          >
             <Trash2 className="h-4 w-4" color="#FE0000" /> Xóa tìm kiếm
           </Button>
         </div>

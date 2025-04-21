@@ -45,12 +45,12 @@ export function ApartmentDetail({ apartmentId }: ApartmentDetailProps) {
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
-            <InfoRow label="Người tạo" value={apartment.createdBy} />
-            <InfoRow label="Người cập nhật" value={apartment.updatedBy} />
+            <InfoRow label="Người tạo" value={apartment.createBy} />
+            <InfoRow label="Người cập nhật" value={apartment.updateBy} />
           </div>
           <div>
-            <InfoRow label="Ngày tạo" value={apartment.createdAt} />
-            <InfoRow label="Ngày cập nhật" value={apartment.updatedAt} />
+            <InfoRow label="Ngày tạo" value={apartment.createTime} />
+            <InfoRow label="Ngày cập nhật" value={apartment.updateTime} />
           </div>
         </div>
       </div>

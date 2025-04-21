@@ -73,10 +73,10 @@ const defaultValues: Partial<FormValues> = {
 
 // Mock data for read-only fields
 const readOnlyData = {
-  createdBy: "Admin",
-  createdAt: "01/01/2023",
-  updatedBy: "Admin",
-  updatedAt: "01/06/2023"
+  createBy: "Admin",
+  createTime: "01/01/2023",
+  updateBy: "Admin",
+  updateTime: "01/06/2023"
 }
 const ChangeProfile = () => {
   const form = useForm<FormValues>({
@@ -334,12 +334,12 @@ const ChangeProfile = () => {
           {/* Read-only information */}
           <div className="grid md:grid-cols-2 gap-x-10">
             <div>
-              <InfoRow label="Người tạo" value={readOnlyData.createdBy} />
-              <InfoRow label="Người cập nhật" value={readOnlyData.updatedBy} />
+              <InfoRow label="Người tạo" value={readOnlyData.createBy} />
+              <InfoRow label="Người cập nhật" value={readOnlyData.updateBy} />
             </div>
             <div>
-              <InfoRow label="Ngày tạo" value={readOnlyData.createdAt} />
-              <InfoRow label="Ngày cập nhật" value={readOnlyData.updatedAt} />
+              <InfoRow label="Ngày tạo" value={readOnlyData.createTime} />
+              <InfoRow label="Ngày cập nhật" value={readOnlyData.updateTime} />
             </div>
           </div>
         </form>

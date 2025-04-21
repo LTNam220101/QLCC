@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,64 +17,94 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useResidentStore } from "@/lib/store/use-resident-store";
 import { toast } from "sonner";
 import TableData from "../common/table-data";
-import { generateData } from "@/lib/create-data-resident-table";
+import { generateData } from "../../../utils/create-table/create-data-resident-table";
+import { useResidentStore } from "@/lib/store/use-resident-store";
+import {
+  useDeleteResident,
+  useResidents,
+} from "@/lib/tanstack-query/residents/queries";
+import { useState } from "react";
+import { Resident } from "../../../types/residents";
 
 export function ResidentTable() {
-  const router = useRouter();
-  const {
-    filteredResidents,
-    currentPage,
-    itemsPerPage,
-    totalItems,
-    deleteDialogOpen,
-    // residentToDelete,
-    setCurrentPage,
-    setItemsPerPage,
-    setDeleteDialogOpen,
-    setResidentToDelete,
-    deleteResident,
-  } = useResidentStore();
+  const { filters, setFilter, clearFilters } = useResidentStore();
+  const { data, isLoading, isError } = useResidents(filters);
+  const deleteResidentMutation = useDeleteResident();
 
+  const [residentToDelete, setResidentToDelete] = useState<Resident | null>(
+    null
+  );
   // Xử lý xóa cư dân
-  const handleDeleteClick = (id: string) => {
-    setResidentToDelete(id);
-    setDeleteDialogOpen(true);
+  const handleDeleteClick = (resident: Resident) => {
+    setResidentToDelete(resident);
   };
 
-  const confirmDelete = () => {
-    deleteResident();
-    toast("Đã xóa cư dân khỏi hệ thống");
+  const confirmDelete = async () => {
+    if (!residentToDelete) return;
+
+    try {
+      await deleteResidentMutation.mutateAsync(residentToDelete.id);
+      toast(`Đã xóa cư dân ${residentToDelete.fullName}`);
+      setResidentToDelete(null);
+    } catch (error) {
+      toast("Đã xảy ra lỗi khi xóa cư dân");
+    }
   };
 
   // Tính toán phân trang
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const currentItems = filteredResidents.slice(startIndex, endIndex);
+  const totalPages = Math.ceil(data?.data?.recordsTotal || 0 / filters.size);
 
-  const columns = generateData({ router, handleDeleteClick });
+  const columns = generateData({
+    handleDeleteClick,
+  });
+
+  // Render lỗi
+  if (isError) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="text-center">
+          <p className="text-red-500 mb-2">Đã xảy ra lỗi khi tải dữ liệu</p>
+          <Button onClick={() => window.location.reload()}>Tải lại</Button>
+        </div>
+      </div>
+    );
+  }
+  // Render khi không có dữ liệu
+  if (data?.data?.data.length === 0) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="text-center">
+          <p className="text-gray-500 mb-2">Không có dữ liệu</p>
+          <Button onClick={clearFilters}>Đặt lại bộ lọc</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4 mt-5">
       {/* Danh sách cư dân */}
-      <TableData columns={columns} datas={currentItems} />
+      <TableData
+        columns={columns}
+        datas={data?.data?.data}
+        isLoading={isLoading}
+      />
 
       {/* Phân trang */}
       <div className="flex items-center justify-between">
         <div className="text-sm text-gray-500">
-          Tổng số {totalItems} bản ghi
+          Tổng số {data?.data?.recordsTotal} bản ghi
         </div>
         <div className="flex items-center gap-2">
           <div className="flex items-center">
             <Select
-              value={itemsPerPage.toString()}
-              onValueChange={(value) => setItemsPerPage(Number(value))}
+              value={filters.size.toString()}
+              onValueChange={(value) => setFilter({ size: Number(value) })}
             >
               <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder={`${itemsPerPage}/trang`} />
+                <SelectValue placeholder={`${filters.size}/trang`} />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="10">10/trang</SelectItem>
@@ -90,8 +119,8 @@ export function ResidentTable() {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-              disabled={currentPage === 1}
+              onClick={() => setFilter({ page: Math.max(filters.page, 0) })}
+              disabled={filters.page === 0}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -101,8 +130,8 @@ export function ResidentTable() {
                 let pageNum = i + 1;
 
                 // Nếu có nhiều trang và đang ở trang sau
-                if (totalPages > 5 && currentPage > 3) {
-                  pageNum = currentPage - 3 + i;
+                if (totalPages > 5 && filters.page > 3) {
+                  pageNum = filters.page - 3 + i;
 
                   // Đảm bảo không vượt quá tổng số trang
                   if (pageNum > totalPages) {
@@ -113,9 +142,9 @@ export function ResidentTable() {
                 return (
                   <Button
                     key={i}
-                    variant={currentPage === pageNum ? "default" : "outline"}
+                    variant={filters.page === pageNum ? "default" : "outline"}
                     size="icon"
-                    onClick={() => setCurrentPage(pageNum)}
+                    onClick={() => setFilter({ page: pageNum })}
                     className="w-8 h-8"
                   >
                     {pageNum}
@@ -128,9 +157,9 @@ export function ResidentTable() {
               variant="outline"
               size="icon"
               onClick={() =>
-                setCurrentPage(Math.min(currentPage + 1, totalPages))
+                setFilter({ page: Math.min(filters.page + 1, totalPages) })
               }
-              disabled={currentPage === totalPages || totalPages === 0}
+              disabled={filters.page === totalPages || totalPages === 0}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -139,7 +168,10 @@ export function ResidentTable() {
       </div>
 
       {/* Dialog xác nhận xóa */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+      <Dialog
+        open={!!residentToDelete}
+        onOpenChange={(open) => !open && setResidentToDelete(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Xác nhận xóa cư dân</DialogTitle>
@@ -149,10 +181,7 @@ export function ResidentTable() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setDeleteDialogOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setResidentToDelete(null)}>
               Hủy
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>

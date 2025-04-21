@@ -1,42 +1,45 @@
-export type HotlineStatus = "active" | "inactive"
+export type HotlineStatus = "active" | "inactive";
 
 export interface Hotline {
-  id: number
-  name: string
-  phoneNumber: string
-  buildingId: number
-  buildingName: string
-  note?: string
-  status: HotlineStatus
-  createdAt: string
-  createdBy: string
-  updatedAt?: string
-  updatedBy?: string
+  hotlineId: string;
+  name: string;
+  hotline: string;
+  buildingId: string;
+  note?: string;
+  status: number;
+  createTime: number;
+  createBy: number;
+  updateTime?: number;
+  updateBy?: number;
 }
 
 export interface HotlineFilter {
-  status?: HotlineStatus
-  name?: string
-  phoneNumber?: string
-  buildingId?: number
-  fromDate?: string
-  toDate?: string
-  page: number
-  limit: number
+  status?: HotlineStatus;
+  name?: string;
+  hotline?: string;
+  buildingId?: number;
+  createTimeFrom?: number;
+  createTimeTo?: number;
+  page: number;
+  size: number;
 }
 
 export interface HotlineFormData {
-  name: string
-  phoneNumber: string
-  buildingId: number
-  note?: string
-  status?: HotlineStatus
+  name: string;
+  hotline: string;
+  buildingId: string;
+  note?: string;
+  status?: number;
 }
 
 export interface HotlinePaginatedResponse {
-  data: Hotline[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
+  data: { data: Hotline[]; recordsTotal: number };
+  total: number;
+  // page: number;
+  // limit: number;
+  // totalPages: number;
+}
+
+export interface HotlineDetailResponse {
+  data: Hotline;
 }

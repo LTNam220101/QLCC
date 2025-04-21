@@ -62,27 +62,27 @@ const data = {
       items: [
         {
           title: "Quản lý khách thăm",
-          url: "/services/news_feed",
+          url: "/news_feed",
         },
         {
           title: "Quản lý đăng ký thi công",
-          url: "/services/transport",
+          url: "/transport",
         },
         {
           title: "Quản lý đăng ký chuyển đồ",
-          url: "/services/transport",
+          url: "/transport",
         },
         {
           title: "Quản lý phản ánh",
-          url: "/services/feed_back",
+          url: "/feed_back",
         },
         {
           title: "Quản lý hotline",
-          url: "/services/hotline",
+          url: "/hotlines",
         },
         {
           title: "Giao tiếp",
-          url: "/services/hotline",
+          url: "/hotlines",
         },
       ],
     },

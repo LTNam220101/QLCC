@@ -36,7 +36,6 @@ const NavAvatar = () => {
           <div
             className="flex items-center"
             onClick={() => {
-              console.log("sign-out");
               signOut({
                 redirectTo: "/login",
               });

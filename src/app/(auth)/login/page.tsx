@@ -59,7 +59,6 @@ export default function LoginPage() {
       ...data,
       redirect: false,
     });
-    console.log("user >>>", user);
     if (!!user?.error) {
       // Hiển thị lỗi đăng nhập
       setLoginError("Tài khoản hoặc mật khẩu không chính xác");

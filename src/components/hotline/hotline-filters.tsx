@@ -1,59 +1,85 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useHotlineFilterStore } from "@/lib/store/use-hotline-filter-store"
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Calendar } from "@/components/ui/calendar"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, Search, X } from "lucide-react"
-import { format } from "date-fns"
-import { vi } from "date-fns/locale"
-import { cn } from "@/lib/utils"
+import { useEffect, useState } from "react";
+import { useHotlineFilterStore } from "@/lib/store/use-hotline-filter-store";
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon, Search, Trash2 } from "lucide-react";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import { cn } from "@/lib/utils";
+import { Label } from "../ui/label";
 
 export function HotlineFilters() {
-  const { filter, setFilter, resetFilter } = useHotlineFilterStore()
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
-
-  const [name, setName] = useState(filter.name || "")
-  const [phoneNumber, setPhoneNumber] = useState(filter.phoneNumber || "")
-  const [fromDate, setFromDate] = useState<Date | undefined>(filter.fromDate ? new Date(filter.fromDate) : undefined)
-  const [toDate, setToDate] = useState<Date | undefined>(filter.toDate ? new Date(filter.toDate) : undefined)
-
+  const { filter, setFilter, resetFilter } = useHotlineFilterStore();
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
+  const [name, setName] = useState(filter.name || "");
+  const [hotline, setHotline] = useState(filter.hotline || "");
+  const [createTimeFrom, setFromDate] = useState<Date | undefined>(
+    filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
+  );
+  const [createTimeTo, setToDate] = useState<Date | undefined>(
+    filter.createTimeTo ? new Date(filter.createTimeTo) : undefined
+  );
   // Áp dụng bộ lọc
   const applyFilter = () => {
     setFilter({
       name: name || undefined,
-      phoneNumber: phoneNumber || undefined,
-      fromDate: fromDate ? format(fromDate, "yyyy-MM-dd") : undefined,
-      toDate: toDate ? format(toDate, "yyyy-MM-dd") : undefined,
-      page: 1, // Reset về trang 1 khi lọc
-    })
-  }
+      hotline: hotline || undefined,
+      createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
+      createTimeTo: createTimeTo ? createTimeTo.getTime() : undefined,
+      page: 0, // Reset về trang 1 khi lọc
+    });
+  };
 
   // Xóa bộ lọc
   const clearFilter = () => {
-    setName("")
-    setPhoneNumber("")
-    setFromDate(undefined)
-    setToDate(undefined)
-    resetFilter()
-  }
+    setName("");
+    setHotline("");
+    setFromDate(undefined);
+    setToDate(undefined);
+    resetFilter();
+  };
+
+  useEffect(() => {
+    setName(filter.name || "");
+    setHotline(filter.hotline || "");
+    setFromDate(
+      filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
+    );
+    setToDate(filter.createTimeTo ? new Date(filter.createTimeTo) : undefined);
+  }, [filter]);
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="flex space-x-[14px] mt-5 mb-4">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
         {/* Trạng thái */}
         <div>
-          <label className="text-sm font-medium">Trạng thái</label>
+          <Label className="mb-2">Trạng thái</Label>
           <Select
             value={filter.status || ""}
-            onValueChange={(value) => setFilter({ status: value ? (value as "active" | "inactive") : undefined })}
+            onValueChange={(value) =>
+              setFilter({
+                status: value ? (value as "active" | "inactive") : undefined,
+              })
+            }
           >
             <SelectTrigger className="w-full">
-              <SelectValue placeholder="Tất cả" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
@@ -65,47 +91,54 @@ export function HotlineFilters() {
 
         {/* Tên hiển thị */}
         <div>
-          <label className="text-sm font-medium">Tên hiển thị</label>
-          <Input placeholder="Nhập tên hiển thị" value={name} onChange={(e) => setName(e.target.value)} />
+          <Label className="mb-2">Tên hiển thị</Label>
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
         </div>
 
         {/* Số hotline */}
         <div>
-          <label className="text-sm font-medium">Số hotline</label>
-          <Input placeholder="Nhập số hotline" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
+          <Label className="mb-2">Số hotline</Label>
+          <Input value={hotline} onChange={(e) => setHotline(e.target.value)} />
         </div>
 
         {/* Ngày tạo */}
         <div>
-          <label className="text-sm font-medium">Ngày tạo (Từ - Đến)</label>
+          <Label className="mb-2">Ngày tạo (Từ - Đến)</Label>
           <div className="flex space-x-2">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className={cn("w-full justify-start text-left font-normal", !fromDate && "text-muted-foreground")}
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !createTimeFrom && !createTimeTo && "text-muted-foreground"
+                  )}
                 >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {fromDate ? format(fromDate, "dd/MM/yyyy") : "Từ ngày"}
+                  {createTimeFrom
+                    ? format(createTimeFrom, "dd/MM/yyyy")
+                    : "-"}{" "}
+                  -{createTimeTo ? format(createTimeTo, "dd/MM/yyyy") : " -"}
+                    <CalendarIcon className="ml-auto h-4 w-4" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={fromDate} onSelect={setFromDate} initialFocus locale={vi} />
-              </PopoverContent>
-            </Popover>
-
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn("w-full justify-start text-left font-normal", !toDate && "text-muted-foreground")}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {toDate ? format(toDate, "dd/MM/yyyy") : "Đến ngày"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar mode="single" selected={toDate} onSelect={setToDate} initialFocus locale={vi} />
+                <Calendar
+                  mode="range"
+                  selected={{ from: createTimeFrom, to: createTimeTo }}
+                  onSelect={(range) => {
+                    if (range?.from) {
+                      setFromDate(range?.from);
+                    }
+                    if (range?.to) {
+                      setToDate(range?.to);
+                    }
+                  }}
+                  disabled={(date) =>
+                    date > new Date() || date < new Date("1900-01-01")
+                  }
+                  initialFocus
+                  locale={vi}
+                />
               </PopoverContent>
             </Popover>
           </div>
@@ -113,10 +146,14 @@ export function HotlineFilters() {
 
         {/* Tòa nhà */}
         <div>
-          <label className="text-sm font-medium">Tòa nhà</label>
+          <Label className="mb-2">Tòa nhà</Label>
           <Select
             value={filter.buildingId?.toString() || ""}
-            onValueChange={(value) => setFilter({ buildingId: value ? Number.parseInt(value) : undefined })}
+            onValueChange={(value) =>
+              setFilter({
+                buildingId: value ? Number.parseInt(value) : undefined,
+              })
+            }
             disabled={isLoadingBuildings}
           >
             <SelectTrigger className="w-full">
@@ -133,17 +170,19 @@ export function HotlineFilters() {
           </Select>
         </div>
       </div>
-
-      <div className="flex justify-end space-x-2">
-        <Button variant="outline" onClick={clearFilter}>
-          <X className="mr-2 h-4 w-4" />
-          Xóa tìm kiếm
-        </Button>
+      {/* Nút tìm kiếm và xóa bộ lọc */}
+      <div className="flex gap-2 mt-[21px]">
         <Button onClick={applyFilter}>
-          <Search className="mr-2 h-4 w-4" />
-          Tìm kiếm
+          <Search className="h-4 w-4" /> Tìm kiếm
+        </Button>
+        <Button
+          variant="outline"
+          onClick={clearFilter}
+          className="text-red hover:text-red"
+        >
+          <Trash2 className="h-4 w-4" color="#FE0000" /> Xóa tìm kiếm
         </Button>
       </div>
     </div>
-  )
+  );
 }

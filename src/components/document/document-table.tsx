@@ -21,7 +21,7 @@ import {
 import { useDocumentStore } from "@/lib/store/use-document-store";
 import { toast } from "sonner";
 import TableData from "../common/table-data";
-import { generateData } from "@/lib/create-data-document-table";
+import { generateData } from "../../../utils/create-table/create-data-document-table";
 
 export function DocumentTable() {
   const {

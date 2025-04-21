@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { devtools, persist } from "zustand/middleware";
+import { devtools } from "zustand/middleware";
 
 // Định nghĩa các kiểu dữ liệu
 export type DocumentStatus = "active" | "inactive" | "expired";
@@ -21,10 +21,10 @@ export interface ApartmentDocument {
   effectiveDate: string;
   note?: string;
   files: DocumentFile[];
-  createdBy: string;
-  createdAt: string;
-  updatedBy: string;
-  updatedAt: string;
+  createBy: string;
+  createTime: string;
+  updateBy: string;
+  updateTime: string;
 }
 
 export interface DocumentFilters {
@@ -88,10 +88,10 @@ interface DocumentState {
     document: Omit<
       ApartmentDocument,
       | "id"
-      | "createdBy"
-      | "createdAt"
-      | "updatedBy"
-      | "updatedAt"
+      | "createBy"
+      | "createTime"
+      | "updateBy"
+      | "updateTime"
       | "files"
       | "status"
     >,
@@ -131,10 +131,10 @@ const initialDocuments = [
         url: "/documents/huong-dan-dang-xuat.pdf",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-01-10",
-    updatedBy: "Admin",
-    updatedAt: "2023-01-10",
+    createBy: "Admin",
+    createTime: "2023-01-10",
+    updateBy: "Admin",
+    updateTime: "2023-01-10",
   },
   {
     id: 2,
@@ -152,10 +152,10 @@ const initialDocuments = [
         url: "/documents/noi-quy-chung-cu.pdf",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-01-15",
-    updatedBy: "Admin",
-    updatedAt: "2023-02-20",
+    createBy: "Admin",
+    createTime: "2023-01-15",
+    updateBy: "Admin",
+    updateTime: "2023-02-20",
   },
   {
     id: 3,
@@ -180,10 +180,10 @@ const initialDocuments = [
         url: "/documents/huong-dan-su-dung-tien-ich.docx",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-02-05",
-    updatedBy: "Admin",
-    updatedAt: "2023-03-15",
+    createBy: "Admin",
+    createTime: "2023-02-05",
+    updateBy: "Admin",
+    updateTime: "2023-03-15",
   },
   {
     id: 4,
@@ -201,10 +201,10 @@ const initialDocuments = [
         url: "/documents/quy-dinh-pccc.pdf",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2022-03-10",
-    updatedBy: "Admin",
-    updatedAt: "2022-03-10",
+    createBy: "Admin",
+    createTime: "2022-03-10",
+    updateBy: "Admin",
+    updateTime: "2022-03-10",
   },
   {
     id: 5,
@@ -229,23 +229,50 @@ const initialDocuments = [
         url: "/documents/bieu-phi.xlsx",
       },
     ],
-    createdBy: "Admin",
-    createdAt: "2023-04-05",
-    updatedBy: "Admin",
-    updatedAt: "2023-04-05",
+    createBy: "Admin",
+    createTime: "2023-04-05",
+    updateBy: "Admin",
+    updateTime: "2023-04-05",
   },
 ];
 
 // Tạo store với Zustand
 export const useDocumentStore = create<DocumentState>()(
-  devtools(
-    persist(
-      (set, get) => ({
-        // Trạng thái ban đầu
-        documents: initialDocuments,
-        filteredDocuments: initialDocuments,
-        selectedDocument: null,
-        selectedFile: null,
+  devtools((set, get) => ({
+    // Trạng thái ban đầu
+    documents: initialDocuments,
+    filteredDocuments: initialDocuments,
+    selectedDocument: null,
+    selectedFile: null,
+    filters: {
+      name: "",
+      building: "",
+      status: "",
+      effectiveDateRange: "",
+      createdDateRange: "",
+    },
+    currentPage: 1,
+    itemsPerPage: 20,
+    totalItems: initialDocuments.length,
+    deleteDialogOpen: false,
+    documentToDelete: null,
+    fileToDelete: null,
+    drawerOpen: false,
+    drawerType: null,
+
+    // Các hành động
+    setDocuments: (documents) => set({ documents }),
+
+    setFilteredDocuments: (filteredDocuments) =>
+      set({ filteredDocuments, totalItems: filteredDocuments.length }),
+
+    setFilter: (key, value) =>
+      set((state) => ({
+        filters: { ...state.filters, [key]: value },
+      })),
+
+    clearFilters: () =>
+      set({
         filters: {
           name: "",
           building: "",
@@ -253,272 +280,232 @@ export const useDocumentStore = create<DocumentState>()(
           effectiveDateRange: "",
           createdDateRange: "",
         },
+      }),
+
+    applyFilters: () => {
+      const { documents, filters } = get();
+      let result = [...documents];
+
+      if (filters.name) {
+        result = result.filter((document) =>
+          document.name.toLowerCase().includes(filters.name.toLowerCase())
+        );
+      }
+
+      if (filters.building) {
+        result = result.filter(
+          (document) => document.building === filters.building
+        );
+      }
+
+      if (filters.status) {
+        result = result.filter(
+          (document) => document.status === filters.status
+        );
+      }
+
+      // Xử lý lọc theo khoảng thời gian hiệu lực nếu cần
+      // Xử lý lọc theo khoảng thời gian tạo nếu cần
+
+      set({
+        filteredDocuments: result,
+        totalItems: result.length,
         currentPage: 1,
-        itemsPerPage: 20,
-        totalItems: initialDocuments.length,
-        deleteDialogOpen: false,
-        documentToDelete: null,
-        fileToDelete: null,
+      });
+    },
+
+    setCurrentPage: (page) => set({ currentPage: page }),
+
+    setItemsPerPage: (count) => set({ itemsPerPage: count }),
+
+    setDeleteDialogOpen: (open) => set({ deleteDialogOpen: open }),
+
+    setDocumentToDelete: (id) => set({ documentToDelete: id }),
+
+    setFileToDelete: (data) => set({ fileToDelete: data }),
+
+    deleteDocument: () => {
+      const { documentToDelete, documents } = get();
+
+      if (documentToDelete) {
+        const updatedDocuments = documents.filter(
+          (document) => document.id !== documentToDelete
+        );
+        set({ documents: updatedDocuments });
+
+        // Áp dụng lại bộ lọc sau khi xóa
+        const { applyFilters } = get();
+        applyFilters();
+
+        set({
+          deleteDialogOpen: false,
+          documentToDelete: null,
+        });
+      }
+    },
+
+    deleteFile: () => {
+      const { fileToDelete, documents } = get();
+
+      if (fileToDelete) {
+        const { documentId, fileId } = fileToDelete;
+        const updatedDocuments = documents.map((document) => {
+          if (document.id === documentId) {
+            return {
+              ...document,
+              files: document.files.filter((file) => file.id !== fileId),
+            };
+          }
+          return document;
+        });
+
+        set({ documents: updatedDocuments });
+
+        // Áp dụng lại bộ lọc sau khi xóa
+        const { applyFilters } = get();
+        applyFilters();
+
+        set({
+          deleteDialogOpen: false,
+          fileToDelete: null,
+        });
+      }
+    },
+
+    // Drawer actions
+    openDrawer: (type, document = null, file = null) =>
+      set({
+        drawerOpen: true,
+        drawerType: type,
+        selectedDocument: document,
+        selectedFile: file,
+      }),
+
+    closeDrawer: () =>
+      set({
         drawerOpen: false,
         drawerType: null,
+        selectedDocument: null,
+        selectedFile: null,
+      }),
 
-        // Các hành động
-        setDocuments: (documents) => set({ documents }),
+    addDocument: (documentData, files) => {
+      const { documents } = get();
+      const newId =
+        documents.length > 0 ? Math.max(...documents.map((a) => a.id)) + 1 : 1;
 
-        setFilteredDocuments: (filteredDocuments) =>
-          set({ filteredDocuments, totalItems: filteredDocuments.length }),
+      const now = new Date().toISOString().split("T")[0];
 
-        setFilter: (key, value) =>
-          set((state) => ({
-            filters: { ...state.filters, [key]: value },
-          })),
+      // Tạo các file mới
+      const newFiles: DocumentFile[] = files.map((file, index) => ({
+        id: newId * 100 + index,
+        name: file.name,
+        size: file.size,
+        type: file.type,
+        url: URL.createObjectURL(file),
+      }));
 
-        clearFilters: () =>
-          set({
-            filters: {
-              name: "",
-              building: "",
-              status: "",
-              effectiveDateRange: "",
-              createdDateRange: "",
-            },
-          }),
+      const newDocument: ApartmentDocument = {
+        id: newId,
+        ...documentData,
+        status: "active",
+        files: newFiles,
+        createBy: "Admin",
+        createTime: now,
+        updateBy: "Admin",
+        updateTime: now,
+      };
 
-        applyFilters: () => {
-          const { documents, filters } = get();
-          let result = [...documents];
+      set({
+        documents: [...documents, newDocument],
+        drawerOpen: false,
+        drawerType: null,
+      });
 
-          if (filters.name) {
-            result = result.filter((document) =>
-              document.name.toLowerCase().includes(filters.name.toLowerCase())
-            );
-          }
+      // Áp dụng lại bộ lọc sau khi thêm
+      const { applyFilters } = get();
+      applyFilters();
+    },
 
-          if (filters.building) {
-            result = result.filter(
-              (document) => document.building === filters.building
-            );
-          }
+    updateDocument: (id, data, newFiles = [], removedFileIds = []) => {
+      const { documents } = get();
+      const now = new Date().toISOString().split("T")[0];
 
-          if (filters.status) {
-            result = result.filter(
-              (document) => document.status === filters.status
-            );
-          }
-
-          // Xử lý lọc theo khoảng thời gian hiệu lực nếu cần
-          // Xử lý lọc theo khoảng thời gian tạo nếu cần
-
-          set({
-            filteredDocuments: result,
-            totalItems: result.length,
-            currentPage: 1,
-          });
-        },
-
-        setCurrentPage: (page) => set({ currentPage: page }),
-
-        setItemsPerPage: (count) => set({ itemsPerPage: count }),
-
-        setDeleteDialogOpen: (open) => set({ deleteDialogOpen: open }),
-
-        setDocumentToDelete: (id) => set({ documentToDelete: id }),
-
-        setFileToDelete: (data) => set({ fileToDelete: data }),
-
-        deleteDocument: () => {
-          const { documentToDelete, documents } = get();
-
-          if (documentToDelete) {
-            const updatedDocuments = documents.filter(
-              (document) => document.id !== documentToDelete
-            );
-            set({ documents: updatedDocuments });
-
-            // Áp dụng lại bộ lọc sau khi xóa
-            const { applyFilters } = get();
-            applyFilters();
-
-            set({
-              deleteDialogOpen: false,
-              documentToDelete: null,
-            });
-          }
-        },
-
-        deleteFile: () => {
-          const { fileToDelete, documents } = get();
-
-          if (fileToDelete) {
-            const { documentId, fileId } = fileToDelete;
-            const updatedDocuments = documents.map((document) => {
-              if (document.id === documentId) {
-                return {
-                  ...document,
-                  files: document.files.filter((file) => file.id !== fileId),
-                };
-              }
-              return document;
-            });
-
-            set({ documents: updatedDocuments });
-
-            // Áp dụng lại bộ lọc sau khi xóa
-            const { applyFilters } = get();
-            applyFilters();
-
-            set({
-              deleteDialogOpen: false,
-              fileToDelete: null,
-            });
-          }
-        },
-
-        // Drawer actions
-        openDrawer: (type, document = null, file = null) =>
-          set({
-            drawerOpen: true,
-            drawerType: type,
-            selectedDocument: document,
-            selectedFile: file,
-          }),
-
-        closeDrawer: () =>
-          set({
-            drawerOpen: false,
-            drawerType: null,
-            selectedDocument: null,
-            selectedFile: null,
-          }),
-
-        addDocument: (documentData, files) => {
-          const { documents } = get();
-          const newId =
-            documents.length > 0
-              ? Math.max(...documents.map((a) => a.id)) + 1
-              : 1;
-
-          const now = new Date().toISOString().split("T")[0];
+      const updatedDocuments = documents.map((document) => {
+        if (document.id === id) {
+          // Lọc ra các file không bị xóa
+          const remainingFiles = document.files.filter(
+            (file) => !removedFileIds.includes(file.id)
+          );
 
           // Tạo các file mới
-          const newFiles: DocumentFile[] = files.map((file, index) => ({
-            id: newId * 100 + index,
+          const addedFiles: DocumentFile[] = newFiles.map((file, index) => ({
+            id: document.id * 1000 + remainingFiles.length + index,
             name: file.name,
             size: file.size,
             type: file.type,
             url: URL.createObjectURL(file),
           }));
 
-          const newDocument: ApartmentDocument = {
-            id: newId,
-            ...documentData,
-            status: "active",
-            files: newFiles,
-            createdBy: "Admin",
-            createdAt: now,
-            updatedBy: "Admin",
-            updatedAt: now,
+          return {
+            ...document,
+            ...data,
+            files: [...remainingFiles, ...addedFiles],
+            updateBy: "Admin",
+            updateTime: now,
           };
+        }
+        return document;
+      });
 
-          set({
-            documents: [...documents, newDocument],
-            drawerOpen: false,
-            drawerType: null,
-          });
+      set({
+        documents: updatedDocuments,
+        drawerOpen: false,
+        drawerType: null,
+        selectedDocument: null,
+      });
 
-          // Áp dụng lại bộ lọc sau khi thêm
-          const { applyFilters } = get();
-          applyFilters();
-        },
+      // Áp dụng lại bộ lọc sau khi cập nhật
+      const { applyFilters } = get();
+      applyFilters();
+    },
 
-        updateDocument: (id, data, newFiles = [], removedFileIds = []) => {
-          const { documents } = get();
-          const now = new Date().toISOString().split("T")[0];
+    uploadFiles: (documentId, files) => {
+      const { documents } = get();
+      const now = new Date().toISOString().split("T")[0];
 
-          const updatedDocuments = documents.map((document) => {
-            if (document.id === id) {
-              // Lọc ra các file không bị xóa
-              const remainingFiles = document.files.filter(
-                (file) => !removedFileIds.includes(file.id)
-              );
+      const updatedDocuments = documents.map((document) => {
+        if (document.id === documentId) {
+          // Tạo các file mới
+          const newFiles: DocumentFile[] = files.map((file, index) => ({
+            id: document.id * 1000 + document.files.length + index,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            url: URL.createObjectURL(file),
+          }));
 
-              // Tạo các file mới
-              const addedFiles: DocumentFile[] = newFiles.map(
-                (file, index) => ({
-                  id: document.id * 1000 + remainingFiles.length + index,
-                  name: file.name,
-                  size: file.size,
-                  type: file.type,
-                  url: URL.createObjectURL(file),
-                })
-              );
+          return {
+            ...document,
+            files: [...document.files, ...newFiles],
+            updateBy: "Admin",
+            updateTime: now,
+          };
+        }
+        return document;
+      });
 
-              return {
-                ...document,
-                ...data,
-                files: [...remainingFiles, ...addedFiles],
-                updatedBy: "Admin",
-                updatedAt: now,
-              };
-            }
-            return document;
-          });
+      set({
+        documents: updatedDocuments,
+        drawerOpen: false,
+        drawerType: null,
+      });
 
-          set({
-            documents: updatedDocuments,
-            drawerOpen: false,
-            drawerType: null,
-            selectedDocument: null,
-          });
-
-          // Áp dụng lại bộ lọc sau khi cập nhật
-          const { applyFilters } = get();
-          applyFilters();
-        },
-
-        uploadFiles: (documentId, files) => {
-          const { documents } = get();
-          const now = new Date().toISOString().split("T")[0];
-
-          const updatedDocuments = documents.map((document) => {
-            if (document.id === documentId) {
-              // Tạo các file mới
-              const newFiles: DocumentFile[] = files.map((file, index) => ({
-                id: document.id * 1000 + document.files.length + index,
-                name: file.name,
-                size: file.size,
-                type: file.type,
-                url: URL.createObjectURL(file),
-              }));
-
-              return {
-                ...document,
-                files: [...document.files, ...newFiles],
-                updatedBy: "Admin",
-                updatedAt: now,
-              };
-            }
-            return document;
-          });
-
-          set({
-            documents: updatedDocuments,
-            drawerOpen: false,
-            drawerType: null,
-          });
-
-          // Áp dụng lại bộ lọc sau khi cập nhật
-          const { applyFilters } = get();
-          applyFilters();
-        },
-      }),
-      {
-        name: "document-storage",
-        // Chỉ lưu trữ dữ liệu tài liệu, không lưu trạng thái UI
-        partialize: (state) => ({ documents: state.documents }),
-      }
-    )
-  )
+      // Áp dụng lại bộ lọc sau khi cập nhật
+      const { applyFilters } = get();
+      applyFilters();
+    },
+  }))
 );
 
 // Dữ liệu tham chiếu

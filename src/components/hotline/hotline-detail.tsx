@@ -1,77 +1,21 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { format } from "date-fns"
-import { vi } from "date-fns/locale"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
-import { useHotline } from "@/lib/tanstack-query/hotlines/queries"
+import { Button } from "@/components/ui/button";
+import { useHotline } from "@/lib/tanstack-query/hotlines/queries";
+import InfoRow from "../common/info-row";
 
 interface HotlineDetailProps {
-  hotlineId: number
+  hotlineId: string;
 }
 
 export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
-  const router = useRouter()
-  const { data: hotline, isLoading, isError } = useHotline(hotlineId)
+  const { data, isLoading, isError } = useHotline(hotlineId);
 
   if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Số hotline</p>
-            <Skeleton className="h-6 w-40" />
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Tên hiển thị</p>
-            <Skeleton className="h-6 w-40" />
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Tòa nhà</p>
-            <Skeleton className="h-6 w-32" />
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Trạng thái</p>
-            <Skeleton className="h-6 w-28" />
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Ghi chú</p>
-          <Skeleton className="h-24 w-full" />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Người tạo</p>
-            <Skeleton className="h-6 w-32" />
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Ngày tạo</p>
-            <Skeleton className="h-6 w-32" />
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Người cập nhật</p>
-            <Skeleton className="h-6 w-32" />
-          </div>
-
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Ngày cập nhật</p>
-            <Skeleton className="h-6 w-32" />
-          </div>
-        </div>
-      </div>
-    )
+    return <div className="container mx-auto p-4">Đang tải...</div>;
   }
 
-  if (isError || !hotline) {
+  if (isError || !data) {
     return (
       <div className="flex justify-center items-center p-8">
         <div className="text-center">
@@ -79,82 +23,40 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
           <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Số hotline</p>
-          <p className="text-lg">{hotline.phoneNumber}</p>
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Tên hiển thị</p>
-          <p className="text-lg">{hotline.name}</p>
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Tòa nhà</p>
-          <p className="text-lg">{hotline.buildingName}</p>
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Trạng thái</p>
-          <Badge
-            variant={hotline.status === "active" ? "default" : "destructive"}
-            className="capitalize"
-          >
-            {hotline.status === "active" ? "Đang hoạt động" : "Đã khóa"}
-          </Badge>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <p className="text-sm font-medium">Ghi chú</p>
-        <div className="p-4 border rounded-md min-h-[100px] bg-muted/30">
-          {hotline.note || (
-            <span className="text-muted-foreground italic">
-              Không có ghi chú
-            </span>
-          )}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Người tạo</p>
-          <p>{hotline.createdBy}</p>
-        </div>
-
-        <div className="space-y-2">
-          <p className="text-sm font-medium">Ngày tạo</p>
-          <p>
-            {format(new Date(hotline.createdAt), "dd/MM/yyyy HH:mm", {
-              locale: vi
-            })}
-          </p>
-        </div>
-
-        {hotline.updatedBy && (
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Người cập nhật</p>
-            <p>{hotline.updatedBy}</p>
+    <>
+      <div className="space-y-4 mt-5 mb-[30px]">
+        <div className="grid md:grid-cols-2 gap-x-10">
+          <div>
+            <InfoRow label="Số hotline" value={data?.data?.hotline} />
+            <InfoRow
+              className="col-span-2"
+              label="Ghi chú"
+              value={data?.data?.note}
+            />
           </div>
-        )}
-
-        {hotline.updatedAt && (
-          <div className="space-y-2">
-            <p className="text-sm font-medium">Ngày cập nhật</p>
-            <p>
-              {format(new Date(hotline.updatedAt), "dd/MM/yyyy HH:mm", {
-                locale: vi
-              })}
-            </p>
+          <div>
+            <InfoRow label="Tên hiển thị" value={data?.data?.name} highlight />
+            <InfoRow label="Tòa nhà" value={data?.data?.buildingId} />
           </div>
-        )}
+        </div>
       </div>
-    </div>
-  )
+      <div className="space-y-4">
+        <h2 className="font-bold">Thông tin khác</h2>
+        <div className="grid md:grid-cols-2 gap-x-10">
+          <div>
+            <InfoRow label="Người tạo" value={data?.data?.createBy} />
+            <InfoRow label="Người cập nhật" value={data?.data?.updateBy} />
+          </div>
+          <div>
+            <InfoRow label="Ngày tạo" value={data?.data?.createTime} />
+            <InfoRow label="Ngày cập nhật" value={data?.data?.updateTime} />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
