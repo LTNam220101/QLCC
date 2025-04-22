@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { ResidentFilter } from "../../../types/residents";
+import { Building } from "../../../types/buildings";
 
 interface ResidentState {
   // Bộ lọc
@@ -86,6 +87,13 @@ export const getDisplayName = (
 ) => {
   const option = options.find((opt) => opt.id === id);
   return option ? option.name : id;
+};
+export const getDisplayBuildingName = (
+  id: string | number | undefined,
+  options?: Building[]
+) => {
+  const option = options?.find((opt) => opt.buildingId === id);
+  return option ? option.buildingName : id;
 };
 
 export const getStatusColor = (status: string) => {

@@ -184,10 +184,10 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
                   <SelectContent>
                     {buildings?.map((building) => (
                       <SelectItem
-                        key={building.id}
-                        value={building.id.toString()}
+                        key={building.buildingId}
+                        value={building.buildingId.toString()}
                       >
-                        {building.name}
+                        {building.buildingName}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -206,7 +206,6 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
               <FormLabel>Ghi chú</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Nhập ghi chú"
                   className="min-h-[120px] rounded-[3px]"
                   {...field}
                   disabled={isLoading}

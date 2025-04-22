@@ -13,21 +13,22 @@ import {
 } from "@/components/ui/select";
 import {
   useResidentStore,
-  buildings,
   apartments,
   roles,
   statuses,
 } from "@/lib/store/use-resident-store";
 import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
 
 export function ResidentFilters() {
+  const { data: buildings } = useBuildings();
   const { filters, setFilter, clearFilters } = useResidentStore();
   const [fullName, setFullName] = useState(filters.fullName || "");
   const [phoneNumber, setPhoneNumber] = useState(filters.phoneNumber || "");
   const [role, setRole] = useState(filters.role || "");
   const [status, setStatus] = useState(filters.status || undefined);
-  const [manageBuildingList, setmanageBuildingList] = useState(
+  const [manageBuildingList, setManageBuildingList] = useState(
     filters.manageBuildingList || []
   );
   const [manageApartmentList, setManageApartmentList] = useState(
@@ -49,8 +50,8 @@ export function ResidentFilters() {
       phoneNumber: phoneNumber || undefined,
       role: role || undefined,
       status: status || undefined,
-      manageBuildingList: manageBuildingList || undefined,
-      manageApartmentList: manageApartmentList || undefined,
+      manageBuildingList: manageBuildingList || [],
+      manageApartmentList: manageApartmentList || [],
       page: 0,
     });
   };
@@ -61,7 +62,7 @@ export function ResidentFilters() {
     setPhoneNumber("");
     setRole("");
     setStatus(undefined);
-    setmanageBuildingList([]);
+    setManageBuildingList([]);
     setManageApartmentList([]);
     clearFilters();
   };
@@ -71,7 +72,7 @@ export function ResidentFilters() {
     setPhoneNumber(filters.phoneNumber || "");
     setRole(filters.role || "");
     setStatus(filters.status);
-    setmanageBuildingList(filters.manageBuildingList || []);
+    setManageBuildingList(filters.manageBuildingList || []);
     setManageApartmentList(filters.manageApartmentList || []);
   }, [filters]);
 
@@ -95,7 +96,16 @@ export function ResidentFilters() {
           </div>
           <div>
             <Label className="mb-2">Vai trò</Label>
-            <Select value={role} onValueChange={(value) => setRole(value)}>
+            <Select
+              value={role}
+              onValueChange={(value) => {
+                if (value !== "all") {
+                  setRole(value);
+                } else {
+                  setRole("");
+                }
+              }}
+            >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
@@ -113,7 +123,13 @@ export function ResidentFilters() {
             <Label className="mb-2">Trạng thái</Label>
             <Select
               value={`${status}`}
-              onValueChange={(value) => setStatus(+value)}
+              onValueChange={(value) => {
+                if (value !== "all") {
+                  setStatus(+value);
+                } else {
+                  setStatus(undefined);
+                }
+              }}
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
@@ -131,17 +147,26 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Toà nhà</Label>
             <Select
-              value={manageBuildingList?.[0]}
-              onValueChange={(value) => setmanageBuildingList([value])}
+              value={manageBuildingList?.[0] || ""}
+              onValueChange={(value) => {
+                if (value !== "all") {
+                  setManageBuildingList([value]);
+                } else {
+                  setManageBuildingList([]);
+                }
+              }}
             >
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tất cả tòa nhà</SelectItem>
-                {buildings.map((building) => (
-                  <SelectItem key={building.id} value={building.id}>
-                    {building.name}
+                {buildings?.map((building) => (
+                  <SelectItem
+                    key={building.buildingId}
+                    value={building.buildingId}
+                  >
+                    {building.buildingName}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -150,8 +175,14 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Căn hộ</Label>
             <Select
-              value={manageApartmentList?.[0]}
-              onValueChange={(value) => setManageApartmentList([value])}
+              value={manageApartmentList?.[0] || ""}
+              onValueChange={(value) => {
+                if (value !== "all") {
+                  setManageApartmentList([value]);
+                } else {
+                  setManageApartmentList([]);
+                }
+              }}
               disabled={
                 !manageBuildingList?.[0] || manageBuildingList?.[0] === ""
               }

@@ -55,7 +55,13 @@ export function DocumentFilters() {
           <Label className="mb-2">Tòa nhà</Label>
           <Select
             value={filters.building}
-            onValueChange={(value) => setFilter("building", value)}
+            onValueChange={(value) => {
+              if (value !== "all") {
+                setFilter("building", value);
+              } else {
+                setFilter("building", "");
+              }
+            }}
           >
             <SelectTrigger className="w-full">
               <SelectValue />
@@ -75,7 +81,13 @@ export function DocumentFilters() {
           <Label className="mb-2">Trạng thái</Label>
           <Select
             value={filters.status}
-            onValueChange={(value) => setFilter("status", value)}
+            onValueChange={(value) => {
+              if (value !== "all") {
+                setFilter("status", value);
+              } else {
+                setFilter("status", "");
+              }
+            }}
           >
             <SelectTrigger className="w-full">
               <SelectValue />
@@ -109,6 +121,9 @@ export function DocumentFilters() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                 locale={vi}
                 onSelect={(range) => {
                   if (range?.from && range?.to) {
@@ -142,6 +157,9 @@ export function DocumentFilters() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                 locale={vi}
                 onSelect={(range) => {
                   if (range?.from && range?.to) {

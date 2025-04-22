@@ -19,10 +19,10 @@ const ResidentService = {
       const queryParams = {
         page: filters.page,
         size: filters.size,
-        ...(filters.status && { status: filters.status }),
+        ...(filters.status !== undefined && { status: filters.status }),
         ...(filters.fullName && { fullName: filters.fullName }),
         ...(filters.phoneNumber && { phoneNumber: filters.phoneNumber }),
-        ...(filters.role && { role: filters.role }),
+        ...(filters.role !== undefined && { role: filters.role }),
         ...(filters.manageBuildingList && {
           manageBuildingList: filters.manageBuildingList,
         }),
@@ -170,8 +170,6 @@ export function useAddResident() {
     onSuccess: () => {
       // Invalidate và refetch danh sách cư dân
       queryClient.invalidateQueries({ queryKey: residentKeys.lists() });
-
-      toast("Cư dân đã được thêm vào hệ thống");
     },
     onError: (error: any) => {
       toast(error.message || "Có lỗi xảy ra khi thêm cư dân");
@@ -192,8 +190,6 @@ export function useUpdateResident() {
 
       // Invalidate và refetch danh sách cư dân
       queryClient.invalidateQueries({ queryKey: residentKeys.lists() });
-
-      toast("Thông tin cư dân đã được cập nhật");
     },
     onError: (error: any) => {
       toast(error.message || "Có lỗi xảy ra khi cập nhật cư dân");

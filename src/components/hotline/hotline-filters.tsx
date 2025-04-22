@@ -27,6 +27,7 @@ import { Label } from "../ui/label";
 export function HotlineFilters() {
   const { filter, setFilter, resetFilter } = useHotlineFilterStore();
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
+  const [status, setStatus] = useState(filter.status);
   const [name, setName] = useState(filter.name || "");
   const [hotline, setHotline] = useState(filter.hotline || "");
   const [createTimeFrom, setFromDate] = useState<Date | undefined>(
@@ -35,9 +36,11 @@ export function HotlineFilters() {
   const [createTimeTo, setToDate] = useState<Date | undefined>(
     filter.createTimeTo ? new Date(filter.createTimeTo) : undefined
   );
+
   // Áp dụng bộ lọc
   const applyFilter = () => {
     setFilter({
+      status: status || undefined,
       name: name || undefined,
       hotline: hotline || undefined,
       createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
@@ -48,6 +51,7 @@ export function HotlineFilters() {
 
   // Xóa bộ lọc
   const clearFilter = () => {
+    setStatus(undefined);
     setName("");
     setHotline("");
     setFromDate(undefined);
@@ -71,20 +75,26 @@ export function HotlineFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={filter.status || ""}
-            onValueChange={(value) =>
-              setFilter({
-                status: value ? (value as "active" | "inactive") : undefined,
-              })
-            }
+            value={`${status}`}
+            onValueChange={(value) => {
+              if (value !== "all") {
+                setFilter({
+                  status: value ? +value : undefined,
+                });
+              } else {
+                setFilter({
+                  status: undefined,
+                });
+              }
+            }}
           >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
-              <SelectItem value="active">Đang hoạt động</SelectItem>
-              <SelectItem value="inactive">Đã khóa</SelectItem>
+              <SelectItem value="1">Đang hoạt động</SelectItem>
+              <SelectItem value="0">Đã khóa</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -114,16 +124,17 @@ export function HotlineFilters() {
                     !createTimeFrom && !createTimeTo && "text-muted-foreground"
                   )}
                 >
-                  {createTimeFrom
-                    ? format(createTimeFrom, "dd/MM/yyyy")
-                    : "-"}{" "}
+                  {createTimeFrom ? format(createTimeFrom, "dd/MM/yyyy") : "-"}{" "}
                   -{createTimeTo ? format(createTimeTo, "dd/MM/yyyy") : " -"}
-                    <CalendarIcon className="ml-auto h-4 w-4" />
+                  <CalendarIcon className="ml-auto h-4 w-4" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="range"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                   selected={{ from: createTimeFrom, to: createTimeTo }}
                   onSelect={(range) => {
                     if (range?.from) {
@@ -149,11 +160,17 @@ export function HotlineFilters() {
           <Label className="mb-2">Tòa nhà</Label>
           <Select
             value={filter.buildingId?.toString() || ""}
-            onValueChange={(value) =>
-              setFilter({
-                buildingId: value ? Number.parseInt(value) : undefined,
-              })
-            }
+            onValueChange={(value) => {
+              if (value !== "all") {
+                setFilter({
+                  buildingId: value ? Number.parseInt(value) : undefined,
+                });
+              } else {
+                setFilter({
+                  buildingId: undefined,
+                });
+              }
+            }}
             disabled={isLoadingBuildings}
           >
             <SelectTrigger className="w-full">

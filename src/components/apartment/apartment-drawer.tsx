@@ -31,44 +31,42 @@ import {
 } from "@/components/ui/sheet";
 import { useApartmentStore } from "@/lib/store/use-apartment-store";
 import { toast } from "sonner";
-import { buildings } from "@/lib/store/use-resident-store";
 import { FileUp, Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
+import {
+  useAddApartment,
+  useUpdateApartment,
+} from "@/lib/tanstack-query/apartments/queries";
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
+import { ApartmentFormData } from "../../../types/apartments";
 
 // Schema xác thực form
 const apartmentFormSchema = z.object({
-  apartmentNumber: z.string().min(1, { message: "Căn hộ là bắt buộc" }),
-  building: z.string().min(1, { message: "Tòa nhà là bắt buộc" }),
+  apartmentName: z.string().min(1, { message: "Căn hộ là bắt buộc" }),
+  manageBuildingList: z
+    .array(z.string())
+    .min(1, { message: "Tòa nhà là bắt buộc" }),
   area: z.coerce
     .number()
     .min(0, { message: "Diện tích phải lớn hơn hoặc bằng 0" }),
-  vehicleCount: z.coerce
-    .number()
-    .min(0, { message: "Số lượng phương tiện phải lớn hơn hoặc bằng 0" }),
-  vehicleType: z.string().optional(),
   note: z.string().optional(),
 });
 
-type ApartmentFormValues = z.infer<typeof apartmentFormSchema>;
-
 export function ApartmentDrawer() {
-  const {
-    drawerOpen,
-    drawerType,
-    selectedApartment,
-    closeDrawer,
-    addApartment,
-    updateApartment,
-  } = useApartmentStore();
+  const router = useRouter();
+  const { drawerOpen, drawerType, selectedApartment, closeDrawer } =
+    useApartmentStore();
+  const { data: buildings } = useBuildings();
+  const createApartmentMutation = useAddApartment();
+  const updateApartmentMutation = useUpdateApartment();
 
   // Form
-  const form = useForm<ApartmentFormValues>({
+  const form = useForm<ApartmentFormData>({
     resolver: zodResolver(apartmentFormSchema),
     defaultValues: {
-      apartmentNumber: "",
-      building: "",
+      apartmentName: "",
+      manageBuildingList: undefined,
       area: 0,
-      vehicleCount: 0,
-      vehicleType: "",
       note: "",
     },
   });
@@ -77,35 +75,49 @@ export function ApartmentDrawer() {
   useEffect(() => {
     if (selectedApartment && drawerType === "edit") {
       form.reset({
-        apartmentNumber: selectedApartment.apartmentNumber,
-        building: selectedApartment.building,
-        area: selectedApartment.area,
-        vehicleCount: selectedApartment.vehicleCount,
-        vehicleType: selectedApartment.vehicleType || "",
+        apartmentName: selectedApartment.apartmentName || "",
+        manageBuildingList: [selectedApartment.buildingId],
+        area: selectedApartment.area || 0,
         note: selectedApartment.note || "",
       });
     } else if (drawerType === "add") {
       form.reset({
-        apartmentNumber: "",
-        building: "",
+        apartmentName: "",
+        manageBuildingList: undefined,
         area: 0,
-        vehicleCount: 0,
-        vehicleType: "",
         note: "",
       });
     }
   }, [selectedApartment, drawerType, form]);
 
   // Xử lý submit form
-  const onSubmit = (data: ApartmentFormValues) => {
-    if (drawerType === "add") {
-      addApartment(data);
-      toast("Căn hộ đã được thêm vào hệ thống");
-    } else if (drawerType === "edit" && selectedApartment) {
-      updateApartment(selectedApartment.id, data);
-      toast("Thông tin căn hộ đã được cập nhật");
+  const onSubmit = async (values: ApartmentFormData) => {
+    try {
+      const data = {
+        apartmentName: values.apartmentName ?? "",
+        manageBuildingList: values.manageBuildingList ?? "",
+        note: values.note ?? "",
+        area: values.area ?? 1,
+      };
+
+      if (drawerType === "edit" && selectedApartment) {
+        await updateApartmentMutation.mutateAsync({
+          id: selectedApartment?.id,
+          data,
+        });
+        closeDrawer();
+        toast("Thông tin căn hộ đã được cập nhật");
+        router.push("/building-information/apartments");
+      } else if (drawerType === "add") {
+        await createApartmentMutation.mutateAsync(data);
+        closeDrawer();
+        toast("Căn hộ mới đã được tạo");
+        router.push("/building-information/apartments");
+      }
+    } catch (error) {
+      console.log("check err", error);
+      toast("Đã xảy ra lỗi, vui lòng thử lại");
     }
-    form.reset();
   };
 
   // Tiêu đề drawer
@@ -125,43 +137,48 @@ export function ApartmentDrawer() {
         {(drawerType === "add" || drawerType === "edit") && (
           <Form {...form}>
             <form className="px-4 grid grid-cols-2 gap-x-5 gap-y-4">
-              <FormField
+              {/* <FormField
                 control={form.control}
-                name="apartmentNumber"
+                name="apartmentName"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
                       Căn hộ
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Nhập Căn hộ" {...field} />
+                      <Input {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
 
               <FormField
                 control={form.control}
-                name="building"
+                name="manageBuildingList"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
                       Tòa nhà
                     </FormLabel>
                     <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      onValueChange={(e) => {
+                        field.onChange([e]);
+                      }}
+                      defaultValue={field.value?.[0]}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Chọn tòa nhà" />
+                          <SelectValue />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {buildings.map((building) => (
-                          <SelectItem key={building.id} value={building.id}>
-                            {building.name}
+                        {buildings?.map((building) => (
+                          <SelectItem
+                            key={building.buildingId}
+                            value={building.buildingId}
+                          >
+                            {building.buildingName}
                           </SelectItem>
                         ))}
                       </SelectContent>

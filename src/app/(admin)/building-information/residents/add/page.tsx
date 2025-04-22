@@ -1,10 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Calendar, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -41,7 +39,7 @@ import { roles } from "@/lib/store/use-resident-store";
 
 export default function AddResidentPage() {
   const router = useRouter();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
+  const { data: buildings } = useBuildings();
   const addResidentMutation = useAddResident();
 
   // Form
@@ -50,7 +48,7 @@ export default function AddResidentPage() {
     defaultValues: {
       fullName: "",
       phoneNumber: "",
-      // building: string,
+      manageBuildingList: undefined,
       // apartment: string,
       role: "",
       // moveInDate?: string,
@@ -81,7 +79,7 @@ export default function AddResidentPage() {
       const data = {
         fullName: values?.fullName ?? "",
         phoneNumber: values?.phoneNumber ?? "",
-        // building: string,
+        manageBuildingList: values?.manageBuildingList ?? [],
         // apartment: string,
         role: values?.role ?? "",
         // moveInDate?: string,
@@ -179,6 +177,9 @@ export default function AddResidentPage() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -247,6 +248,9 @@ export default function AddResidentPage() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -280,17 +284,17 @@ export default function AddResidentPage() {
 
             <div />
 
-            {/* <FormField
+            <FormField
               control={form.control}
-              name="building"
+              name="manageBuildingList"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
                     Tòa nhà
                   </FormLabel>
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={e=>{field.onChange([e])}}
+                    defaultValue={field.value?.[0]}
                   >
                     <FormControl>
                       <SelectTrigger className="w-full">
@@ -298,9 +302,12 @@ export default function AddResidentPage() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {buildings.map((building) => (
-                        <SelectItem key={building.id} value={building.id}>
-                          {building.name}
+                      {buildings?.map((building) => (
+                        <SelectItem
+                          key={building.buildingId}
+                          value={building.buildingId}
+                        >
+                          {building.buildingName}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -310,7 +317,7 @@ export default function AddResidentPage() {
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="apartment"
               render={({ field }) => (

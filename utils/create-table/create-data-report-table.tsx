@@ -2,18 +2,16 @@ import { Column } from "@/components/common/table-data";
 import { Button } from "@/components/ui/button";
 import { Edit, LockKeyhole, LockKeyholeOpen, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { vi } from "date-fns/locale";
-import { Hotline } from "../../types/hotlines";
+import { Report } from "../../types/reports";
 
 export const generateData = ({
   handleDeleteClick,
   handleChangeStatus,
 }: {
-  handleDeleteClick?: (hotline: Hotline) => void;
-  handleChangeStatus?: (hotline: Hotline) => void;
-}): Column<Hotline>[] => [
+  handleDeleteClick?: (hotline: Report) => void;
+  handleChangeStatus?: (hotline: Report) => void;
+}): Column<Report>[] => [
   {
     dataIndex: "index",
     name: "STT",
@@ -21,24 +19,27 @@ export const generateData = ({
   },
   {
     dataIndex: "name",
-    name: "Tên hiển thị",
+    name: "Mã phản ánh",
   },
   {
     dataIndex: "hotline",
-    name: "Số hotline",
+    name: "Nội dung",
+  },
+  {
+    dataIndex: "buildingName",
+    name: "Căn hộ",
   },
   {
     dataIndex: "buildingName",
     name: "Toà nhà",
   },
   {
-    dataIndex: "createTime",
+    dataIndex: "buildingName",
+    name: "Ghi chú",
+  },
+  {
+    dataIndex: "buildingName",
     name: "Ngày tạo",
-    render: (hotline) => {
-      return hotline.createTime
-        ? format(new Date(hotline.createTime), "dd/MM/yyyy", { locale: vi })
-        : "-";
-    },
   },
   {
     dataIndex: "status",
@@ -69,7 +70,7 @@ export const generateData = ({
             <LockKeyholeOpen className="h-4 w-4" color="#194FFF" />
           )}
         </Button>
-        <Link href={`/services/hotlines/${hotline.hotlineId}/edit`}>
+        <Link href={`/services/reports/${hotline.hotlineId}/edit`}>
           <Button variant="outline" size="icon">
             <Edit className="h-4 w-4" color="#194FFF" />
           </Button>

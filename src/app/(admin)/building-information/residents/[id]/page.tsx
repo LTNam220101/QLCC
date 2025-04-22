@@ -6,22 +6,20 @@ import { Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/common/page-header";
 import InfoRow from "@/components/common/info-row";
-import {
-  buildings,
-  getDisplayName,
-  roles,
-} from "@/lib/store/use-resident-store";
+import { getDisplayName, roles } from "@/lib/store/use-resident-store";
 import StatusBadge from "@/components/common/status-badge";
 import { useResident } from "@/lib/tanstack-query/residents/queries";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Gender } from "@/enum";
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
 export default function ResidentDetailPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
+  const { data: buildings } = useBuildings();
   const { data: resident, isLoading, isError } = useResident(id);
 
   if (isLoading) {
@@ -95,7 +93,13 @@ export default function ResidentDetailPage({
             <InfoRow label="Email" value={resident?.data?.email} />
             <InfoRow
               label="Tòa nhà"
-              value={getDisplayName(resident?.data?.building, buildings)}
+              value={getDisplayName(
+                resident?.data?.manageBuildingList?.[0],
+                (buildings || [])?.map((building) => ({
+                  id: building.buildingId,
+                  name: building.buildingName,
+                }))
+              )}
             />
             <InfoRow
               label="Ngày sinh"

@@ -59,8 +59,8 @@ export const residentFormSchema = z.object({
     required_error: "Ngày cấp CMND/CCCD/Hộ chiếu là bắt buộc",
   }),
   identifyIssuer: z.string().min(1, "Nơi cấp CMND/CCCD/Hộ chiếu là bắt buộc"),
-  // building: z.string().min(1, "Tòa nhà là bắt buộc"),
-  // apartment: z.string().min(1, "Căn hộ là bắt buộc"),
+  manageBuildingList: z.array(z.string()).min(1, "Tòa nhà là bắt buộc"),
+  // manageApartmentList: z.string().min(1, "Căn hộ là bắt buộc"),
   role: z.string().min(1, "Vai trò là bắt buộc"),
   gender: z.number().optional(),
   // moveInDate: z.string().optional(),
@@ -84,7 +84,7 @@ export default function EditResidentPage({
     defaultValues: {
       fullName: "",
       phoneNumber: "",
-      // building: string,
+      manageBuildingList: undefined,
       // apartment: string,
       role: "",
       // moveInDate?: string,
@@ -103,7 +103,7 @@ export default function EditResidentPage({
       form.reset({
         fullName: resident?.data?.fullName,
         phoneNumber: resident?.data?.phoneNumber,
-        // building: string,
+        manageBuildingList: resident?.data?.manageBuildingList,
         // apartment: string,
         role: resident?.data?.role,
         // moveInDate?: string,
@@ -135,7 +135,7 @@ export default function EditResidentPage({
       const data = {
         fullName: values?.fullName ?? "",
         phoneNumber: values?.phoneNumber ?? "",
-        // building: string,
+        manageBuildingList: values?.manageBuildingList ?? [],
         // apartment: string,
         role: values?.role ?? "",
         // moveInDate?: string,
@@ -240,6 +240,9 @@ export default function EditResidentPage({
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -308,6 +311,9 @@ export default function EditResidentPage({
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -366,17 +372,19 @@ export default function EditResidentPage({
               )}
             />
 
-            {/* <FormField
+            <FormField
               control={form.control}
-              name="building"
+              name="manageBuildingList"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
                     Tòa nhà
                   </FormLabel>
                   <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={(e) => {
+                      field.onChange([e]);
+                    }}
+                    defaultValue={field.value?.[0]}
                   >
                     <FormControl>
                       <SelectTrigger disabled={isLoading} className="w-full">
@@ -384,9 +392,12 @@ export default function EditResidentPage({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {buildings.map((building) => (
-                        <SelectItem key={building.id} value={building.id}>
-                          {building.name}
+                      {buildings?.map((building) => (
+                        <SelectItem
+                          key={building.buildingId}
+                          value={building.buildingId}
+                        >
+                          {building.buildingName}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -396,7 +407,7 @@ export default function EditResidentPage({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name="apartment"
               render={({ field }) => (
@@ -440,7 +451,7 @@ export default function EditResidentPage({
                   </FormLabel>
                   <Select
                     onValueChange={(e) => {
-                      if(e){
+                      if (e) {
                         field.onChange(e);
                       }
                     }}

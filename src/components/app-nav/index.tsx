@@ -70,7 +70,7 @@ const data = {
         },
         {
           title: "Quản lý đăng ký chuyển đồ",
-          url: "/transport",
+          url: "/moving-tickets",
         },
         {
           title: "Quản lý phản ánh",

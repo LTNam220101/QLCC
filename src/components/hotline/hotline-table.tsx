@@ -1,13 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useHotlineFilterStore } from "@/lib/store/use-hotline-filter-store";
 import {
@@ -38,16 +31,6 @@ export function HotlineTable() {
 
   const [hotlineToUpdateStatus, setHotlineToUpdateStatus] =
     useState<Hotline | null>(null);
-
-  // Xử lý phân trang
-  const handlePageChange = (page: number) => {
-    setFilter({ page });
-  };
-
-  // Xử lý thay đổi số lượng hiển thị
-  const handleLimitChange = (value: string) => {
-    setFilter({ size: Number.parseInt(value), page: 0 });
-  };
 
   // Xử lý xóa hotline
   const handleDelete = async () => {
@@ -122,83 +105,10 @@ export function HotlineTable() {
         datas={data?.data?.data}
         columns={columns}
         isLoading={isLoading}
+        filters={filter}
+        setFilter={setFilter}
+        recordsTotal={data?.data?.recordsTotal}
       />
-      {/* Phân trang */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-500">
-          Tổng số {data?.data?.recordsTotal} bản ghi
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center">
-            <Select
-              value={filter?.page.toString()}
-              onValueChange={(value) =>
-                setFilter({ page: 0, size: Number(value) })
-              }
-            >
-              <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder={`${filter?.page}/trang`} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10/trang</SelectItem>
-                <SelectItem value="20">20/trang</SelectItem>
-                <SelectItem value="50">50/trang</SelectItem>
-                <SelectItem value="100">100/trang</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
-              disabled={currentPage === 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-
-            <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum = i + 1;
-
-                // Nếu có nhiều trang và đang ở trang sau
-                if (totalPages > 5 && currentPage > 3) {
-                  pageNum = currentPage - 3 + i;
-
-                  // Đảm bảo không vượt quá tổng số trang
-                  if (pageNum > totalPages) {
-                    pageNum = totalPages - (4 - i);
-                  }
-                }
-
-                return (
-                  <Button
-                    key={i}
-                    variant={currentPage === pageNum ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setCurrentPage(pageNum)}
-                    className="w-8 h-8"
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
-            </div>
-
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setCurrentPage(Math.min(currentPage + 1, totalPages))
-              }
-              disabled={currentPage === totalPages || totalPages === 0}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div> */}
-        </div>
-      </div>
 
       {/* Dialog xác nhận xóa */}
       <Dialog

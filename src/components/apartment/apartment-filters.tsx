@@ -15,6 +15,13 @@ import { vi } from "date-fns/locale";
 import { Label } from "../ui/label";
 import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
 import { cn } from "@/lib/utils";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export function ApartmentFilters() {
   const { filters, setFilter, clearFilters } = useApartmentStore();
@@ -22,7 +29,9 @@ export function ApartmentFilters() {
   const [apartmentName, setApartmentName] = useState(
     filters.apartmentName || ""
   );
-  const [buildingName, setBuildingName] = useState(filters.buildingName || "");
+  const [manageBuildingList, setManageBuildingList] = useState(
+    filters.manageBuildingList || undefined
+  );
   const [createTimeFrom, setFromDate] = useState<Date | undefined>(
     filters.createTimeFrom ? new Date(filters.createTimeFrom) : undefined
   );
@@ -33,7 +42,7 @@ export function ApartmentFilters() {
   const handleSearch = () => {
     setFilter({
       apartmentName: apartmentName || undefined,
-      buildingName: buildingName || undefined,
+      manageBuildingList: manageBuildingList || undefined,
       createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
       createTimeTo: createTimeTo ? createTimeTo.getTime() : undefined,
       page: 0,
@@ -43,7 +52,7 @@ export function ApartmentFilters() {
   // Xóa bộ lọc
   const clearFilter = () => {
     setApartmentName("");
-    setBuildingName("");
+    setManageBuildingList(undefined);
     setFromDate(undefined);
     setToDate(undefined);
     clearFilters();
@@ -51,7 +60,7 @@ export function ApartmentFilters() {
 
   useEffect(() => {
     setApartmentName(filters.apartmentName || "");
-    setBuildingName(filters.buildingName || "");
+    setManageBuildingList(filters.manageBuildingList);
     setFromDate(
       filters.createTimeFrom ? new Date(filters.createTimeFrom) : undefined
     );
@@ -63,27 +72,36 @@ export function ApartmentFilters() {
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[14px] gap-y-4">
-        {/* <div>
+        <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={filters.buildingName}
-            onValueChange={(value) => setBuildingName(value)}
+            value={manageBuildingList?.[0]}
+            onValueChange={(value) => {
+              if (value !== "all") {
+                setManageBuildingList([value]);
+              } else {
+                setManageBuildingList([]);
+              }
+            }}
           >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả tòa nhà</SelectItem>
-              {buildings.map((building) => (
-                <SelectItem key={building.id} value={building.id}>
-                  {building.name}
+              {buildings?.map((building) => (
+                <SelectItem
+                  key={building.buildingId}
+                  value={building.buildingId}
+                >
+                  {building.buildingName}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
         </div>
 
-        <div>
+        {/* <div>
           <Label className="mb-2">Căn hộ</Label>
           <Input
             value={filters.apartmentName}
@@ -110,6 +128,9 @@ export function ApartmentFilters() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
+                captionLayout="dropdown-buttons"
+                fromYear={1960}
+                toYear={2030}
                 locale={vi}
                 selected={{ from: createTimeFrom, to: createTimeTo }}
                 onSelect={(range) => {

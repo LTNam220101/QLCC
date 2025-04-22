@@ -209,15 +209,18 @@ export default function AddDocumentPage() {
                           !field.value && "text-muted-foreground"
                         )}
                       >
-                        <Calendar className="mr-2 h-4 w-4" />
                         {field.value
                           ? format(field.value, "dd/MM/yyyy", { locale: vi })
                           : "Chọn ngày hiệu lực"}
+                          <Calendar className="ml-auto h-4 w-4" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
                       <CalendarComponent
                         mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                         selected={field.value}
                         onSelect={field.onChange}
                         locale={vi}

@@ -1,14 +1,6 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -53,9 +45,6 @@ export function ResidentTable() {
     }
   };
 
-  // Tính toán phân trang
-  const totalPages = Math.ceil(data?.data?.recordsTotal || 0 / filters.size);
-
   const columns = generateData({
     handleDeleteClick,
   });
@@ -90,82 +79,10 @@ export function ResidentTable() {
         columns={columns}
         datas={data?.data?.data}
         isLoading={isLoading}
+        filters={filters}
+        setFilter={setFilter}
+        recordsTotal={data?.data?.recordsTotal}
       />
-
-      {/* Phân trang */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-500">
-          Tổng số {data?.data?.recordsTotal} bản ghi
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="flex items-center">
-            <Select
-              value={filters.size.toString()}
-              onValueChange={(value) => setFilter({ size: Number(value) })}
-            >
-              <SelectTrigger className="w-[100px]">
-                <SelectValue placeholder={`${filters.size}/trang`} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10/trang</SelectItem>
-                <SelectItem value="20">20/trang</SelectItem>
-                <SelectItem value="50">50/trang</SelectItem>
-                <SelectItem value="100">100/trang</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setFilter({ page: Math.max(filters.page, 0) })}
-              disabled={filters.page === 0}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-
-            <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum = i + 1;
-
-                // Nếu có nhiều trang và đang ở trang sau
-                if (totalPages > 5 && filters.page > 3) {
-                  pageNum = filters.page - 3 + i;
-
-                  // Đảm bảo không vượt quá tổng số trang
-                  if (pageNum > totalPages) {
-                    pageNum = totalPages - (4 - i);
-                  }
-                }
-
-                return (
-                  <Button
-                    key={i}
-                    variant={filters.page === pageNum ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setFilter({ page: pageNum })}
-                    className="w-8 h-8"
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
-            </div>
-
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setFilter({ page: Math.min(filters.page + 1, totalPages) })
-              }
-              disabled={filters.page === totalPages || totalPages === 0}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </div>
 
       {/* Dialog xác nhận xóa */}
       <Dialog

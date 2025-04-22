@@ -5,6 +5,7 @@ import { ApartmentDrawer } from "@/components/apartment/apartment-drawer";
 import PageHeader from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { useApartmentStore } from "@/lib/store/use-apartment-store";
+import { useApartment } from "@/lib/tanstack-query/apartments/queries";
 import { Edit } from "lucide-react";
 import { use } from "react";
 
@@ -14,12 +15,14 @@ export default function ApartmentDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const apartmentId = Number.parseInt(id, 10);
-  const { apartments, openDrawer } = useApartmentStore();
-  const apartment = apartments.find((apt) => apt.id === apartmentId);
+  const { data } = useApartment(id);
+
+  const { openDrawer } = useApartmentStore();
 
   const handleEdit = () => {
-    openDrawer("edit", apartment);
+    if (data?.data) {
+      openDrawer("edit", data?.data);
+    }
   };
   return (
     <>
@@ -32,7 +35,7 @@ export default function ApartmentDetailPage({
           Sửa
         </Button>
       </PageHeader>
-      <ApartmentDetail apartmentId={apartmentId} />
+      <ApartmentDetail apartmentId={id} />
       <ApartmentDrawer />
     </>
   );

@@ -279,15 +279,18 @@ export function DocumentDrawer() {
                         !field.value && "text-muted-foreground"
                       )}
                     >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
                       {field.value
                         ? format(field.value, "dd/MM/yyyy", { locale: vi })
                         : "Chọn ngày hiệu lực"}
+                        <CalendarIcon className="ml-auto h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
                       selected={field.value}
                       onSelect={field.onChange}
                       locale={vi}

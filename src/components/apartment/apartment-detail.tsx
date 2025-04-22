@@ -1,24 +1,30 @@
 "use client";
-import { useApartmentStore } from "@/lib/store/use-apartment-store";
 import InfoRow from "../common/info-row";
-import { buildings, getDisplayName } from "@/lib/store/use-resident-store";
+import { getDisplayName } from "@/lib/store/use-resident-store";
+import { useApartment } from "@/lib/tanstack-query/apartments/queries";
+import { Button } from "../ui/button";
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
 
 interface ApartmentDetailProps {
-  apartmentId: number;
+  apartmentId: string;
 }
 
 export function ApartmentDetail({ apartmentId }: ApartmentDetailProps) {
-  const { apartments } = useApartmentStore();
-  const apartment = apartments.find((apt) => apt.id === apartmentId);
+  const { data, isLoading, isError } = useApartment(apartmentId);
+  const { data: buildings } = useBuildings();
 
-  if (!apartment) {
+  if (isLoading) {
+    return <div className="container mx-auto p-4">Đang tải...</div>;
+  }
+
+  if (isError || !data) {
     return (
-      <div className="space-y-4 mt-5 mb-[30px]">
-        <div className="text-center py-8">
-          <h2 className="text-xl font-semibold">Không tìm thấy căn hộ</h2>
-          <p className="mt-2 text-muted-foreground">
-            Căn hộ này không tồn tại hoặc đã bị xóa
-          </p>
+      <div className="flex justify-center items-center p-8">
+        <div className="text-center">
+          <p className="text-red-500 mb-2">Đã xảy ra lỗi khi tải dữ liệu</p>
+          <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
     );
@@ -29,14 +35,20 @@ export function ApartmentDetail({ apartmentId }: ApartmentDetailProps) {
       <h2 className="font-bold">Thông tin chung</h2>
       <div className="grid md:grid-cols-2 gap-x-10">
         <div>
-          <InfoRow label="Căn hộ" value={apartment.apartmentNumber} />
-          <InfoRow label="Ghi chú" value={apartment.note || "-"} />
+          <InfoRow label="Căn hộ" value={data?.data?.apartmentName} />
+          <InfoRow label="Ghi chú" value={data?.data?.note || "-"} />
         </div>
         <div>
-          <InfoRow label="Diện tích" value={apartment.area || "-"} />
+          <InfoRow label="Diện tích" value={data?.data?.area || "-"} />
           <InfoRow
             label="Tòa nhà"
-            value={getDisplayName(apartment.building, buildings)}
+            value={getDisplayName(
+              data?.data?.buildingName,
+              (buildings || [])?.map((building) => ({
+                id: building.buildingId,
+                name: building.buildingName,
+              }))
+            )}
           />
         </div>
       </div>
@@ -45,12 +57,28 @@ export function ApartmentDetail({ apartmentId }: ApartmentDetailProps) {
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
-            <InfoRow label="Người tạo" value={apartment.createBy} />
-            <InfoRow label="Người cập nhật" value={apartment.updateBy} />
+            <InfoRow label="Người tạo" value={data?.data?.createBy} />
+            <InfoRow label="Người cập nhật" value={data?.data?.updateBy} />
           </div>
           <div>
-            <InfoRow label="Ngày tạo" value={apartment.createTime} />
-            <InfoRow label="Ngày cập nhật" value={apartment.updateTime} />
+            <InfoRow
+              label="Ngày tạo"
+              value={
+                data?.data?.createTime &&
+                format(new Date(data?.data?.createTime), "dd/MM/yyyy", {
+                  locale: vi,
+                })
+              }
+            />
+            <InfoRow
+              label="Ngày cập nhật"
+              value={
+                data?.data?.updateTime &&
+                format(new Date(data?.data?.updateTime), "dd/MM/yyyy", {
+                  locale: vi,
+                })
+              }
+            />
           </div>
         </div>
       </div>

@@ -1,17 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { useHotline } from "@/lib/tanstack-query/hotlines/queries";
+import { useMovingTicket } from "@/lib/tanstack-query/moving-tickets/queries";
 import InfoRow from "../common/info-row";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
+import { Rating, RatingValue } from "../ui/rating";
 
-interface HotlineDetailProps {
-  hotlineId: string;
+interface MovingTicketDetailProps {
+  movingTicketId: string;
 }
 
-export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
-  const { data, isLoading, isError } = useHotline(hotlineId);
+export function MovingTicketDetail({
+  movingTicketId,
+}: MovingTicketDetailProps) {
+  const { data, isLoading, isError } = useMovingTicket(movingTicketId);
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>;
@@ -33,20 +36,37 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
       <div className="space-y-4 mt-5 mb-[30px]">
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
-            <InfoRow label="Số hotline" value={data?.data?.hotline} />
+            <InfoRow label="Căn hộ" value={data?.data?.apartmentId} />
             <InfoRow
-              className="col-span-2"
+              label="Mã đăng ký"
+              value={data?.data?.ticketCode?.split("-")?.at(-1)}
+            />
+            <InfoRow
               label="Ghi chú"
+              className="col-span-2"
               value={data?.data?.note}
             />
           </div>
           <div>
-            <InfoRow label="Tên hiển thị" value={data?.data?.name} highlight />
-            <InfoRow label="Tòa nhà" value={data?.data?.buildingId} />
+            <InfoRow
+              label="Ngày chuyển đồ"
+              value={
+                data?.data?.movingDayTime &&
+                format(new Date(data?.data?.movingDayTime), "dd/MM/yyyy", {
+                  locale: vi,
+                })
+              }
+              highlight
+            />
+            <InfoRow label="Hình thức" value={data?.data?.transferType} />
+            <InfoRow
+              label="Nội dung xác nhận"
+              value={data?.data?.evaluateContent}
+            />
           </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 mb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
@@ -73,6 +93,25 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
               }
             />
           </div>
+        </div>
+      </div>
+      <div className="space-y-4">
+        <div className="flex items-center space-x-5">
+          <h2 className="font-bold">Đánh giá</h2>
+          <Rating
+            value={(data?.data?.evaluate || 0) as RatingValue}
+            readonly
+            size="sm"
+          />
+        </div>
+        <div className="grid md:grid-cols-2 gap-x-10">
+          <div className="col-span-2">
+            <InfoRow
+              label="Nội dung đánh giá"
+              value={data?.data?.evaluateContent}
+            />
+          </div>
+          <div></div>
         </div>
       </div>
     </>

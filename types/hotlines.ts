@@ -1,5 +1,3 @@
-export type HotlineStatus = "active" | "inactive";
-
 export interface Hotline {
   hotlineId: string;
   name: string;
@@ -8,13 +6,13 @@ export interface Hotline {
   note?: string;
   status: number;
   createTime: number;
-  createBy: number;
+  createBy: string;
   updateTime?: number;
-  updateBy?: number;
+  updateBy?: string;
 }
 
 export interface HotlineFilter {
-  status?: HotlineStatus;
+  status?: number;
   name?: string;
   hotline?: string;
   buildingId?: number;

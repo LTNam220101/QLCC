@@ -1,13 +1,9 @@
 import { Column } from "@/components/common/table-data";
 import { Button } from "@/components/ui/button";
-import { Edit, Lock, Trash2 } from "lucide-react";
+import { Edit, ScanSearch, Trash2 } from "lucide-react";
 import StatusBadge from "@/components/common/status-badge";
 import Link from "next/link";
-import {
-  buildings,
-  getDisplayName,
-  roles,
-} from "@/lib/store/use-resident-store";
+import { getDisplayName, roles } from "@/lib/store/use-resident-store";
 import { Resident } from "../../types/residents";
 
 export const generateData = ({
@@ -29,11 +25,8 @@ export const generateData = ({
     name: "Số điện thoại",
   },
   {
-    dataIndex: "building",
+    dataIndex: "buildingName",
     name: "Toà nhà",
-    render: (resident) => {
-      return getDisplayName(resident.building, buildings);
-    },
   },
   {
     dataIndex: "apartment",
@@ -62,7 +55,7 @@ export const generateData = ({
       <div className="flex gap-2">
         <Link href={`/building-information/residents/${resident.id}`}>
           <Button variant="outline" size="icon">
-            <Lock className="h-4 w-4" color="#194FFF" />
+            <ScanSearch className="h-4 w-4" color="#194FFF" />
             <span className="sr-only">Chi tiết</span>
           </Button>
         </Link>

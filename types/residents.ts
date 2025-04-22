@@ -2,8 +2,8 @@ export interface Resident {
   id: string;
   fullName: string;
   phoneNumber: string;
-  // building: string;
-  // apartment: string;
+  manageBuildingList: string[];
+  // manageApartmentList: string[];
   role: string;
   // moveInDate: string;
   status: number;
@@ -33,8 +33,8 @@ export interface ResidentFilter {
 export interface ResidentFormData {
   fullName: string;
   phoneNumber: string;
-  // building: string;
-  // apartment: string;
+  manageBuildingList: string[];
+  // manageApartmentList: string[];
   role: string;
   // moveInDate?: string;
   email?: string;

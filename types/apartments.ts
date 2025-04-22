@@ -12,8 +12,7 @@ export interface Apartment {
 }
 
 export interface ApartmentFilter {
-  buildingName?: string;
-  buildingId?: string;
+  manageBuildingList?: string[];
   apartmentName?: string;
   createTimeFrom?: number;
   createTimeTo?: number;
@@ -23,8 +22,7 @@ export interface ApartmentFilter {
 
 export interface ApartmentFormData {
   apartmentName: string;
-  buildingName: string;
-  buildingId: string;
+  manageBuildingList: string[];
   area: number;
   note?: string;
 }

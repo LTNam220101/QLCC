@@ -16,7 +16,7 @@ const HotlineService = {
       const queryParams = {
         page: filter.page,
         size: filter.size,
-        ...(filter.status && { status: filter.status }),
+        ...(filter.status !== undefined && { status: filter.status }),
         ...(filter.name && { name: filter.name }),
         ...(filter.hotline && { hotline: filter.hotline }),
         ...(filter.buildingId && { buildingId: filter.buildingId }),

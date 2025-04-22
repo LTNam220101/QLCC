@@ -19,8 +19,9 @@ const ApartmentService = {
       const queryParams = {
         page: filters.page,
         size: filters.size,
-        ...(filters.buildingName && { buildingName: filters.buildingName }),
-        ...(filters.buildingId && { buildingId: filters.buildingId }),
+        ...(filters.manageBuildingList && {
+          manageBuildingList: filters.manageBuildingList,
+        }),
         ...(filters.apartmentName && { apartmentName: filters.apartmentName }),
         ...(filters.createTimeFrom && {
           createTimeFrom: filters.createTimeFrom,
@@ -172,8 +173,6 @@ export function useAddApartment() {
     onSuccess: () => {
       // Invalidate và refetch danh sách căn hộ
       queryClient.invalidateQueries({ queryKey: apartmentKeys.lists() });
-
-      toast("Cư dân đã được thêm vào hệ thống");
     },
     onError: (error: any) => {
       toast(error.message || "Có lỗi xảy ra khi thêm căn hộ");
@@ -194,8 +193,6 @@ export function useUpdateApartment() {
 
       // Invalidate và refetch danh sách căn hộ
       queryClient.invalidateQueries({ queryKey: apartmentKeys.lists() });
-
-      toast("Thông tin căn hộ đã được cập nhật");
     },
     onError: (error: any) => {
       toast(error.message || "Có lỗi xảy ra khi cập nhật căn hộ");

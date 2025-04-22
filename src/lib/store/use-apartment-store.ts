@@ -21,8 +21,7 @@ interface ApartmentState {
 }
 
 const initialFilter: ApartmentFilter = {
-  buildingName: undefined,
-  buildingId: undefined,
+  manageBuildingList: undefined,
   apartmentName: undefined,
   createTimeFrom: undefined,
   createTimeTo: undefined,
