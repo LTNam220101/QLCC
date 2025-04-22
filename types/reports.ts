@@ -1,23 +1,30 @@
 export interface Report {
   reportId: string;
   reportContent: string;
+  resultContent: string;
   note?: string;
   buildingId: string;
+  buildingName: string;
   apartmentId: string;
+  apartmentName: string;
+  ressidentId: string;
+  ressidentName: string;
   status: number;
   createTime: number;
   createBy: string;
   updateTime?: number;
   updateBy?: string;
-//   residentName: string;
-//   residentId: string;
+  evaluate?: number;
+  evaluateContent?: string;
+  //   residentName: string;
+  //   residentId: string;
 }
 
 export interface ReportFilter {
   status?: number;
-  name?: string;
-  hotline?: string;
-  buildingId?: number;
+  reportContent?: string;
+  buildingId?: string;
+  apartmentId?: string;
   createTimeFrom?: number;
   createTimeTo?: number;
   page: number;
@@ -25,9 +32,9 @@ export interface ReportFilter {
 }
 
 export interface ReportFormData {
-  name: string;
-  hotline: string;
   buildingId: string;
+  apartmentId: string;
+  reportContent: string;
   note?: string;
   status?: number;
 }
@@ -35,9 +42,6 @@ export interface ReportFormData {
 export interface ReportPaginatedResponse {
   data: { data: Report[]; recordsTotal: number };
   total: number;
-  // page: number;
-  // limit: number;
-  // totalPages: number;
 }
 
 export interface ReportDetailResponse {

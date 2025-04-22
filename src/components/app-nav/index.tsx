@@ -74,7 +74,7 @@ const data = {
         },
         {
           title: "Quản lý phản ánh",
-          url: "/feed_back",
+          url: "/reports",
         },
         {
           title: "Quản lý hotline",
