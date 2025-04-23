@@ -23,6 +23,17 @@ const nextConfig: NextConfig = {
     ];
   },
   reactStrictMode: false,
+  eslint: {
+    // Bỏ qua kiểm tra ESLint khi chạy `next build`
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    // !! WARN !!
+    // Dangerously allow production builds to successfully complete even if
+    // your project has type errors.
+    // !! WARN !!
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;

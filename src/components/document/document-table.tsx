@@ -87,7 +87,7 @@ export function DocumentTable() {
         <div className="flex items-center gap-2">
           <div className="flex items-center">
             <Select
-              value={itemsPerPage.toString()}
+              value={itemsPerPage?.toString()}
               onValueChange={(value) => setItemsPerPage(Number(value))}
             >
               <SelectTrigger className="w-[100px]">

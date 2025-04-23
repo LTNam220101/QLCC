@@ -1,10 +1,10 @@
-FROM node:lts as dependencies
+FROM node:lts-alpine AS dependencies
 WORKDIR /app
 COPY package.json ./
 RUN yarn install
 
-FROM node:lts as builder
-ARG ENVIRONMENT
+FROM node:lts-alpine AS builder
+ARG ENVIRONMENT=dev
 WORKDIR /app
 COPY ./ .
 RUN echo "Build environment is $ENVIRONMENT"
@@ -13,10 +13,10 @@ COPY ./.env.${ENVIRONMENT} .env
 COPY --from=dependencies /app/node_modules ./node_modules
 RUN yarn run build
 
-FROM node:lts as runner
+FROM node:lts-alpine AS runner
 WORKDIR /app
-ENV NODE_ENV production
-COPY --from=builder /app/next.config.mjs ./
+ENV NODE_ENV=production
+COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/.env ./.env

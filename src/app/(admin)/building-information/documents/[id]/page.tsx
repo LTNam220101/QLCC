@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Edit, Eye, Trash } from "lucide-react";
@@ -32,11 +32,12 @@ import { toast } from "sonner";
 export default function DocumentDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = use(params);
   const router = useRouter();
   const { documents, setFileToDelete, deleteFile } = useDocumentStore();
-  const documentId = Number.parseInt(params.id, 10);
+  const documentId = Number.parseInt(id, 10);
   const [document, setDocument] = useState<any>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [previewOpen, setPreviewOpen] = useState(false);

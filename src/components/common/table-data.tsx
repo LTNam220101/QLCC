@@ -118,7 +118,7 @@ function TableData<T>({
         <div className="flex items-center gap-2">
           <div className="flex items-center">
             <Select
-              value={filters.size.toString()}
+              value={filters?.size?.toString()}
               onValueChange={(value) => setFilter({ size: Number(value) })}
             >
               <SelectTrigger className="w-[100px]">

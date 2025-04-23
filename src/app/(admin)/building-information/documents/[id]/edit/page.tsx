@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -72,12 +72,13 @@ type DocumentFormValues = z.infer<typeof documentFormSchema>;
 export default function EditDocumentPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = use(params);
   const router = useRouter();
   const { documents, updateDocument, setFileToDelete, deleteFile } =
     useDocumentStore();
-  const documentId = Number.parseInt(params.id, 10);
+  const documentId = Number.parseInt(id, 10);
 
   const [document, setDocument] = useState<any>(null);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);

@@ -185,7 +185,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
                     {buildings?.map((building) => (
                       <SelectItem
                         key={building.buildingId}
-                        value={building.buildingId.toString()}
+                        value={building?.buildingId?.toString()}
                       >
                         {building.buildingName}
                       </SelectItem>

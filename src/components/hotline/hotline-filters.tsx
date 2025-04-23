@@ -159,7 +159,7 @@ export function HotlineFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={filter.buildingId?.toString() || ""}
+            value={filter?.buildingId?.toString() || ""}
             onValueChange={(value) => {
               if (value !== "all") {
                 setFilter({
@@ -179,7 +179,7 @@ export function HotlineFilters() {
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
               {buildings?.map((building) => (
-                <SelectItem key={building.id} value={building.id.toString()}>
+                <SelectItem key={building.id} value={building?.id?.toString()}>
                   {building.name}
                 </SelectItem>
               ))}

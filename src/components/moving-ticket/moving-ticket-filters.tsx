@@ -198,7 +198,7 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={filter.buildingId?.toString() || ""}
+            value={filter?.buildingId?.toString() || ""}
             onValueChange={(value) => {
               if (value !== "all") {
                 setBuildingId(value);
@@ -216,7 +216,7 @@ export function MovingTicketFilters() {
               {buildings?.map((building) => (
                 <SelectItem
                   key={building.buildingId}
-                  value={building.buildingId.toString()}
+                  value={building?.buildingId?.toString()}
                 >
                   {building.buildingName}
                 </SelectItem>

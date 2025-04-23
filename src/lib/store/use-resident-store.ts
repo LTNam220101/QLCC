@@ -31,7 +31,7 @@ export const useResidentStore = create<ResidentState>()(
     // Các hành động
     setFilter: (newFilter) =>
       set((state) => {
-        let a: any = {};
+        const a: any = {};
         if (newFilter.manageBuildingList) {
           a.manageApartmentList = [];
         }
