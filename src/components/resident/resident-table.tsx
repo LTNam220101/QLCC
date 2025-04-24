@@ -14,8 +14,9 @@ import TableData from "../common/table-data";
 import { generateData } from "../../../utils/create-table/create-data-resident-table";
 import { useResidentStore } from "@/lib/store/use-resident-store";
 import {
-  useDeleteResident,
+  useUpdateResident,
   useResidents,
+  useDeleteResident,
 } from "@/lib/tanstack-query/residents/queries";
 import { useState } from "react";
 import { Resident } from "../../../types/residents";
@@ -23,7 +24,13 @@ import { Resident } from "../../../types/residents";
 export function ResidentTable() {
   const { filters, setFilter, clearFilters } = useResidentStore();
   const { data, isLoading, isError } = useResidents(filters);
+  const updateResidentMutation = useUpdateResident();
   const deleteResidentMutation = useDeleteResident();
+
+  const [residentToUpdate, setResidentToUpdate] = useState<{
+    resident: Resident;
+    newStatus: number;
+  } | null>(null);
 
   const [residentToDelete, setResidentToDelete] = useState<Resident | null>(
     null
@@ -33,20 +40,46 @@ export function ResidentTable() {
     setResidentToDelete(resident);
   };
 
+  const handleUpdateClick = (resident: Resident, status: number) => {
+    setResidentToUpdate({ resident, newStatus: status });
+  };
+
   const confirmDelete = async () => {
     if (!residentToDelete) return;
 
     try {
-      await deleteResidentMutation.mutateAsync(residentToDelete.id);
-      toast(`Đã xóa cư dân ${residentToDelete.fullName}`);
+      await deleteResidentMutation.mutateAsync(residentToDelete?.id);
+      toast(`Đã xoá cư dân ${residentToDelete?.fullName}`);
       setResidentToDelete(null);
     } catch (error) {
-      toast("Đã xảy ra lỗi khi xóa cư dân");
+      toast("Đã xảy ra lỗi khi xoá cư dân");
+    }
+  };
+
+  const confirmUpdate = async () => {
+    if (!residentToUpdate) return;
+
+    try {
+      const { updateBy, updateTime, createBy, createTime, ...rest } =
+        residentToUpdate?.resident;
+      await updateResidentMutation.mutateAsync({
+        id: residentToUpdate?.resident?.id,
+        data: {
+          ...rest,
+          status: residentToUpdate?.newStatus,
+        },
+      });
+      toast(`Đã cập nhật cư dân ${residentToUpdate?.resident?.fullName}`);
+      setResidentToUpdate(null);
+    } catch (error) {
+      toast("Đã xảy ra lỗi khi cập nhật cư dân");
     }
   };
 
   const columns = generateData({
+    startIndex: filters?.size * filters?.page || 0,
     handleDeleteClick,
+    handleUpdateClick,
   });
 
   // Render lỗi
@@ -75,7 +108,7 @@ export function ResidentTable() {
   return (
     <div className="space-y-4 mt-5">
       {/* Danh sách cư dân */}
-      <TableData
+      <TableData<Resident>
         columns={columns}
         datas={data?.data?.data}
         isLoading={isLoading}
@@ -84,6 +117,26 @@ export function ResidentTable() {
         recordsTotal={data?.data?.recordsTotal}
       />
 
+      {/* Dialog xác nhận cập nhật */}
+      <Dialog
+        open={!!residentToUpdate}
+        onOpenChange={(open) => !open && setResidentToUpdate(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Xác nhận thay đổi trạng thái cư dân</DialogTitle>
+            <DialogDescription>
+              Bạn có chắc chắn muốn thay đổi trạng thái cư dân này?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setResidentToUpdate(null)}>
+              Hủy
+            </Button>
+            <Button onClick={confirmUpdate}>Xác nhận</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
       {/* Dialog xác nhận xóa */}
       <Dialog
         open={!!residentToDelete}
@@ -91,10 +144,9 @@ export function ResidentTable() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Xác nhận xóa cư dân</DialogTitle>
+            <DialogTitle>Xác nhận xoá cư dân</DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn xóa cư dân này? Hành động này không thể hoàn
-              tác.
+              Bạn có chắc chắn muốn xoá cư dân này?
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -102,7 +154,7 @@ export function ResidentTable() {
               Hủy
             </Button>
             <Button variant="destructive" onClick={confirmDelete}>
-              Xóa
+              Xác nhận
             </Button>
           </DialogFooter>
         </DialogContent>

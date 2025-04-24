@@ -8,16 +8,18 @@ import { vi } from "date-fns/locale";
 import { Hotline } from "../../types/hotlines";
 
 export const generateData = ({
+  startIndex,
   handleDeleteClick,
   handleChangeStatus,
 }: {
+  startIndex: number;
   handleDeleteClick?: (hotline: Hotline) => void;
   handleChangeStatus?: (hotline: Hotline) => void;
 }): Column<Hotline>[] => [
   {
     dataIndex: "index",
     name: "STT",
-    render: (_, index) => index + 1,
+    render: (_, index) => startIndex+ index + 1,
   },
   {
     dataIndex: "name",
@@ -69,18 +71,18 @@ export const generateData = ({
             <LockKeyholeOpen className="h-4 w-4" color="#194FFF" />
           )}
         </Button>
-        <Link href={`/services/hotlines/${hotline.hotlineId}/edit`}>
+        {/* <Link href={`/services/hotlines/${hotline.hotlineId}/edit`}>
           <Button variant="outline" size="icon">
             <Edit className="h-4 w-4" color="#194FFF" />
           </Button>
-        </Link>
-        <Button
+        </Link> */}
+        {/* <Button
           variant="outline"
           size="icon"
           onClick={() => handleDeleteClick?.(hotline)}
         >
           <Trash2 className="h-4 w-4" color="#FE0000" />
-        </Button>
+        </Button> */}
       </div>
     ),
   },

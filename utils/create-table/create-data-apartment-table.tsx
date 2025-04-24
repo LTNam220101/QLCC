@@ -6,11 +6,15 @@ import { Apartment } from "../../types/apartments";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 
-export const generateData = (): Column<Apartment>[] => [
+export const generateData = ({
+  startIndex,
+}: {
+  startIndex: number;
+}): Column<Apartment>[] => [
   {
     dataIndex: "index",
     name: "STT",
-    render: (_, index) => index + 1,
+    render: (_, index) => startIndex + index + 1,
   },
   {
     dataIndex: "apartmentName",

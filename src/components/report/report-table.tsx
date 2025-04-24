@@ -31,7 +31,6 @@ export function ReportTable() {
 
   const [reportToUpdateStatus, setReportToUpdateStatus] =
     useState<Report | null>(null);
-
   // Xử lý xóa report
   const handleDelete = async () => {
     if (!reportToDelete) return;
@@ -54,12 +53,14 @@ export function ReportTable() {
       });
       toast(`Đã đổi trạng thái phản ánh ${reportToUpdateStatus.reportId}`);
       setReportToUpdateStatus(null);
+      setTypeUpdate(undefined);
     } catch (error) {
       toast(`Đã xảy ra lỗi khi đổi trạng thái`);
     }
   };
 
   const columns = generateData({
+    startIndex: filter?.size * filter?.page || 0,
     handleDeleteClick: (report) => {
       setReportToDelete(report);
     },
@@ -146,10 +147,7 @@ export function ReportTable() {
             >
               Hủy
             </Button>
-            <Button
-              variant="destructive"
-              onClick={() => handleUpdateStatus(typeUpdate!)}
-            >
+            <Button onClick={() => handleUpdateStatus(typeUpdate!)}>
               Xác nhận
             </Button>
           </DialogFooter>

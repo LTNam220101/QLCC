@@ -62,12 +62,12 @@ export const generateData = ({
             <span className="sr-only">Chi tiết</span>
           </Button>
         </Link>
-        <Link href={`/building-information/documents/${document.id}/edit`}>
+        {/* <Link href={`/building-information/documents/${document.id}/edit`}>
           <Button variant="outline" size="icon">
             <Edit className="h-4 w-4" color="#194FFF" />
             <span className="sr-only">Sửa</span>
           </Button>
-        </Link>
+        </Link> */}
         <Button
           variant="outline"
           size="icon"

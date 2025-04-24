@@ -36,7 +36,8 @@ import { ReportFormData } from "../../../types/reports";
 // Schema validation
 const formSchema = z.object({
   reportContent: z.string().min(1, "Nội dung không được để trống"),
-  apartmentId: z.string().min(1, "Căn hộ không được để trống"),
+  apartmentId: z.string(),
+  // .min(1, "Căn hộ không được để trống"),
   buildingId: z.string().min(1, "Toà nhà không được để trống"),
   note: z.string().optional(),
 });
@@ -85,6 +86,7 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
   // Xử lý submit form
   const onSubmit = async (values: ReportFormData) => {
     try {
+      console.log(234)
       const data = {
         buildingId: values.buildingId ?? "",
         apartmentId: values.apartmentId ?? "",
@@ -93,12 +95,14 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
       };
 
       if (isEdit && reportId) {
+        console.log(567)
         const { updateBy, updateTime, createBy, createTime, ...rest } =
           report?.data;
         await updateReportMutation.mutateAsync({ ...rest, ...data });
         toast("Thông tin đăng ký chuyển đồ đã được cập nhật");
         router.push("/services/reports");
       } else {
+        console.log(879)
         await createReportMutation.mutateAsync(data);
         toast("Report mới đã được tạo");
         router.push("/services/reports");

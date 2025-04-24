@@ -1,23 +1,31 @@
 import { Column } from "@/components/common/table-data";
 import { Button } from "@/components/ui/button";
-import { Edit, LockKeyhole, LockKeyholeOpen, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { EllipsisVertical, ScanSearch } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Report } from "../../types/reports";
+import { Report, ReportStatus } from "../../types/reports";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 export const generateData = ({
+  startIndex,
   handleDeleteClick,
   handleChangeStatus,
 }: {
+  startIndex: number;
   handleDeleteClick?: (report: Report) => void;
   handleChangeStatus?: (report: Report, status: number) => void;
 }): Column<Report>[] => [
   {
     dataIndex: "index",
     name: "STT",
-    render: (_, index) => index + 1,
+    render: (_, index) => startIndex + index + 1,
   },
   {
     dataIndex: "reportId",
@@ -52,44 +60,44 @@ export const generateData = ({
   {
     dataIndex: "status",
     name: "Trạng thái",
-    render: (report) => (
-      <Badge
-        variant={report.status === 1 ? "green_outline" : "destructive_outline"}
-      >
-        {report.status === 1 ? "Đang hoạt động" : "Đã khóa"}
-      </Badge>
-    ),
+    render: (report) => {
+      const color = `${ReportStatus?.[report?.status]?.color}_outline`;
+      const statusName = ReportStatus?.[report?.status]?.name;
+
+      return <Badge variant={color as any}>{statusName}</Badge>;
+    },
   },
   {
     dataIndex: "status",
     name: "Thao tác",
     render: (report) => (
       <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => {
-            handleChangeStatus?.(report);
-          }}
-        >
-          {report.status === 1 ? (
-            <LockKeyhole className="h-4 w-4" color="#194FFF" />
-          ) : (
-            <LockKeyholeOpen className="h-4 w-4" color="#194FFF" />
-          )}
-        </Button>
-        <Link href={`/services/reports/${report.reportId}/edit`}>
+        <Link href={`/services/reports/${report.reportId}`}>
           <Button variant="outline" size="icon">
-            <Edit className="h-4 w-4" color="#194FFF" />
+            <ScanSearch className="h-4 w-4" color="blue" />
           </Button>
         </Link>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleDeleteClick?.(report)}
-        >
-          <Trash2 className="h-4 w-4" color="#FE0000" />
-        </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <EllipsisVertical className="h-4 w-4" color="#194FFF" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={() => handleDeleteClick?.(report)}>
+              Xoá
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleChangeStatus?.(report, 2)}>
+              Xác nhận xử lý
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleChangeStatus?.(report, 0)}>
+              Từ chối
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleChangeStatus?.(report, 3)}>
+              Hoàn thành
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     ),
   },

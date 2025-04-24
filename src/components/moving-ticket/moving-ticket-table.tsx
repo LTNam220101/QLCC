@@ -65,6 +65,7 @@ export function MovingTicketTable() {
   };
 
   const columns = generateData({
+    startIndex: filter?.size * filter?.page || 0,
     handleDeleteClick: (movingTicket) => {
       setMovingTicketToDelete(movingTicket);
     },

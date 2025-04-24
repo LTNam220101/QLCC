@@ -93,9 +93,10 @@ const ReportService = {
     data?: ReportFormData
   ): Promise<ReportDetailResponse> => {
     try {
+      const _id = data?.reportId;
       // Gọi API sử dụng sendRequest
       const response = await apiRequest<ReportDetailResponse>({
-        url: `/resident-report/${id}`,
+        url: `/resident-report/${id || _id}`,
         method: "PUT",
         useCredentials: true,
         body: {

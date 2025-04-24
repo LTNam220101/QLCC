@@ -23,6 +23,7 @@ import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { Label } from "../ui/label";
+import { ReportStatus } from "../../../types/reports";
 
 export function ReportFilters() {
   const { filter, setFilter, resetFilter } = useReportFilterStore();
@@ -97,8 +98,11 @@ export function ReportFilters() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
-              <SelectItem value="1">Đang hoạt động</SelectItem>
-              <SelectItem value="0">Đã khóa</SelectItem>
+              {Object.entries(ReportStatus).map(([id, status]) => (
+                <SelectItem key={id} value={id}>
+                  {status.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>

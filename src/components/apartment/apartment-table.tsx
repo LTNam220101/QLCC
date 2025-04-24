@@ -4,16 +4,16 @@ import { Button } from "@/components/ui/button";
 import { useApartmentStore } from "@/lib/store/use-apartment-store";
 import TableData from "../common/table-data";
 import { generateData } from "../../../utils/create-table/create-data-apartment-table";
-import {
-  useApartments,
-} from "@/lib/tanstack-query/apartments/queries";
+import { useApartments } from "@/lib/tanstack-query/apartments/queries";
 
 export function ApartmentTable() {
   const { filters, setFilter, clearFilters } = useApartmentStore();
 
   const { data, isLoading, isError } = useApartments(filters);
 
-  const columns = generateData();
+  const columns = generateData({
+    startIndex: filters?.size * filters?.page || 0,
+  });
 
   // Render lỗi
   if (isError) {

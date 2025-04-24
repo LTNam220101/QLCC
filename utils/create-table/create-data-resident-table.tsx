@@ -1,20 +1,31 @@
 import { Column } from "@/components/common/table-data";
 import { Button } from "@/components/ui/button";
-import { Edit, ScanSearch, Trash2 } from "lucide-react";
+import {
+  CheckCheck,
+  Edit,
+  LockKeyhole,
+  LockKeyholeOpen,
+  ScanSearch,
+  Trash2,
+} from "lucide-react";
 import StatusBadge from "@/components/common/status-badge";
 import Link from "next/link";
 import { getDisplayName, roles } from "@/lib/store/use-resident-store";
 import { Resident } from "../../types/residents";
 
 export const generateData = ({
+  startIndex,
+  handleUpdateClick,
   handleDeleteClick,
 }: {
+  startIndex: number;
+  handleUpdateClick?: (resident: Resident, status: number) => void;
   handleDeleteClick?: (resident: Resident) => void;
 }): Column<Resident>[] => [
   {
     dataIndex: "index",
     name: "STT",
-    render: (_, index) => index + 1,
+    render: (_, index) => startIndex + index + 1,
   },
   {
     dataIndex: "fullName",
@@ -56,23 +67,50 @@ export const generateData = ({
         <Link href={`/building-information/residents/${resident.id}`}>
           <Button variant="outline" size="icon">
             <ScanSearch className="h-4 w-4" color="#194FFF" />
-            <span className="sr-only">Chi tiết</span>
           </Button>
         </Link>
-        <Link href={`/building-information/residents/${resident.id}/edit`}>
+        {/* <Link href={`/building-information/residents/${resident.id}/edit`}>
           <Button variant="outline" size="icon">
             <Edit className="h-4 w-4" color="#194FFF" />
-            <span className="sr-only">Sửa</span>
           </Button>
-        </Link>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => handleDeleteClick?.(resident)}
-        >
-          <Trash2 className="h-4 w-4" color="#FE0000" />
-          <span className="sr-only">Xóa</span>
-        </Button>
+        </Link> */}
+        {resident.status === 0 ? (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => handleUpdateClick?.(resident, 4)}
+          >
+            <LockKeyholeOpen className="h-6 w-6" color="blue" />
+          </Button>
+        ) : null}
+        {resident.status === 2 ? (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => handleUpdateClick?.(resident, 3)}
+          >
+            <CheckCheck className="h-6 w-6" color="blue" />
+          </Button>
+        ) : null}
+        {[0, 1, 2]?.includes(resident.status) ? (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => handleDeleteClick?.(resident)}
+          >
+            <Trash2 className="h-4 w-4" color="#FE0000" />
+          </Button>
+        ) : null}
+
+        {resident.status === 4 ? (
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => handleUpdateClick?.(resident, 0)}
+          >
+            <LockKeyhole className="h-6 w-6" color="blue" />
+          </Button>
+        ) : null}
       </div>
     ),
   },

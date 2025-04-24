@@ -68,6 +68,7 @@ export function HotlineTable() {
   };
 
   const columns = generateData({
+    startIndex: filter?.size * filter?.page || 0,
     handleDeleteClick: (hotline) => {
       setHotlineToDelete(hotline);
     },

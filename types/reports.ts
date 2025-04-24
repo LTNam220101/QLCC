@@ -1,3 +1,13 @@
+export const ReportStatus: {
+  [key: number]: { name: string; color: string };
+} = {
+  0: { name: "Từ chối", color: "red" },
+  1: { name: "Chờ xử lý", color: "gray" },
+  2: { name: "Đang xử lý", color: "blue" },
+  3: { name: "Hoàn thành", color: "green" },
+  4: { name: "Đã đánh giá", color: "purple" },
+};
+
 export interface Report {
   reportId: string;
   reportContent: string;

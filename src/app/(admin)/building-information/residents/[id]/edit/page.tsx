@@ -115,7 +115,7 @@ export default function EditResidentPage({
         dateOfBirth: resident?.data?.dateOfBirth,
       });
     }
-  }, [form, resident]);
+  }, [form, resident?.data]);
 
   // Theo dõi thay đổi tòa nhà để lọc căn hộ
   // const watchBuilding = form.watch("building");
@@ -166,10 +166,12 @@ export default function EditResidentPage({
         title={
           <>
             Cập nhật cư dân
-            <StatusBadge
-              status={resident?.data?.status}
-              className="ml-[14px]"
-            />
+            {resident?.data?.status ? (
+              <StatusBadge
+                status={resident?.data?.status}
+                className="ml-[14px]"
+              />
+            ) : null}
           </>
         }
         backUrl={`/building-information/residents/${id}`}
@@ -240,9 +242,9 @@ export default function EditResidentPage({
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                          captionLayout="dropdown-buttons"
+                          fromYear={1960}
+                          toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -311,9 +313,9 @@ export default function EditResidentPage({
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                          captionLayout="dropdown-buttons"
+                          fromYear={1960}
+                          toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -355,7 +357,7 @@ export default function EditResidentPage({
                     onValueChange={(e) => {
                       field.onChange(+e);
                     }}
-                    value={`${field.value}`}
+                    value={field.value ? `${field.value}` : undefined}
                   >
                     <FormControl>
                       <SelectTrigger disabled={isLoading} className="w-full">
@@ -365,7 +367,6 @@ export default function EditResidentPage({
                     <SelectContent>
                       <SelectItem value="1">Nam</SelectItem>
                       <SelectItem value="0">Nữ</SelectItem>
-                      {/* <SelectItem value="Khác">Khác</SelectItem> */}
                     </SelectContent>
                   </Select>
                 </FormItem>

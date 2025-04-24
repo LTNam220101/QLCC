@@ -9,16 +9,18 @@ import { MovingTicket } from "../../types/moving-tickets";
 import { TransferType } from "@/enum";
 
 export const generateData = ({
+  startIndex,
   handleDeleteClick,
   handleChangeStatus,
 }: {
+  startIndex: number;
   handleDeleteClick?: (movingTicket: MovingTicket) => void;
   handleChangeStatus?: (movingTicket: MovingTicket, status: number) => void;
 }): Column<MovingTicket>[] => [
   {
     dataIndex: "index",
     name: "STT",
-    render: (_, index) => index + 1,
+    render: (_, index) => startIndex + index + 1,
   },
   {
     dataIndex: "ticketCode",
@@ -95,11 +97,11 @@ export const generateData = ({
             <LockKeyholeOpen className="h-4 w-4" color="#194FFF" />
           )}
         </Button>
-        <Link href={`/services/moving-tickets/${movingTicket.ticketId}/edit`}>
+        {/* <Link href={`/services/moving-tickets/${movingTicket.ticketId}/edit`}>
           <Button variant="outline" size="icon">
             <Edit className="h-4 w-4" color="#194FFF" />
           </Button>
-        </Link>
+        </Link> */}
         <Button
           variant="outline"
           size="icon"

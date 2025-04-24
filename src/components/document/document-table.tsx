@@ -72,7 +72,10 @@ export function DocumentTable() {
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
   const currentItems = filteredDocuments.slice(startIndex, endIndex);
 
-  const columns = generateData({ handleDeleteClick });
+  const columns = generateData({
+    startIndex: filters?.size * filters?.page || 0,
+    handleDeleteClick,
+  });
 
   return (
     <div className="space-y-4">

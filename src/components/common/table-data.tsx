@@ -32,7 +32,7 @@ export type textAlign =
 export type Column<T> = {
   className?: string;
   textAlign?: textAlign;
-  render?: (data: T, index: number) => any;
+  render?: (data: T, index: number) => React.ReactNode;
   dataIndex: string;
   name?: React.ReactNode;
 };
@@ -42,8 +42,8 @@ type ListingTableDataProps<T> = {
   datas?: T[];
   isLoading?: boolean;
   recordsTotal?: number;
-  filters: any;
-  setFilter: (arg0: any) => void;
+  filters: Record<string, any>;
+  setFilter: (arg0: Record<string, any>) => void;
 };
 
 function TableData<T>({
@@ -138,14 +138,14 @@ function TableData<T>({
               variant="outline"
               size="icon"
               onClick={() => setFilter({ page: Math.max(filters.page, 0) })}
-              disabled={filters.page === 1}
+              disabled={filters.page === 0}
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
 
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum = i + 1;
+                let pageNum = i;
 
                 // Nếu có nhiều trang và đang ở trang sau
                 if (totalPages > 5 && filters.page > 3) {
@@ -165,7 +165,7 @@ function TableData<T>({
                     onClick={() => setFilter({ page: pageNum })}
                     className="w-8 h-8"
                   >
-                    {pageNum}
+                    {pageNum + 1}
                   </Button>
                 );
               })}

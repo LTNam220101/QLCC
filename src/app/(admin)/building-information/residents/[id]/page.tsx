@@ -42,10 +42,12 @@ export default function ResidentDetailPage({
         title={
           <>
             Chi tiết cư dân
-            <StatusBadge
-              status={resident?.data?.status}
-              className="ml-[14px]"
-            />
+            {resident?.data?.status ? (
+              <StatusBadge
+                status={resident?.data?.status}
+                className="ml-[14px]"
+              />
+            ) : null}
           </>
         }
         backUrl="/building-information/residents"

@@ -15,11 +15,11 @@ import {
   useResidentStore,
   apartments,
   roles,
-  statuses,
 } from "@/lib/store/use-resident-store";
 import { Separator } from "../ui/separator";
 import { Label } from "../ui/label";
 import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
+import { ResidentStatus } from "../../../types/residents";
 
 export function ResidentFilters() {
   const { data: buildings } = useBuildings();
@@ -136,8 +136,8 @@ export function ResidentFilters() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Tất cả trạng thái</SelectItem>
-                {statuses.map((status) => (
-                  <SelectItem key={status.id} value={status.id}>
+                {Object.entries(ResidentStatus).map(([id, status]) => (
+                  <SelectItem key={id} value={id}>
                     {status.name}
                   </SelectItem>
                 ))}
