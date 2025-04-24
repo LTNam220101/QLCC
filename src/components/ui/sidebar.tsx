@@ -258,7 +258,7 @@ function SidebarTrigger({
   onClick,
   ...props
 }: React.ComponentProps<typeof Button>) {
-  const { toggleSidebar } = useSidebar();
+  // const { toggleSidebar } = useSidebar();
 
   return (
     <Button
@@ -272,7 +272,7 @@ function SidebarTrigger({
       )}
       onClick={(event) => {
         onClick?.(event);
-        toggleSidebar();
+        // toggleSidebar();
       }}
       {...props}
     >

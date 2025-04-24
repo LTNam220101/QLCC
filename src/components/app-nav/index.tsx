@@ -1,13 +1,7 @@
-"use client";
+"use client"
 
-import * as React from "react";
-import {
-  BookOpen,
-  Bot,
-  Command,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import * as React from "react"
+import { BookOpen, Bot, Command, Settings2, SquareTerminal } from "lucide-react"
 
 import {
   Sidebar,
@@ -15,45 +9,44 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarRail,
-} from "@/components/ui/sidebar";
-import { NavMain } from "./nav-main";
+  SidebarRail
+} from "@/components/ui/sidebar"
+import { NavMain } from "./nav-main"
+import { usePathname } from "next/navigation"
 
-// This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
+    {
+      title: "TRANG CHỦ",
+      url: "/",
+      icon: Settings2,
+    },
     {
       title: "Thông tin toà nhà",
       url: "/building-information",
       icon: SquareTerminal,
-      isActive: true,
       items: [
         {
           title: "Quản lý cư dân",
-          url: "/residents",
+          url: "/residents"
         },
         {
           title: "Quản lý căn hộ",
-          url: "/apartments",
+          url: "/apartments"
         },
         {
           title: "Quản lý tài liệu căn hộ",
-          url: "/documents",
+          url: "/documents"
         },
         {
           title: "Quản lý sổ tay cư dân",
-          url: "/apartments",
+          url: "/apartments"
         },
         {
           title: "Quản lý thông tin toà nhà",
-          url: "/apartments",
-        },
-      ],
+          url: "/apartments"
+        }
+      ]
     },
     {
       title: "Dịch vụ toà nhà",
@@ -62,29 +55,29 @@ const data = {
       items: [
         {
           title: "Quản lý khách thăm",
-          url: "/news_feed",
+          url: "/news_feed"
         },
         {
           title: "Quản lý đăng ký thi công",
-          url: "/transport",
+          url: "/transport"
         },
         {
           title: "Quản lý đăng ký chuyển đồ",
-          url: "/moving-tickets",
+          url: "/moving-tickets"
         },
         {
           title: "Quản lý phản ánh",
-          url: "/reports",
+          url: "/reports"
         },
         {
           title: "Quản lý hotline",
-          url: "/hotlines",
+          url: "/hotlines"
         },
         {
           title: "Giao tiếp",
-          url: "/hotlines",
-        },
-      ],
+          url: "/hotlines"
+        }
+      ]
     },
     {
       title: "Thanh toán/Chi phí",
@@ -93,13 +86,13 @@ const data = {
       items: [
         {
           title: "Bảng kê chi phí",
-          url: "#",
+          url: "#"
         },
         {
           title: "Quản lý thanh toán",
-          url: "#",
-        },
-      ],
+          url: "#"
+        }
+      ]
     },
     {
       title: "Thông báo/Bảng tin",
@@ -108,18 +101,45 @@ const data = {
       items: [
         {
           title: "Thông báo",
-          url: "#",
+          url: "#"
         },
         {
           title: "Bảng tin",
-          url: "#",
-        },
-      ],
-    },
-  ],
-};
+          url: "#"
+        }
+      ]
+    }
+  ]
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const pathname = usePathname()
+
+  // Duyệt và cập nhật trạng thái isActive
+  const navItems = data.navMain.map((item) => {
+    const isMainActive =
+      pathname === item.url || pathname.startsWith(item.url + "/")
+
+    // Duyệt submenu nếu có
+    const subItems = item.items?.map((sub) => {
+      const isSubActive =
+        pathname === sub.url || pathname.startsWith(item.url + sub.url)
+      return {
+        ...sub,
+        isActive: isSubActive
+      }
+    })
+
+    // Nếu bất kỳ submenu nào active => menu chính cũng active
+    const isAnySubActive = subItems?.some((s) => s.isActive)
+
+    return {
+      ...item,
+      isActive: isMainActive || isAnySubActive,
+      items: subItems
+    }
+  })
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="bg-purple">
@@ -135,15 +155,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <div className="flex items-center px-[18px] py-[14px] gap-[10px]">
-          <div className="w-8 h-8 border border-[#666666] rounded-lg flex items-center justify-center">
-            <Settings2 />
-          </div>
-          <span className="font-medium text-[#666]">TRANG CHỦ</span>
-        </div>
-        <NavMain items={data.navMain} />
+        <NavMain items={navItems} />
       </SidebarContent>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

@@ -179,8 +179,8 @@ export function HotlineFilters() {
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
               {buildings?.map((building) => (
-                <SelectItem key={building.id} value={building?.id?.toString()}>
-                  {building.name}
+                <SelectItem key={building.buildingId} value={building?.buildingId?.toString()}>
+                  {building.buildingName}
                 </SelectItem>
               ))}
             </SelectContent>
