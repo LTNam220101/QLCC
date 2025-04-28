@@ -30,12 +30,13 @@ export interface Resident {
 }
 
 export interface ResidentFilter {
-  status?: number;
+  // status?: number;
+  statusList?: number[];
   fullName?: string;
   phoneNumber?: string;
-  role?: string;
-  manageBuildingList?: string[];
-  manageApartmentList?: string[];
+  identifyId?:string;
+  createTimeFrom?: number;
+  createTimeTo?: number;
   page: number;
   size: number;
 }
@@ -43,9 +44,9 @@ export interface ResidentFilter {
 export interface ResidentFormData {
   fullName: string;
   phoneNumber: string;
-  manageBuildingList: string[];
+  // manageBuildingList: string[];
   // manageApartmentList: string[];
-  role: string;
+  // role: string;
   // moveInDate?: string;
   email?: string;
   identifyId: string;

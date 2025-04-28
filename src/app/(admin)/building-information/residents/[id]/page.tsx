@@ -6,7 +6,6 @@ import { Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/common/page-header";
 import InfoRow from "@/components/common/info-row";
-import { getDisplayName, roles } from "@/lib/store/use-resident-store";
 import StatusBadge from "@/components/common/status-badge";
 import { useResident } from "@/lib/tanstack-query/residents/queries";
 import { format } from "date-fns";
@@ -72,11 +71,6 @@ export default function ResidentDetailPage({
               label="Số điện thoại"
               value={resident?.data?.phoneNumber}
             />
-            <InfoRow
-              label="Căn hộ"
-              value={resident?.data?.apartment}
-              highlight
-            />
             <InfoRow label="Họ và tên" value={resident?.data?.fullName} />
             <InfoRow
               label="Số CMND/CCCD/Hộ chiếu"
@@ -86,23 +80,9 @@ export default function ResidentDetailPage({
               label="Nơi cấp CMND/CCCD/Hộ chiếu"
               value={resident?.data?.identifyIssuer}
             />
-            <InfoRow
-              label="Vai trò"
-              value={getDisplayName(resident?.data?.role, roles)}
-            />
           </div>
           <div>
             <InfoRow label="Email" value={resident?.data?.email} />
-            <InfoRow
-              label="Tòa nhà"
-              value={getDisplayName(
-                resident?.data?.manageBuildingList?.[0],
-                (buildings || [])?.map((building) => ({
-                  id: building.buildingId,
-                  name: building.buildingName,
-                }))
-              )}
-            />
             <InfoRow
               label="Ngày sinh"
               value={
@@ -128,10 +108,6 @@ export default function ResidentDetailPage({
             <InfoRow
               label="Giới tính"
               value={Gender?.[resident?.data?.gender]}
-            />
-            <InfoRow
-              label="Ngày chuyển đến"
-              value={resident?.data?.moveInDate}
             />
           </div>
         </div>

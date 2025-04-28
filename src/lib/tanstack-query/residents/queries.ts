@@ -19,15 +19,15 @@ const ResidentService = {
       const queryParams = {
         page: filters.page,
         size: filters.size,
-        ...(filters.status !== undefined && { status: filters.status }),
+        ...(filters.statusList !== undefined && { statusList: filters.statusList }),
         ...(filters.fullName && { fullName: filters.fullName }),
         ...(filters.phoneNumber && { phoneNumber: filters.phoneNumber }),
-        ...(filters.role !== undefined && { role: filters.role }),
-        ...(filters.manageBuildingList && {
-          manageBuildingList: filters.manageBuildingList,
+        ...(filters.identifyId !== undefined && { identifyId: filters.identifyId }),
+        ...(filters.createTimeFrom && {
+          createTimeFrom: filters.createTimeFrom,
         }),
-        ...(filters.manageApartmentList && {
-          manageApartmentList: filters.manageApartmentList,
+        ...(filters.createTimeTo && {
+          createTimeTo: filters.createTimeTo,
         }),
       };
 

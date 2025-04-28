@@ -1,79 +1,77 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { useMovingTicketFilterStore } from "@/lib/store/use-moving-ticket-filter-store";
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { useMovingTicketFilterStore } from "@/lib/store/use-moving-ticket-filter-store"
 import {
   useMovingTickets,
   useDeleteMovingTicket,
-  useUpdateMovingTicket,
-} from "@/lib/tanstack-query/moving-tickets/queries";
-import { toast } from "sonner";
-import { generateData } from "../../../utils/create-table/create-data-moving-ticket-table";
-import TableData from "../common/table-data";
+  useUpdateMovingTicket
+} from "@/lib/tanstack-query/moving-tickets/queries"
+import { toast } from "sonner"
+import { generateData } from "../../../utils/create-table/create-data-moving-ticket-table"
+import TableData from "../common/table-data"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import { MovingTicket } from "../../../types/moving-tickets";
+  DialogTitle
+} from "../ui/dialog"
+import { MovingTicket } from "../../../types/moving-tickets"
 
 export function MovingTicketTable() {
-  const { filter, setFilter, resetFilter } = useMovingTicketFilterStore();
-  const { data, isLoading, isError } = useMovingTickets(filter);
-  const deleteMovingTicketMutation = useDeleteMovingTicket();
-  const updateMovingTicketMutation = useUpdateMovingTicket();
-  const [typeUpdate, setTypeUpdate] = useState<number | undefined>(undefined);
+  const { filter, setFilter, resetFilter } = useMovingTicketFilterStore()
+  const { data, isLoading, isError } = useMovingTickets(filter)
+  const deleteMovingTicketMutation = useDeleteMovingTicket()
+  const updateMovingTicketMutation = useUpdateMovingTicket()
+  const [typeUpdate, setTypeUpdate] = useState<number | undefined>(undefined)
   const [movingTicketToDelete, setMovingTicketToDelete] =
-    useState<MovingTicket | null>(null);
+    useState<MovingTicket | null>(null)
 
   const [movingTicketToUpdateStatus, setMovingTicketToUpdateStatus] =
-    useState<MovingTicket | null>(null);
+    useState<MovingTicket | null>(null)
 
   // Xử lý xóa movingTicket
   const handleDelete = async () => {
-    if (!movingTicketToDelete) return;
+    if (!movingTicketToDelete) return
 
     try {
       await deleteMovingTicketMutation.mutateAsync(
         movingTicketToDelete.ticketId
-      );
-      toast(`Đã xóa yêu cầu ${movingTicketToDelete.ticketCode}`);
-      setMovingTicketToDelete(null);
+      )
+      toast(`Đã xóa yêu cầu`)
+      setMovingTicketToDelete(null)
     } catch (error) {
-      toast("Đã xảy ra lỗi khi xóa yêu cầu");
+      toast("Đã xảy ra lỗi khi xóa yêu cầu")
     }
-  };
+  }
   // Xử lý đổi status movingTicket
   const handleUpdateStatus = async (status: number) => {
-    if (!movingTicketToUpdateStatus) return;
+    if (!movingTicketToUpdateStatus) return
     try {
       await updateMovingTicketMutation.mutateAsync({
         ...movingTicketToUpdateStatus,
-        status: status,
-      });
-      toast(
-        `Đã đổi trạng thái yêu cầu ${movingTicketToUpdateStatus.ticketCode}`
-      );
-      setMovingTicketToUpdateStatus(null);
+        status: status
+      })
+      toast(`Đã đổi trạng thái yêu cầu`)
+      setMovingTicketToUpdateStatus(null)
     } catch (error) {
-      toast(`Đã xảy ra lỗi khi đổi trạng thái`);
+      toast(`Đã xảy ra lỗi khi đổi trạng thái`)
     }
-  };
+  }
 
   const columns = generateData({
     startIndex: filter?.size * filter?.page || 0,
     handleDeleteClick: (movingTicket) => {
-      setMovingTicketToDelete(movingTicket);
+      setMovingTicketToDelete(movingTicket)
     },
     handleChangeStatus: (movingTicket, status) => {
-      setMovingTicketToUpdateStatus(movingTicket);
-      setTypeUpdate(status);
-    },
-  });
+      setMovingTicketToUpdateStatus(movingTicket)
+      setTypeUpdate(status)
+    }
+  })
 
   // Render lỗi
   if (isError) {
@@ -84,7 +82,7 @@ export function MovingTicketTable() {
           <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
-    );
+    )
   }
   // Render khi không có dữ liệu
   if (data?.data?.data.length === 0) {
@@ -95,7 +93,7 @@ export function MovingTicketTable() {
           <Button onClick={resetFilter}>Đặt lại bộ lọc</Button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -118,9 +116,8 @@ export function MovingTicketTable() {
           <DialogHeader>
             <DialogTitle>Xác nhận xóa yêu cầu</DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn xóa yêu cầu{" "}
-              {`${movingTicketToDelete?.ticketCode}`}? Hành động này không thể
-              hoàn tác.
+              Bạn có chắc chắn muốn xóa yêu cầu? Hành động này không thể hoàn
+              tác.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -146,8 +143,7 @@ export function MovingTicketTable() {
           <DialogHeader>
             <DialogTitle>Xác nhận đổi trạng thái yêu cầu</DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn đổi trạng thái yêu cầu{" "}
-              {`${movingTicketToUpdateStatus?.ticketCode}`}?
+              Bạn có chắc chắn muốn đổi trạng thái yêu cầu
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
@@ -157,15 +153,12 @@ export function MovingTicketTable() {
             >
               Hủy
             </Button>
-            <Button
-              variant="destructive"
-              onClick={() => handleUpdateStatus(typeUpdate!)}
-            >
+            <Button onClick={() => handleUpdateStatus(typeUpdate!)}>
               Xác nhận
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
-  );
+  )
 }

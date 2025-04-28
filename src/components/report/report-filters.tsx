@@ -28,7 +28,7 @@ import { ReportStatus } from "../../../types/reports";
 export function ReportFilters() {
   const { filter, setFilter, resetFilter } = useReportFilterStore();
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
-  const [status, setStatus] = useState(filter.status);
+  const [statusList, setStatusList] = useState(filter.statusList)
   const [reportContent, setReportContent] = useState(
     filter.reportContent || ""
   );
@@ -44,7 +44,7 @@ export function ReportFilters() {
   // Áp dụng bộ lọc
   const applyFilter = () => {
     setFilter({
-      status: status || undefined,
+      statusList: statusList || undefined,
       reportContent: reportContent,
       buildingId: buildingId || undefined,
       apartmentId: apartmentId || undefined,
@@ -55,7 +55,7 @@ export function ReportFilters() {
   };
   // Xóa bộ lọc
   const clearFilter = () => {
-    setStatus(undefined);
+    setStatusList(undefined);
     setReportContent("");
     setBuildingId("");
     setApartmentId("");
@@ -65,7 +65,7 @@ export function ReportFilters() {
   };
 
   useEffect(() => {
-    setStatus(filter.status || undefined);
+    setStatusList(filter.statusList || undefined);
     setReportContent(filter.reportContent || "");
     setBuildingId(filter.buildingId || "");
     setApartmentId(filter.apartmentId || "");
@@ -84,12 +84,12 @@ export function ReportFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={`${status}`}
+            value={`${statusList?.[0]}`}
             onValueChange={(value) => {
               if (value !== "all") {
-                setStatus(+value);
+                setStatusList([+value]);
               } else {
-                setStatus(undefined);
+                setStatusList(undefined);
               }
             }}
           >

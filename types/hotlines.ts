@@ -12,7 +12,8 @@ export interface Hotline {
 }
 
 export interface HotlineFilter {
-  status?: number;
+  // status?: number;
+  statusList?: number[];
   name?: string;
   hotline?: string;
   buildingId?: number;
@@ -33,9 +34,6 @@ export interface HotlineFormData {
 export interface HotlinePaginatedResponse {
   data: { data: Hotline[]; recordsTotal: number };
   total: number;
-  // page: number;
-  // limit: number;
-  // totalPages: number;
 }
 
 export interface HotlineDetailResponse {

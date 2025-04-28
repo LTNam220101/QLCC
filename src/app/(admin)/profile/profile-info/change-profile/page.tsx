@@ -85,7 +85,6 @@ const ChangeProfile = () => {
   })
 
   function onSubmit(data: FormValues) {
-    console.log(data)
     // Here you would typically send the data to your API
     alert("Thông tin đã được lưu thành công!")
   }

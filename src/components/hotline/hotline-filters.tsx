@@ -1,72 +1,73 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useHotlineFilterStore } from "@/lib/store/use-hotline-filter-store";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react"
+import { useHotlineFilterStore } from "@/lib/store/use-hotline-filter-store"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+  SelectValue
+} from "@/components/ui/select"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon, Search, Trash2 } from "lucide-react";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { Label } from "../ui/label";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { CalendarIcon, Search, Trash2 } from "lucide-react"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { cn } from "@/lib/utils"
+import { Label } from "../ui/label"
 
 export function HotlineFilters() {
-  const { filter, setFilter, resetFilter } = useHotlineFilterStore();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
-  const [status, setStatus] = useState(filter.status);
-  const [name, setName] = useState(filter.name || "");
-  const [hotline, setHotline] = useState(filter.hotline || "");
+  const { filter, setFilter, resetFilter } = useHotlineFilterStore()
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
+  const [statusList, setStatusList] = useState(filter.statusList || undefined)
+  const [name, setName] = useState(filter.name || "")
+  const [hotline, setHotline] = useState(filter.hotline || "")
   const [createTimeFrom, setFromDate] = useState<Date | undefined>(
     filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
-  );
+  )
   const [createTimeTo, setToDate] = useState<Date | undefined>(
     filter.createTimeTo ? new Date(filter.createTimeTo) : undefined
-  );
+  )
 
   // Áp dụng bộ lọc
   const applyFilter = () => {
     setFilter({
-      status: status || undefined,
+      statusList: statusList || undefined,
       name: name || undefined,
       hotline: hotline || undefined,
       createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
       createTimeTo: createTimeTo ? createTimeTo.getTime() : undefined,
-      page: 0, // Reset về trang 1 khi lọc
-    });
-  };
+      page: 0 // Reset về trang 1 khi lọc
+    })
+  }
 
   // Xóa bộ lọc
   const clearFilter = () => {
-    setStatus(undefined);
-    setName("");
-    setHotline("");
-    setFromDate(undefined);
-    setToDate(undefined);
-    resetFilter();
-  };
+    setStatusList(undefined)
+    setName("")
+    setHotline("")
+    setFromDate(undefined)
+    setToDate(undefined)
+    resetFilter()
+  }
 
   useEffect(() => {
-    setName(filter.name || "");
-    setHotline(filter.hotline || "");
+    setStatusList(filter.statusList || undefined)
+    setName(filter.name || "")
+    setHotline(filter.hotline || "")
     setFromDate(
       filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
-    );
-    setToDate(filter.createTimeTo ? new Date(filter.createTimeTo) : undefined);
-  }, [filter]);
+    )
+    setToDate(filter.createTimeTo ? new Date(filter.createTimeTo) : undefined)
+  }, [filter])
 
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
@@ -75,16 +76,12 @@ export function HotlineFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={`${status}`}
+            value={`${statusList?.[0]}`}
             onValueChange={(value) => {
               if (value !== "all") {
-                setFilter({
-                  status: value ? +value : undefined,
-                });
+                setStatusList([+value])
               } else {
-                setFilter({
-                  status: undefined,
-                });
+                setStatusList(undefined)
               }
             }}
           >
@@ -132,16 +129,16 @@ export function HotlineFilters() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="range"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                  captionLayout="dropdown-buttons"
+                  fromYear={1960}
+                  toYear={2030}
                   selected={{ from: createTimeFrom, to: createTimeTo }}
                   onSelect={(range) => {
                     if (range?.from) {
-                      setFromDate(range?.from);
+                      setFromDate(range?.from)
                     }
                     if (range?.to) {
-                      setToDate(range?.to);
+                      setToDate(range?.to)
                     }
                   }}
                   disabled={(date) =>
@@ -163,12 +160,12 @@ export function HotlineFilters() {
             onValueChange={(value) => {
               if (value !== "all") {
                 setFilter({
-                  buildingId: value ? Number.parseInt(value) : undefined,
-                });
+                  buildingId: value ? Number.parseInt(value) : undefined
+                })
               } else {
                 setFilter({
-                  buildingId: undefined,
-                });
+                  buildingId: undefined
+                })
               }
             }}
             disabled={isLoadingBuildings}
@@ -179,7 +176,10 @@ export function HotlineFilters() {
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
               {buildings?.map((building) => (
-                <SelectItem key={building.buildingId} value={building?.buildingId?.toString()}>
+                <SelectItem
+                  key={building.buildingId}
+                  value={building?.buildingId?.toString()}
+                >
                   {building.buildingName}
                 </SelectItem>
               ))}
@@ -201,5 +201,5 @@ export function HotlineFilters() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

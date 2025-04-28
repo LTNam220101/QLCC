@@ -147,10 +147,11 @@ export const apartmentKeys = {
 // Custom hooks
 
 // Hook lấy danh sách căn hộ với phân trang và lọc
-export function useApartments(filters: ApartmentFilter) {
+export function useApartments(filters: ApartmentFilter, enabled=true) {
   return useQuery({
     queryKey: apartmentKeys.list(filters),
     queryFn: () => ApartmentService.getApartments(filters),
+    enabled: enabled
   });
 }
 

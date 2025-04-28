@@ -16,7 +16,7 @@ const MovingTicketService = {
       const queryParams = {
         page: filter.page,
         size: filter.size,
-        ...(filter.status !== undefined && { status: filter.status }),
+        ...(filter.statusList !== undefined && { statusList: filter.statusList }),
         ...(filter.transferType !== undefined && { transferType: filter.transferType }),
         ...(filter.ticketCode && { ticketCode: filter.ticketCode }),
         ...(filter.movingDayTimeFrom && {
@@ -96,9 +96,10 @@ const MovingTicketService = {
     data?: MovingTicketFormData
   ): Promise<MovingTicketDetailResponse> => {
     try {
+      const _id = data?.ticketId
       // Gọi API sử dụng sendRequest
       const response = await apiRequest<MovingTicketDetailResponse>({
-        url: `/ticket-moving/${id}`,
+        url: `/ticket-moving/${id || _id}`,
         method: "PUT",
         useCredentials: true,
         body: {

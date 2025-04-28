@@ -1,51 +1,58 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useMovingTicketFilterStore } from "@/lib/store/use-moving-ticket-filter-store";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react"
+import { useMovingTicketFilterStore } from "@/lib/store/use-moving-ticket-filter-store"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+  SelectValue
+} from "@/components/ui/select"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon, Search, Trash2 } from "lucide-react";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { Label } from "../ui/label";
-import { TransferType } from "@/enum";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { CalendarIcon, Search, Trash2 } from "lucide-react"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { cn } from "@/lib/utils"
+import { Label } from "../ui/label"
+import { TransferType } from "@/enum"
+import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 
 export function MovingTicketFilters() {
-  const { filter, setFilter, resetFilter } = useMovingTicketFilterStore();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
-  const [status, setStatus] = useState(filter.status);
-  const [transferType, setTransferType] = useState(
-    filter.transferType
-  );
-  const [ticketCode, setTicketCode] = useState(filter.ticketCode || "");
-  const [apartmentId, setApartmentId] = useState(filter.apartmentId || "");
-  const [buildingId, setBuildingId] = useState(filter.buildingId || "");
+  const { filter, setFilter, resetFilter } = useMovingTicketFilterStore()
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
+  const [statusList, setStatusList] = useState(filter.statusList)
+  const [transferType, setTransferType] = useState(filter.transferType)
+  const [ticketCode, setTicketCode] = useState(filter.ticketCode || "")
+  const [apartmentId, setApartmentId] = useState(filter.apartmentId || "")
+  const [buildingId, setBuildingId] = useState(filter.buildingId || "")
   const [movingDayTimeFrom, setMovingDayTimeFrom] = useState<Date | undefined>(
     filter.movingDayTimeFrom ? new Date(filter.movingDayTimeFrom) : undefined
-  );
+  )
   const [movingDayTimeTo, setMovingDayTimeTo] = useState<Date | undefined>(
     filter.movingDayTimeTo ? new Date(filter.movingDayTimeTo) : undefined
-  );
+  )
 
+  const { data } = useApartments(
+    {
+      manageBuildingList: [buildingId],
+      page: 0,
+      size: 1000
+    },
+    !!buildingId
+  )
   // Áp dụng bộ lọc
   const applyFilter = () => {
     setFilter({
-      status: status || undefined,
+      statusList: statusList || undefined,
       transferType: transferType,
       ticketCode: ticketCode || undefined,
       apartmentId: apartmentId || undefined,
@@ -54,35 +61,34 @@ export function MovingTicketFilters() {
         ? movingDayTimeFrom.getTime()
         : undefined,
       movingDayTimeTo: movingDayTimeTo ? movingDayTimeTo.getTime() : undefined,
-      page: 0, // Reset về trang 1 khi lọc
-    });
-  };
+      page: 0 // Reset về trang 1 khi lọc
+    })
+  }
   // Xóa bộ lọc
   const clearFilter = () => {
-    setStatus(undefined);
-    setTransferType(undefined);
-    setTicketCode("");
-    setApartmentId("");
-    setBuildingId("");
-    setMovingDayTimeFrom(undefined);
-    setMovingDayTimeTo(undefined);
-    resetFilter();
-  };
+    setStatusList(undefined)
+    setTransferType(undefined)
+    setTicketCode("")
+    setApartmentId("")
+    setBuildingId("")
+    setMovingDayTimeFrom(undefined)
+    setMovingDayTimeTo(undefined)
+    resetFilter()
+  }
 
   useEffect(() => {
-    setStatus(filter.status || undefined);
-    setTransferType(filter.transferType);
-    setTicketCode(filter.ticketCode || "");
-    setApartmentId(filter.apartmentId || "");
-    setBuildingId(filter.buildingId || "");
+    setStatusList(filter.statusList || undefined)
+    setTransferType(filter.transferType)
+    setTicketCode(filter.ticketCode || "")
+    setApartmentId(filter.apartmentId || "")
+    setBuildingId(filter.buildingId || "")
     setMovingDayTimeFrom(
       filter.movingDayTimeFrom ? new Date(filter.movingDayTimeFrom) : undefined
-    );
+    )
     setMovingDayTimeTo(
       filter.movingDayTimeTo ? new Date(filter.movingDayTimeTo) : undefined
-    );
-  }, [filter]);
-
+    )
+  }, [filter])
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
@@ -90,12 +96,12 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={`${status}`}
+            value={`${statusList?.[0]}`}
             onValueChange={(value) => {
               if (value !== "all") {
-                setStatus(+value);
+                setStatusList([+value])
               } else {
-                setStatus(undefined);
+                setStatusList(undefined)
               }
             }}
           >
@@ -117,9 +123,9 @@ export function MovingTicketFilters() {
             value={`${transferType}`}
             onValueChange={(value) => {
               if (value !== "all") {
-                setTransferType(+value);
+                setTransferType(+value)
               } else {
-                setTransferType(undefined);
+                setTransferType(undefined)
               }
             }}
           >
@@ -171,16 +177,16 @@ export function MovingTicketFilters() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="range"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                  captionLayout="dropdown-buttons"
+                  fromYear={1960}
+                  toYear={2030}
                   selected={{ from: movingDayTimeFrom, to: movingDayTimeTo }}
                   onSelect={(range) => {
                     if (range?.from) {
-                      setMovingDayTimeFrom(range?.from);
+                      setMovingDayTimeFrom(range?.from)
                     }
                     if (range?.to) {
-                      setMovingDayTimeTo(range?.to);
+                      setMovingDayTimeTo(range?.to)
                     }
                   }}
                   disabled={(date) =>
@@ -198,12 +204,12 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={filter?.buildingId?.toString() || ""}
+            value={buildingId || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
-                setBuildingId(value);
+                setBuildingId(value)
               } else {
-                setBuildingId("");
+                setBuildingId("")
               }
             }}
             disabled={isLoadingBuildings}
@@ -225,35 +231,32 @@ export function MovingTicketFilters() {
           </Select>
         </div>
         {/* Căn hộ */}
-        {/* <div>
+        <div>
           <Label className="mb-2">Căn hộ</Label>
           <Select
-            value={filter.apartmentId?.toString() || ""}
+            value={apartmentId || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
-                setApartmentId(value);
+                setApartmentId(value)
               } else {
-                setApartmentId("");
+                setApartmentId("")
               }
             }}
-            disabled={isLoadingBuildings}
+            disabled={!buildingId}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Tất cả" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
-              {buildings?.map((building) => (
-                <SelectItem
-                  key={building.buildingId}
-                  value={building.buildingId.toString()}
-                >
-                  {building.buildingName}
+              {data?.data?.data?.map((apartment) => (
+                <SelectItem key={apartment.id} value={apartment.id}>
+                  {apartment.apartmentName}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </div> */}
+        </div>
       </div>
       {/* Nút tìm kiếm và xóa bộ lọc */}
       <div className="flex gap-2 mt-[21px]">
@@ -269,5 +272,5 @@ export function MovingTicketFilters() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

@@ -1,46 +1,45 @@
-"use client";
+"use client"
 
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Calendar, Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { Calendar, Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+  FormMessage
+} from "@/components/ui/form"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue
+} from "@/components/ui/select"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { toast } from "sonner";
-import PageHeader from "@/components/common/page-header";
-import { residentFormSchema } from "../[id]/edit/page";
-import { ResidentFormData } from "../../../../../../types/residents";
-import { useAddResident } from "@/lib/tanstack-query/residents/queries";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
-import { roles } from "@/lib/store/use-resident-store";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { toast } from "sonner"
+import PageHeader from "@/components/common/page-header"
+import { residentFormSchema } from "../[id]/edit/page"
+import { ResidentFormData } from "../../../../../../types/residents"
+import { useAddResident } from "@/lib/tanstack-query/residents/queries"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
 
 export default function AddResidentPage() {
-  const router = useRouter();
-  const { data: buildings } = useBuildings();
-  const addResidentMutation = useAddResident();
+  const router = useRouter()
+  const { data: buildings } = useBuildings()
+  const addResidentMutation = useAddResident()
 
   // Form
   const form = useForm<ResidentFormData>({
@@ -48,59 +47,38 @@ export default function AddResidentPage() {
     defaultValues: {
       fullName: "",
       phoneNumber: "",
-      manageBuildingList: undefined,
-      // apartment: string,
-      role: "",
-      // moveInDate?: string,
       email: "",
       identifyId: "",
       identifyIssueDate: undefined,
       identifyIssuer: "",
       gender: undefined,
-      dateOfBirth: undefined,
-    },
-  });
-
-  // // Theo dõi thay đổi tòa nhà để lọc căn hộ
-  // const watchBuilding = form.watch("building");
-
-  // useEffect(() => {
-  //   if (watchBuilding) {
-  //     setFilteredApartments(
-  //       apartments.filter((apt) => apt.buildingId === watchBuilding)
-  //     );
-  //   } else {
-  //     setFilteredApartments(apartments);
-  //   }
-  // }, [watchBuilding]);
+      dateOfBirth: undefined
+    }
+  })
 
   const onSubmit = async (values: ResidentFormData) => {
     try {
       const data = {
         fullName: values?.fullName ?? "",
         phoneNumber: values?.phoneNumber ?? "",
-        manageBuildingList: values?.manageBuildingList ?? [],
-        // apartment: string,
-        role: values?.role ?? "",
-        // moveInDate?: string,
         email: values?.email ?? "",
         identifyId: values?.identifyId ?? "",
         identifyIssueDate: values?.identifyIssueDate ?? "",
         identifyIssuer: values?.identifyIssuer ?? "",
         gender: values?.gender ?? undefined,
-        dateOfBirth: values?.dateOfBirth ?? "",
-      };
-      await addResidentMutation.mutateAsync(data);
-      toast("Cư dân mới đã được thêm vào hệ thống");
-      router.push("/building-information/residents");
+        dateOfBirth: values?.dateOfBirth ?? ""
+      }
+      await addResidentMutation.mutateAsync(data)
+      toast("Cư dân mới đã được thêm vào hệ thống")
+      router.push("/building-information/residents")
     } catch (error) {
-      toast("Có lỗi xảy ra khi thêm cư dân mới");
+      toast("Có lỗi xảy ra khi thêm cư dân mới")
     }
-  };
+  }
 
   // Loading state
   const isSubmitting =
-    form.formState.isSubmitting || addResidentMutation.isPending;
+    form.formState.isSubmitting || addResidentMutation.isPending
 
   return (
     <div>
@@ -177,9 +155,9 @@ export default function AddResidentPage() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                          captionLayout="dropdown-buttons"
+                          fromYear={1960}
+                          toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -248,9 +226,9 @@ export default function AddResidentPage() {
                       <PopoverContent className="w-auto p-0" align="start">
                         <CalendarComponent
                           mode="single"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                          captionLayout="dropdown-buttons"
+                          fromYear={1960}
+                          toYear={2030}
                           selected={new Date(field.value)}
                           onSelect={(e) => field.onChange(e?.getTime())}
                           disabled={(date) =>
@@ -281,104 +259,6 @@ export default function AddResidentPage() {
                 </FormItem>
               )}
             />
-
-            <div />
-
-            <FormField
-              control={form.control}
-              name="manageBuildingList"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
-                    Tòa nhà
-                  </FormLabel>
-                  <Select
-                    onValueChange={e=>{field.onChange([e])}}
-                    defaultValue={field.value?.[0]}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {buildings?.map((building) => (
-                        <SelectItem
-                          key={building.buildingId}
-                          value={building.buildingId}
-                        >
-                          {building.buildingName}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            {/* <FormField
-              control={form.control}
-              name="apartment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
-                    Căn hộ
-                  </FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    disabled={!watchBuilding}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {filteredApartments.map((apartment) => (
-                        <SelectItem key={apartment.id} value={apartment.id}>
-                          {apartment.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            /> */}
-
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
-                    Vai trò
-                  </FormLabel>
-                  <Select
-                    disabled={isSubmitting}
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {roles.map((role) => (
-                        <SelectItem key={role.id} value={role.id}>
-                          {role.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div />
           </div>
           <h2 className="font-bold">Thông tin khác</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-4">
@@ -402,7 +282,7 @@ export default function AddResidentPage() {
                   <FormLabel>Giới tính</FormLabel>
                   <Select
                     onValueChange={(e) => {
-                      field.onChange(+e);
+                      field.onChange(+e)
                     }}
                     value={`${field.value}`}
                   >
@@ -424,5 +304,5 @@ export default function AddResidentPage() {
         </form>
       </Form>
     </div>
-  );
+  )
 }

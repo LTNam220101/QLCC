@@ -2,7 +2,6 @@ import { Column } from "@/components/common/table-data";
 import { Button } from "@/components/ui/button";
 import {
   CheckCheck,
-  Edit,
   LockKeyhole,
   LockKeyholeOpen,
   ScanSearch,
@@ -10,7 +9,6 @@ import {
 } from "lucide-react";
 import StatusBadge from "@/components/common/status-badge";
 import Link from "next/link";
-import { getDisplayName, roles } from "@/lib/store/use-resident-store";
 import { Resident } from "../../types/residents";
 
 export const generateData = ({
@@ -28,31 +26,20 @@ export const generateData = ({
     render: (_, index) => startIndex + index + 1,
   },
   {
-    dataIndex: "fullName",
-    name: "Họ và tên",
-  },
-  {
     dataIndex: "phoneNumber",
     name: "Số điện thoại",
   },
   {
-    dataIndex: "buildingName",
-    name: "Toà nhà",
+    dataIndex: "fullName",
+    name: "Họ và tên",
   },
   {
-    dataIndex: "apartment",
-    name: "Căn hộ",
+    dataIndex: "identifyId",
+    name: "Số CMND/CCCD/Hộ chiếu",
   },
   {
-    dataIndex: "role",
-    name: "Vai trò",
-    render: (resident) => {
-      return getDisplayName(resident.role, roles);
-    },
-  },
-  {
-    dataIndex: "moveInDate",
-    name: "Ngày chuyển đến",
+    dataIndex: "phoneNumber",
+    name: "Số điện thoại",
   },
   {
     dataIndex: "status",

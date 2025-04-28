@@ -1,10 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import type {
-  ReportDetailResponse,
-  ReportFilter,
-  ReportFormData,
-  ReportPaginatedResponse,
-} from "../../../../types/resident-reports";
+import { ReportDetailResponse, ReportFilter, ReportFormData, ReportPaginatedResponse } from "../../../../types/reports";
+
 import { apiRequest } from "../../../../utils/api";
 
 const ReportService = {
@@ -16,7 +12,7 @@ const ReportService = {
       const queryParams = {
         page: filter.page,
         size: filter.size,
-        ...(filter.status !== undefined && { status: filter.status }),
+        ...(filter.statusList !== undefined && { statusList: filter.statusList }),
         ...(filter.reportContent !== undefined && {
           reportContent: filter.reportContent,
         }),

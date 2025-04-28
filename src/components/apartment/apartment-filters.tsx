@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Input } from "../ui/input";
 
 export function ApartmentFilters() {
   const { filters, setFilter, clearFilters } = useApartmentStore();
@@ -101,13 +102,13 @@ export function ApartmentFilters() {
           </Select>
         </div>
 
-        {/* <div>
+        <div>
           <Label className="mb-2">Căn hộ</Label>
           <Input
-            value={filters.apartmentName}
+            value={apartmentName}
             onChange={(e) => setApartmentName(e.target.value)}
           />
-        </div> */}
+        </div>
 
         <div>
           <Label className="mb-2">Ngày tạo (Từ - Đến)</Label>

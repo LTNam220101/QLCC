@@ -31,7 +31,8 @@ export interface Report {
 }
 
 export interface ReportFilter {
-  status?: number;
+  // status?: number;
+  statusList?: number[];
   reportContent?: string;
   buildingId?: string;
   apartmentId?: string;
@@ -47,6 +48,7 @@ export interface ReportFormData {
   reportContent: string;
   note?: string;
   status?: number;
+  reportId?: string;
 }
 
 export interface ReportPaginatedResponse {

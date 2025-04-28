@@ -1,56 +1,71 @@
+export const ReportStatus: {
+  [key: number]: { name: string; color: string }
+} = {
+  '-3': { name: "Đã hết hạn", color: "gray" },
+  '-2': { name: "Từ chối", color: "red" },
+  '-1': { name: "Đã xoá", color: "gray" },
+  0: { name: "Chờ xác nhận", color: "gray" },
+  1: { name: "Chưa đến hạn", color: "orange" },
+  2: { name: "Đang chuyển đồ", color: "blue" },
+  3: { name: "Hoàn thành", color: "green" },
+  4: { name: "Đã đánh giá", color: "purple" }
+}
+
 export interface MovingTicket {
-  ticketId: string;
-  ticketCode: string;
-  ticketType: number;
-  residentId: string;
-  buildingId: string;
-  buildingName: string;
-  apartmentId: string;
-  apartmentName: string;
+  ticketId: string
+  ticketCode: string
+  ticketType: number
+  residentId: string
+  buildingId: string
+  buildingName: string
+  apartmentId: string
+  apartmentName: string
   //   movingDay: string;
-  movingDayTime: number;
-  expectedTime: string;
-  evaluate?: number;
-  evaluateContent?: string;
-  transferType: number;
-  note?: string;
-  status: number;
-  createTime: number;
-  createBy: string;
-  updateTime?: number;
-  updateBy?: string;
+  movingDayTime: number
+  expectedTime: string
+  evaluate?: number
+  evaluateContent?: string
+  transferType: number
+  note?: string
+  status: number
+  createTime: number
+  createBy: string
+  updateTime?: number
+  updateBy?: string
 }
 
 export interface MovingTicketFilter {
-  status?: number;
-  transferType?: number;
-  ticketCode?: string;
-  movingDayTimeFrom?: number;
-  movingDayTimeTo?: number;
-  apartmentId?: string;
-  buildingId?: string;
-  page: number;
-  size: number;
+  // status?: number;
+  statusList?: number[];
+  transferType?: number
+  ticketCode?: string
+  movingDayTimeFrom?: number
+  movingDayTimeTo?: number
+  apartmentId?: string
+  buildingId?: string
+  page: number
+  size: number
 }
 
 export interface MovingTicketFormData {
-  movingDayTime: number;
-  expectedTime: string;
-  apartmentId: string;
-  buildingId: string;
-  transferType: number;
-  note?: string;
-  status?: number;
+  movingDayTime: number
+  expectedTime: string
+  apartmentId: string
+  buildingId: string
+  transferType: number
+  note?: string
+  status?: number
+  ticketId?: string
 }
 
 export interface MovingTicketPaginatedResponse {
-  data: { data: MovingTicket[]; recordsTotal: number };
-  total: number;
+  data: { data: MovingTicket[]; recordsTotal: number }
+  total: number
   // page: number;
   // limit: number;
   // totalPages: number;
 }
 
 export interface MovingTicketDetailResponse {
-  data: MovingTicket;
+  data: MovingTicket
 }

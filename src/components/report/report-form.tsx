@@ -86,7 +86,6 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
   // Xử lý submit form
   const onSubmit = async (values: ReportFormData) => {
     try {
-      console.log(234)
       const data = {
         buildingId: values.buildingId ?? "",
         apartmentId: values.apartmentId ?? "",
@@ -95,14 +94,12 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
       };
 
       if (isEdit && reportId) {
-        console.log(567)
         const { updateBy, updateTime, createBy, createTime, ...rest } =
           report?.data;
         await updateReportMutation.mutateAsync({ ...rest, ...data });
         toast("Thông tin đăng ký chuyển đồ đã được cập nhật");
         router.push("/services/reports");
       } else {
-        console.log(879)
         await createReportMutation.mutateAsync(data);
         toast("Report mới đã được tạo");
         router.push("/services/reports");
