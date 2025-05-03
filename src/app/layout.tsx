@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { SessionProvider } from "next-auth/react"
 import { TanStackQueryProvider } from "@/lib/tanstack-query/provider"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 const inter = Inter({
   variable: "--font-inter-sans",
@@ -23,7 +24,9 @@ export default async function RootLayout({
     <html className={inter.variable}>
       <body className="antialiased">
         <TanStackQueryProvider>
-          <SessionProvider>{children}</SessionProvider>
+          <SessionProvider>
+            <TooltipProvider>{children}</TooltipProvider>
+          </SessionProvider>
         </TanStackQueryProvider>
       </body>
     </html>

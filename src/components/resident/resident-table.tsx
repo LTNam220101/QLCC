@@ -20,8 +20,10 @@ import {
 } from "@/lib/tanstack-query/residents/queries";
 import { useState } from "react";
 import { Resident } from "../../../types/residents";
+import { useRouter } from "next/navigation";
 
 export function ResidentTable() {
+  const router = useRouter()
   const { filters, setFilter, clearFilters } = useResidentStore();
   const { data, isLoading, isError } = useResidents(filters);
   const updateResidentMutation = useUpdateResident();
@@ -115,6 +117,9 @@ export function ResidentTable() {
         filters={filters}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
+        onClickRow={(_, resident)=>{
+          router.push(`/building-information/residents/${resident.id}`)
+        }}
       />
 
       {/* Dialog xác nhận cập nhật */}

@@ -39,7 +39,7 @@ const ApartmentService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
 
@@ -60,7 +60,7 @@ const ApartmentService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;
@@ -83,7 +83,7 @@ const ApartmentService = {
         body: data,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;
@@ -107,7 +107,7 @@ const ApartmentService = {
         body: data,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;

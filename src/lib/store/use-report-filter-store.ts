@@ -8,10 +8,10 @@ interface ReportFilterState {
 }
 
 const initialFilter: ReportFilter = {
-  status: undefined,
+  statusList: undefined,
   reportContent: "",
-  buildingId: "",
-  apartmentId: "",
+  manageBuildingList: undefined,
+  manageApartmentList: undefined,
   createTimeFrom: undefined,
   createTimeTo: undefined,
   page: 0,

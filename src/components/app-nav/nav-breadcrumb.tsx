@@ -23,6 +23,10 @@ const breadcrumbNameMap: Record<string, string> = {
   reports: "Quản lý phản ánh",
   "moving-tickets": "Quản lý đăng ký chuyển đồ",
   hotlines: "Quản lý hotline",
+  // Thông báo, bảng tin
+  boards: "Thông báo/Bảng tin",
+  notifications: "Thông báo",
+  news: "Bảng tin",
   // Profile
   profile: "Tài khoản",
   "profile-info": "Thông tin tài khoản",

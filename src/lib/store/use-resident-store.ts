@@ -13,7 +13,7 @@ interface ResidentState {
 }
 
 const initialFilter: ResidentFilter = {
-  status: undefined,
+  statusList: undefined,
   fullName: undefined,
   phoneNumber: undefined,
   identifyId: "",

@@ -20,8 +20,10 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Report } from "../../../types/reports";
+import { useRouter } from "next/navigation";
 
 export function ReportTable() {
+  const router = useRouter()
   const { filter, setFilter, resetFilter } = useReportFilterStore();
   const { data, isLoading, isError } = useReports(filter);
   const deleteReportMutation = useDeleteReport();
@@ -102,6 +104,9 @@ export function ReportTable() {
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
+        onClickRow={(_, report)=>{
+          router.push(`/services/reports/${report.reportId}`)
+        }}
       />
 
       {/* Dialog xác nhận xóa */}

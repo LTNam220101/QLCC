@@ -79,33 +79,33 @@ const data = {
         }
       ]
     },
-    {
-      title: "Thanh toán/Chi phí",
-      url: "/notification",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Bảng kê chi phí",
-          url: "#"
-        },
-        {
-          title: "Quản lý thanh toán",
-          url: "#"
-        }
-      ]
-    },
+    // {
+    //   title: "Thanh toán/Chi phí",
+    //   url: "/notification",
+    //   icon: BookOpen,
+    //   items: [
+    //     {
+    //       title: "Bảng kê chi phí",
+    //       url: "#"
+    //     },
+    //     {
+    //       title: "Quản lý thanh toán",
+    //       url: "#"
+    //     }
+    //   ]
+    // },
     {
       title: "Thông báo/Bảng tin",
-      url: "#",
+      url: "/boards",
       icon: Settings2,
       items: [
         {
           title: "Thông báo",
-          url: "#"
+          url: "/notifications"
         },
         {
           title: "Bảng tin",
-          url: "#"
+          url: "/news"
         }
       ]
     }

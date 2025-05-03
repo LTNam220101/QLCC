@@ -30,6 +30,9 @@ export function HotlineFilters() {
   const [statusList, setStatusList] = useState(filter.statusList || undefined)
   const [name, setName] = useState(filter.name || "")
   const [hotline, setHotline] = useState(filter.hotline || "")
+  const [manageBuildingList, setManageBuildingList] = useState(
+    filter.manageBuildingList || undefined
+  )
   const [createTimeFrom, setFromDate] = useState<Date | undefined>(
     filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
   )
@@ -156,16 +159,12 @@ export function HotlineFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={filter?.buildingId?.toString() || ""}
+            value={manageBuildingList?.[0]}
             onValueChange={(value) => {
               if (value !== "all") {
-                setFilter({
-                  buildingId: value ? Number.parseInt(value) : undefined
-                })
+                setManageBuildingList([value])
               } else {
-                setFilter({
-                  buildingId: undefined
-                })
+                setManageBuildingList(undefined)
               }
             }}
             disabled={isLoadingBuildings}

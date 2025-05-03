@@ -94,9 +94,7 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
       };
 
       if (isEdit && reportId) {
-        const { updateBy, updateTime, createBy, createTime, ...rest } =
-          report?.data;
-        await updateReportMutation.mutateAsync({ ...rest, ...data });
+        await updateReportMutation.mutateAsync({ ...report?.data, ...data });
         toast("Thông tin đăng ký chuyển đồ đã được cập nhật");
         router.push("/services/reports");
       } else {

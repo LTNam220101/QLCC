@@ -76,7 +76,7 @@ export const sendRequest = async <T>({
       return res.json().then(function (json) {
         // to be able to access error status when you catch the error
         return {
-          statusCode: res.status,
+          status: res.status,
           message: json?.message ?? "",
           error: json?.error ?? "",
         } as T;
@@ -119,7 +119,7 @@ export const sendRequestFile = async <T>({
       return res.json().then(function (json) {
         // to be able to access error status when you catch the error
         return {
-          statusCode: res.status,
+          status: res.status,
           message: json?.message ?? "",
           error: json?.error ?? "",
         } as T;
@@ -132,13 +132,14 @@ export const sendRequestFile = async <T>({
 export async function apiRequest<T>(options: Omit<IRequest, "token">) {
   try {
     const token = await getClientToken();
-    return sendRequest<T>({
+    const res = await sendRequest<T>({
       ...options,
       token,
     });
+    return res
   } catch (error) {
     // Nếu lỗi 401 Unauthorized, thử refresh token và gọi lại
-    if (error.statusCode === 401) {
+    if (error.status === 401) {
       try {
         // Refresh token
         await handleTokenRefresh();
@@ -165,13 +166,14 @@ export async function apiRequest<T>(options: Omit<IRequest, "token">) {
 export async function apiRequestFile<T>(options: Omit<IRequest, "token">) {
   try {
     const token = await getClientToken();
-    return sendRequestFile<T>({
+    const res = await sendRequestFile<T>({
       ...options,
       token,
     });
+    return res
   } catch (error: any) {
     // Nếu lỗi 401 Unauthorized, thử refresh token và gọi lại
-    if (error.statusCode === 401) {
+    if (error.status === 401) {
       try {
         // Refresh token
         await handleTokenRefresh();

@@ -20,8 +20,10 @@ import {
   DialogTitle
 } from "../ui/dialog"
 import { MovingTicket } from "../../../types/moving-tickets"
+import { useRouter } from "next/navigation"
 
 export function MovingTicketTable() {
+  const router = useRouter()
   const { filter, setFilter, resetFilter } = useMovingTicketFilterStore()
   const { data, isLoading, isError } = useMovingTickets(filter)
   const deleteMovingTicketMutation = useDeleteMovingTicket()
@@ -105,6 +107,9 @@ export function MovingTicketTable() {
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
+        onClickRow={(_, movingTicket)=>{
+          router.push(`/services/moving-tickets/${movingTicket.ticketId}`)
+        }}
       />
 
       {/* Dialog xác nhận xóa */}

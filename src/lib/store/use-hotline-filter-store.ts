@@ -8,10 +8,10 @@ interface HotlineFilterState {
 }
 
 const initialFilter: HotlineFilter = {
-  status: undefined,
+  statusList: undefined,
   name: undefined,
   hotline: undefined,
-  buildingId: undefined,
+  manageBuildingList: undefined,
   createTimeFrom: undefined,
   createTimeTo: undefined,
   page: 0,

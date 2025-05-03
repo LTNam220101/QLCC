@@ -35,14 +35,13 @@ export interface MovingTicket {
 }
 
 export interface MovingTicketFilter {
-  // status?: number;
   statusList?: number[];
   transferType?: number
   ticketCode?: string
   movingDayTimeFrom?: number
   movingDayTimeTo?: number
-  apartmentId?: string
-  buildingId?: string
+  manageBuildingList?: string[]
+  manageApartmentList?: string[]
   page: number
   size: number
 }
@@ -60,12 +59,12 @@ export interface MovingTicketFormData {
 
 export interface MovingTicketPaginatedResponse {
   data: { data: MovingTicket[]; recordsTotal: number }
-  total: number
-  // page: number;
-  // limit: number;
-  // totalPages: number;
+  status: string
+  message: string
 }
 
 export interface MovingTicketDetailResponse {
   data: MovingTicket
+  status: string
+  message: string
 }

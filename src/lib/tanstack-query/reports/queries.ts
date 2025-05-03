@@ -16,8 +16,8 @@ const ReportService = {
         ...(filter.reportContent !== undefined && {
           reportContent: filter.reportContent,
         }),
-        ...(filter.buildingId && { buildingId: filter.buildingId }),
-        ...(filter.apartmentId && { apartmentId: filter.apartmentId }),
+        ...(filter.manageBuildingList && { manageBuildingList: filter.manageBuildingList }),
+        ...(filter.manageApartmentList && { manageApartmentList: filter.manageApartmentList }),
         ...(filter.createTimeFrom && {
           createTimeFrom: filter.createTimeFrom,
         }),
@@ -34,7 +34,7 @@ const ReportService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch reports");
       }
 
@@ -54,7 +54,7 @@ const ReportService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch reports");
       }
       return response;
@@ -74,7 +74,7 @@ const ReportService = {
         body: data,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch reports");
       }
       return response;
@@ -104,7 +104,7 @@ const ReportService = {
         },
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch reports");
       }
       return response;

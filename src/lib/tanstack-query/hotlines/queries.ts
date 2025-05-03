@@ -19,7 +19,7 @@ const HotlineService = {
         ...(filter.statusList !== undefined && { statusList: filter.statusList }),
         ...(filter.name && { name: filter.name }),
         ...(filter.hotline && { hotline: filter.hotline }),
-        ...(filter.buildingId && { buildingId: filter.buildingId }),
+        ...(filter.manageBuildingList && { manageBuildingList: filter.manageBuildingList }),
         ...(filter.createTimeFrom && { createTimeFrom: filter.createTimeFrom }),
         ...(filter.createTimeTo && { createTimeTo: filter.createTimeTo }),
       };
@@ -32,7 +32,7 @@ const HotlineService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
 
@@ -52,7 +52,7 @@ const HotlineService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;
@@ -74,7 +74,7 @@ const HotlineService = {
         body: data,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;
@@ -104,7 +104,7 @@ const HotlineService = {
         },
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;

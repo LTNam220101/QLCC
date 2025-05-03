@@ -4,11 +4,9 @@ import {
   CheckCheck,
   LockKeyhole,
   LockKeyholeOpen,
-  ScanSearch,
   Trash2,
 } from "lucide-react";
 import StatusBadge from "@/components/common/status-badge";
-import Link from "next/link";
 import { Resident } from "../../types/residents";
 
 export const generateData = ({
@@ -50,17 +48,7 @@ export const generateData = ({
     dataIndex: "status",
     name: "Thao tác",
     render: (resident) => (
-      <div className="flex gap-2">
-        <Link href={`/building-information/residents/${resident.id}`}>
-          <Button variant="outline" size="icon">
-            <ScanSearch className="h-4 w-4" color="#194FFF" />
-          </Button>
-        </Link>
-        {/* <Link href={`/building-information/residents/${resident.id}/edit`}>
-          <Button variant="outline" size="icon">
-            <Edit className="h-4 w-4" color="#194FFF" />
-          </Button>
-        </Link> */}
+      <div className="flex gap-2" onClick={(e)=>e.stopPropagation()}>
         {resident.status === 0 ? (
           <Button
             variant="outline"

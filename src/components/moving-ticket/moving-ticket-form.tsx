@@ -1,71 +1,72 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+  FormMessage
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
+  SelectValue
+} from "@/components/ui/select"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
 import {
   useCreateMovingTicket,
   useUpdateMovingTicket,
-  useMovingTicket,
-} from "@/lib/tanstack-query/moving-tickets/queries";
-import { toast } from "sonner";
-import { Calendar, Check } from "lucide-react";
-import { MovingTicketFormData } from "../../../types/moving-tickets";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { Calendar as CalendarComponent } from "@/components/ui/calendar";
-import { vi } from "date-fns/locale";
-import { TransferType } from "@/enum";
+  useMovingTicket
+} from "@/lib/tanstack-query/moving-tickets/queries"
+import { toast } from "sonner"
+import { Calendar, Check } from "lucide-react"
+import { MovingTicketFormData } from "../../../types/moving-tickets"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import { vi } from "date-fns/locale"
+import { TransferType } from "@/enum"
+import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 
 // Schema validation
 const formSchema = z.object({
   movingDayTime: z.number({
-    required_error: "Ngày chuyển đồ là bắt buộc",
+    required_error: "Ngày chuyển đồ là bắt buộc"
   }),
   expectedTime: z.string().min(1, "Thời gian dự kiến không được để trống"),
   transferType: z.number().min(0, "Hình thức không được để trống"),
   apartmentId: z.string(),
   buildingId: z.string(),
-  note: z.string().optional(),
-});
+  note: z.string().optional()
+})
 
 interface MovingTicketFormProps {
-  movingTicketId?: string;
-  isEdit?: boolean;
+  movingTicketId?: string
+  isEdit?: boolean
 }
 
 export function MovingTicketForm({
   movingTicketId,
-  isEdit = false,
+  isEdit = false
 }: MovingTicketFormProps) {
-  const router = useRouter();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
+  const router = useRouter()
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
   const { data: movingTicket, isLoading: isLoadingMovingTicket } =
-    useMovingTicket(movingTicketId);
-  const createMovingTicketMutation = useCreateMovingTicket();
-  const updateMovingTicketMutation = useUpdateMovingTicket(movingTicketId);
+    useMovingTicket(movingTicketId)
+  const createMovingTicketMutation = useCreateMovingTicket()
+  const updateMovingTicketMutation = useUpdateMovingTicket(movingTicketId)
 
   // Form
   const form = useForm<MovingTicketFormData>({
@@ -76,9 +77,18 @@ export function MovingTicketForm({
       transferType: undefined,
       apartmentId: "",
       buildingId: "",
-      note: "",
+      note: ""
+    }
+  })
+  const watchBuilding = form.watch("buildingId")
+  const { data: apartments } = useApartments(
+    {
+      manageBuildingList: [watchBuilding],
+      page: 0,
+      size: 1000
     },
-  });
+    !!watchBuilding
+  )
 
   // Cập nhật form khi có dữ liệu moving-ticket
   useEffect(() => {
@@ -89,8 +99,8 @@ export function MovingTicketForm({
         transferType: undefined,
         apartmentId: "",
         buildingId: "",
-        note: "",
-      });
+        note: ""
+      })
     } else if (isEdit && movingTicket) {
       form.reset({
         movingDayTime: movingTicket.data?.movingDayTime,
@@ -98,10 +108,10 @@ export function MovingTicketForm({
         transferType: movingTicket.data?.transferType,
         apartmentId: movingTicket.data?.apartmentId || "",
         buildingId: movingTicket.data?.buildingId || "",
-        note: movingTicket.data?.note || "",
-      });
+        note: movingTicket.data?.note || ""
+      })
     }
-  }, [form, movingTicket, isEdit]);
+  }, [form, movingTicket, isEdit])
   // Xử lý submit form
   const onSubmit = async (values: MovingTicketFormData) => {
     try {
@@ -111,31 +121,32 @@ export function MovingTicketForm({
         transferType: values.transferType ?? "",
         apartmentId: values.apartmentId ?? "",
         buildingId: values.buildingId ?? "",
-        note: values.note ?? "",
-      };
+        note: values.note ?? ""
+      }
 
       if (isEdit && movingTicketId) {
-        const { updateBy, updateTime, createBy, createTime, ...rest } =
-          movingTicket?.data;
-        await updateMovingTicketMutation.mutateAsync({ ...rest, ...data });
-        toast("Thông tin đăng ký chuyển đồ đã được cập nhật");
-        router.push("/services/moving-tickets");
+        await updateMovingTicketMutation.mutateAsync({
+          ...movingTicket?.data,
+          ...data
+        })
+        toast("Thông tin đăng ký chuyển đồ đã được cập nhật")
+        router.push("/services/moving-tickets")
       } else {
-        await createMovingTicketMutation.mutateAsync(data);
-        toast("MovingTicket mới đã được tạo");
-        router.push("/services/moving-tickets");
+        await createMovingTicketMutation.mutateAsync(data)
+        toast("MovingTicket mới đã được tạo")
+        router.push("/services/moving-tickets")
       }
     } catch (error) {
-      toast("Đã xảy ra lỗi, vui lòng thử lại");
+      toast("Đã xảy ra lỗi, vui lòng thử lại")
     }
-  };
+  }
 
   // Loading state
-  const isLoading = isLoadingBuildings || (isEdit && isLoadingMovingTicket);
+  const isLoading = isLoadingBuildings || (isEdit && isLoadingMovingTicket)
   const isSubmitting =
     form.formState.isSubmitting ||
     createMovingTicketMutation.isPending ||
-    updateMovingTicketMutation.isPending;
+    updateMovingTicketMutation.isPending
 
   return (
     <Form {...form}>
@@ -174,7 +185,7 @@ export function MovingTicketForm({
                         toYear={2030}
                         selected={new Date(field.value)}
                         onSelect={(e) => {
-                          field.onChange(e?.getTime());
+                          field.onChange(e?.getTime())
                         }}
                         locale={vi}
                         initialFocus
@@ -232,7 +243,7 @@ export function MovingTicketForm({
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="apartmentId"
             render={({ field }) => (
@@ -249,12 +260,9 @@ export function MovingTicketForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {buildings?.map((building) => (
-                      <SelectItem
-                        key={building.id}
-                        value={building.id.toString()}
-                      >
-                        {building.name}
+                    {apartments?.data?.data?.map((apartment) => (
+                      <SelectItem key={apartment.id} value={apartment?.id}>
+                        {apartment.apartmentName}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -262,7 +270,7 @@ export function MovingTicketForm({
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="transferType"
@@ -271,7 +279,7 @@ export function MovingTicketForm({
                 <FormLabel>Hình thức</FormLabel>
                 <Select
                   onValueChange={(e) => {
-                    field.onChange(+e);
+                    field.onChange(+e)
                   }}
                   value={`${field.value}`}
                   disabled={isLoading}
@@ -322,5 +330,5 @@ export function MovingTicketForm({
         </div>
       </form>
     </Form>
-  );
+  )
 }

@@ -1,24 +1,24 @@
-"use client";
-import React from "react";
+"use client"
+import React from "react"
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "../ui/table";
-import { cn } from "@/lib/utils";
-import { Skeleton } from "../ui/skeleton";
+  TableRow
+} from "../ui/table"
+import { cn } from "@/lib/utils"
+import { Skeleton } from "../ui/skeleton"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Button } from "../ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+  SelectValue
+} from "../ui/select"
+import { Button } from "../ui/button"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 
 export type textAlign =
   | "text-left"
@@ -27,24 +27,25 @@ export type textAlign =
   | "text-justify"
   | "text-start"
   | "text-end"
-  | undefined;
+  | undefined
 
 export type Column<T> = {
-  className?: string;
-  textAlign?: textAlign;
-  render?: (data: T, index: number) => React.ReactNode;
-  dataIndex: string;
-  name?: React.ReactNode;
-};
+  className?: string
+  textAlign?: textAlign
+  render?: (data: T, index: number) => React.ReactNode
+  dataIndex: string
+  name?: React.ReactNode
+}
 
 type ListingTableDataProps<T> = {
-  columns?: Column<T>[];
-  datas?: T[];
-  isLoading?: boolean;
-  recordsTotal?: number;
-  filters: Record<string, any>;
-  setFilter: (arg0: Record<string, any>) => void;
-};
+  columns?: Column<T>[]
+  datas?: T[]
+  isLoading?: boolean
+  recordsTotal?: number
+  filters: Record<string, any>
+  setFilter: (arg0: Record<string, any>) => void
+  onClickRow?: (index: number, data: T) => void
+}
 
 function TableData<T>({
   columns,
@@ -53,8 +54,9 @@ function TableData<T>({
   recordsTotal,
   filters,
   setFilter,
+  onClickRow = () => {}
 }: ListingTableDataProps<T>) {
-  const totalPages = Math.ceil((recordsTotal || 0) / filters.size);
+  const totalPages = Math.ceil((recordsTotal || 0) / filters.size)
   return (
     <>
       <Table className="text-sm overflow-auto w-full table-auto border">
@@ -83,13 +85,19 @@ function TableData<T>({
                       key={colIndex}
                       className={cn(column?.textAlign, column.className, "h-1")}
                     >
-                      <Skeleton className="my-[10px] h-[20px] w-[60%]" />
+                      <Skeleton className="h-[20px] w-[60%]" />
                     </TableCell>
                   ))}
                 </TableRow>
               ))
             : datas?.map((data, rowIndex) => (
-                <TableRow key={rowIndex} className="border-b">
+                <TableRow
+                  key={rowIndex}
+                  onClick={() => {
+                    onClickRow(rowIndex, data)
+                  }}
+                  className="border-b cursor-pointer"
+                >
                   {columns?.map((column, colIndex) => {
                     return (
                       <TableCell
@@ -104,7 +112,7 @@ function TableData<T>({
                           ? column.render(data, rowIndex)
                           : data?.[column.dataIndex] ?? "-"}
                       </TableCell>
-                    );
+                    )
                   })}
                 </TableRow>
               ))}
@@ -145,15 +153,15 @@ function TableData<T>({
 
             <div className="flex items-center gap-1">
               {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum = i;
+                let pageNum = i
 
                 // Nếu có nhiều trang và đang ở trang sau
                 if (totalPages > 5 && filters.page > 3) {
-                  pageNum = filters.page - 3 + i;
+                  pageNum = filters.page - 3 + i
 
                   // Đảm bảo không vượt quá tổng số trang
                   if (pageNum > totalPages) {
-                    pageNum = totalPages - (4 - i);
+                    pageNum = totalPages - (4 - i)
                   }
                 }
 
@@ -167,7 +175,7 @@ function TableData<T>({
                   >
                     {pageNum + 1}
                   </Button>
-                );
+                )
               })}
             </div>
 
@@ -185,7 +193,7 @@ function TableData<T>({
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default TableData;
+export default TableData

@@ -39,7 +39,7 @@ const ResidentService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
 
@@ -60,7 +60,7 @@ const ResidentService = {
         useCredentials: true,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;
@@ -81,7 +81,7 @@ const ResidentService = {
         body: data,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;
@@ -105,7 +105,7 @@ const ResidentService = {
         body: data,
       });
       // Kiểm tra lỗi từ API (nếu có)
-      if ("statusCode" in response && response.statusCode !== 200) {
+      if ("status" in response && response.status !== "success") {
         throw new Error(response.message || "Failed to fetch hotlines");
       }
       return response;

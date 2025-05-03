@@ -115,7 +115,6 @@ export function ApartmentDrawer() {
         router.push("/building-information/apartments");
       }
     } catch (error) {
-      console.log("check err", error);
       toast("Đã xảy ra lỗi, vui lòng thử lại");
     }
   };

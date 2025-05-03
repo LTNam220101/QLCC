@@ -1,81 +1,94 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { useReportFilterStore } from "@/lib/store/use-report-filter-store";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { useEffect, useState } from "react"
+import { useReportFilterStore } from "@/lib/store/use-report-filter-store"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+  SelectValue
+} from "@/components/ui/select"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon, Search, Trash2 } from "lucide-react";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { Label } from "../ui/label";
-import { ReportStatus } from "../../../types/reports";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { CalendarIcon, Search, Trash2 } from "lucide-react"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { cn } from "@/lib/utils"
+import { Label } from "../ui/label"
+import { ReportStatus } from "../../../types/reports"
+import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 
 export function ReportFilters() {
-  const { filter, setFilter, resetFilter } = useReportFilterStore();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
+  const { filter, setFilter, resetFilter } = useReportFilterStore()
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
+
   const [statusList, setStatusList] = useState(filter.statusList)
-  const [reportContent, setReportContent] = useState(
-    filter.reportContent || ""
-  );
-  const [buildingId, setBuildingId] = useState(filter.buildingId || "");
-  const [apartmentId, setApartmentId] = useState(filter.apartmentId || "");
+  const [reportContent, setReportContent] = useState(filter.reportContent || "")
+  const [manageBuildingList, setManageBuildingId] = useState(
+    filter.manageBuildingList || undefined
+  )
+  const [manageApartmentList, setManageApartmentList] = useState(
+    filter.manageApartmentList || undefined
+  )
   const [createTimeFrom, setCreateTimeFrom] = useState<Date | undefined>(
     filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
-  );
+  )
   const [createTimeTo, setCreateTimeTo] = useState<Date | undefined>(
     filter.createTimeTo ? new Date(filter.createTimeTo) : undefined
-  );
+  )
+
+  const { data } = useApartments(
+    {
+      manageBuildingList: manageBuildingList,
+      page: 0,
+      size: 1000
+    },
+    !!manageBuildingList?.[0]
+  )
 
   // Áp dụng bộ lọc
   const applyFilter = () => {
     setFilter({
       statusList: statusList || undefined,
       reportContent: reportContent,
-      buildingId: buildingId || undefined,
-      apartmentId: apartmentId || undefined,
+      manageBuildingList: manageBuildingList || undefined,
+      manageApartmentList: manageApartmentList || undefined,
       createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
       createTimeTo: createTimeTo ? createTimeTo.getTime() : undefined,
-      page: 0, // Reset về trang 1 khi lọc
-    });
-  };
+      page: 0 // Reset về trang 1 khi lọc
+    })
+  }
   // Xóa bộ lọc
   const clearFilter = () => {
-    setStatusList(undefined);
-    setReportContent("");
-    setBuildingId("");
-    setApartmentId("");
-    setCreateTimeFrom(undefined);
-    setCreateTimeTo(undefined);
-    resetFilter();
-  };
+    setStatusList(undefined)
+    setReportContent("")
+    setManageBuildingId(undefined)
+    setManageApartmentList(undefined)
+    setCreateTimeFrom(undefined)
+    setCreateTimeTo(undefined)
+    resetFilter()
+  }
 
   useEffect(() => {
-    setStatusList(filter.statusList || undefined);
-    setReportContent(filter.reportContent || "");
-    setBuildingId(filter.buildingId || "");
-    setApartmentId(filter.apartmentId || "");
+    setStatusList(filter.statusList || undefined)
+    setReportContent(filter.reportContent || "")
+    setManageBuildingId(filter.manageBuildingList || undefined)
+    setManageApartmentList(filter.manageApartmentList || undefined)
     setCreateTimeFrom(
       filter.createTimeFrom ? new Date(filter.createTimeFrom) : undefined
-    );
+    )
     setCreateTimeTo(
       filter.createTimeTo ? new Date(filter.createTimeTo) : undefined
-    );
-  }, [filter]);
+    )
+  }, [filter])
 
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
@@ -87,9 +100,9 @@ export function ReportFilters() {
             value={`${statusList?.[0]}`}
             onValueChange={(value) => {
               if (value !== "all") {
-                setStatusList([+value]);
+                setStatusList([+value])
               } else {
-                setStatusList(undefined);
+                setStatusList(undefined)
               }
             }}
           >
@@ -120,12 +133,12 @@ export function ReportFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={filter?.buildingId?.toString() || ""}
+            value={manageBuildingList?.[0]}
             onValueChange={(value) => {
               if (value !== "all") {
-                setBuildingId(value);
+                setManageBuildingId([value])
               } else {
-                setBuildingId("");
+                setManageBuildingId(undefined)
               }
             }}
             disabled={isLoadingBuildings}
@@ -138,7 +151,7 @@ export function ReportFilters() {
               {buildings?.map((building) => (
                 <SelectItem
                   key={building.buildingId}
-                  value={building?.buildingId?.toString()}
+                  value={building?.buildingId}
                 >
                   {building.buildingName}
                 </SelectItem>
@@ -147,35 +160,32 @@ export function ReportFilters() {
           </Select>
         </div>
         {/* Căn hộ */}
-        {/* <div>
+        <div>
           <Label className="mb-2">Căn hộ</Label>
           <Select
-            value={filter.apartmentId?.toString() || ""}
+            value={manageApartmentList?.[0]}
             onValueChange={(value) => {
               if (value !== "all") {
-                setApartmentId(value);
+                setManageApartmentList([value])
               } else {
-                setApartmentId("");
+                setManageApartmentList(undefined)
               }
             }}
-            disabled={isLoadingBuildings}
+            disabled={!manageBuildingList?.[0]}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Tất cả" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
-              {buildings?.map((building) => (
-                <SelectItem
-                  key={building.buildingId}
-                  value={building.buildingId.toString()}
-                >
-                  {building.buildingName}
+              {data?.data?.data?.map((apartment) => (
+                <SelectItem key={apartment.id} value={apartment.id}>
+                  {apartment.apartmentName}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </div> */}
+        </div>
 
         {/* Ngày tạo */}
         <div>
@@ -204,10 +214,10 @@ export function ReportFilters() {
                   selected={{ from: createTimeFrom, to: createTimeTo }}
                   onSelect={(range) => {
                     if (range?.from) {
-                      setCreateTimeFrom(range?.from);
+                      setCreateTimeFrom(range?.from)
                     }
                     if (range?.to) {
-                      setCreateTimeTo(range?.to);
+                      setCreateTimeTo(range?.to)
                     }
                   }}
                   disabled={(date) =>
@@ -235,5 +245,5 @@ export function ReportFilters() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

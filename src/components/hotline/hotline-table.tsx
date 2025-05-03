@@ -20,8 +20,10 @@ import {
   DialogTitle,
 } from "../ui/dialog";
 import { Hotline } from "../../../types/hotlines";
+import { useRouter } from "next/navigation";
 
 export function HotlineTable() {
+  const router = useRouter()
   const { filter, setFilter, resetFilter } = useHotlineFilterStore();
   const { data, isLoading, isError } = useHotlines(filter);
   const deleteHotlineMutation = useDeleteHotline();
@@ -109,6 +111,9 @@ export function HotlineTable() {
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
+        onClickRow={(_, hotline)=>{
+          router.push(`/services/hotlines/${hotline.hotlineId}`)
+        }}
       />
 
       {/* Dialog xác nhận xóa */}

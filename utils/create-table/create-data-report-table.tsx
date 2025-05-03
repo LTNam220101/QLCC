@@ -1,52 +1,50 @@
-import { Column } from "@/components/common/table-data";
-import { Button } from "@/components/ui/button";
-import { EllipsisVertical, ScanSearch } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Report, ReportStatus } from "../../types/reports";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
+import { Column } from "@/components/common/table-data"
+import { Button } from "@/components/ui/button"
+import { EllipsisVertical, ScanSearch } from "lucide-react"
+import { Badge } from "@/components/ui/badge"
+import { Report, ReportStatus } from "../../types/reports"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import Link from "next/link";
-
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu"
 export const generateData = ({
   startIndex,
   handleDeleteClick,
-  handleChangeStatus,
+  handleChangeStatus
 }: {
-  startIndex: number;
-  handleDeleteClick?: (report: Report) => void;
-  handleChangeStatus?: (report: Report, status: number) => void;
+  startIndex: number
+  handleDeleteClick?: (report: Report) => void
+  handleChangeStatus?: (report: Report, status: number) => void
 }): Column<Report>[] => [
   {
     dataIndex: "index",
     name: "STT",
-    render: (_, index) => startIndex + index + 1,
+    render: (_, index) => startIndex + index + 1
   },
   {
     dataIndex: "reportId",
     name: "Mã phản ánh",
-    render: (report) => report?.reportId?.split("-")?.at(-1),
+    render: (report) => report?.reportId?.split("-")?.at(-1)
   },
   {
     dataIndex: "reportContent",
-    name: "Nội dung",
+    name: "Nội dung"
   },
   {
     dataIndex: "buildingName",
-    name: "Căn hộ",
+    name: "Căn hộ"
   },
   {
-    dataIndex: "buildingName",
-    name: "Toà nhà",
+    dataIndex: "residentName",
+    name: "Toà nhà"
   },
   {
     dataIndex: "note",
-    name: "Ghi chú",
+    name: "Ghi chú"
   },
   {
     dataIndex: "createTime",
@@ -54,29 +52,24 @@ export const generateData = ({
     render: (hotline) => {
       return hotline.createTime
         ? format(new Date(hotline.createTime), "dd/MM/yyyy", { locale: vi })
-        : "-";
-    },
+        : "-"
+    }
   },
   {
     dataIndex: "status",
     name: "Trạng thái",
     render: (report) => {
-      const color = `${ReportStatus?.[report?.status]?.color}_outline`;
-      const statusName = ReportStatus?.[report?.status]?.name;
+      const color = `${ReportStatus?.[report?.status]?.color}_outline`
+      const statusName = ReportStatus?.[report?.status]?.name
 
-      return <Badge variant={color as any}>{statusName}</Badge>;
-    },
+      return <Badge variant={color as any}>{statusName}</Badge>
+    }
   },
   {
     dataIndex: "status",
     name: "Thao tác",
     render: (report) => (
-      <div className="flex gap-2">
-        <Link href={`/services/reports/${report.reportId}`}>
-          <Button variant="outline" size="icon">
-            <ScanSearch className="h-4 w-4" color="blue" />
-          </Button>
-        </Link>
+      <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
@@ -99,6 +92,6 @@ export const generateData = ({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-    ),
-  },
-];
+    )
+  }
+]

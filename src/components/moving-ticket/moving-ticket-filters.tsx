@@ -32,8 +32,12 @@ export function MovingTicketFilters() {
   const [statusList, setStatusList] = useState(filter.statusList)
   const [transferType, setTransferType] = useState(filter.transferType)
   const [ticketCode, setTicketCode] = useState(filter.ticketCode || "")
-  const [apartmentId, setApartmentId] = useState(filter.apartmentId || "")
-  const [buildingId, setBuildingId] = useState(filter.buildingId || "")
+  const [manageBuildingList, setManageBuildingList] = useState(
+    filter.manageBuildingList || undefined
+  )
+  const [manageApartmentList, setManageApartmentList] = useState(
+    filter.manageApartmentList || undefined
+  )
   const [movingDayTimeFrom, setMovingDayTimeFrom] = useState<Date | undefined>(
     filter.movingDayTimeFrom ? new Date(filter.movingDayTimeFrom) : undefined
   )
@@ -43,11 +47,11 @@ export function MovingTicketFilters() {
 
   const { data } = useApartments(
     {
-      manageBuildingList: [buildingId],
+      manageBuildingList: manageBuildingList,
       page: 0,
       size: 1000
     },
-    !!buildingId
+    !!manageBuildingList?.[0]
   )
   // Áp dụng bộ lọc
   const applyFilter = () => {
@@ -55,8 +59,8 @@ export function MovingTicketFilters() {
       statusList: statusList || undefined,
       transferType: transferType,
       ticketCode: ticketCode || undefined,
-      apartmentId: apartmentId || undefined,
-      buildingId: buildingId || undefined,
+      manageBuildingList: manageBuildingList || undefined,
+      manageApartmentList: manageApartmentList || undefined,
       movingDayTimeFrom: movingDayTimeFrom
         ? movingDayTimeFrom.getTime()
         : undefined,
@@ -69,8 +73,8 @@ export function MovingTicketFilters() {
     setStatusList(undefined)
     setTransferType(undefined)
     setTicketCode("")
-    setApartmentId("")
-    setBuildingId("")
+    setManageBuildingList(undefined)
+    setManageApartmentList(undefined)
     setMovingDayTimeFrom(undefined)
     setMovingDayTimeTo(undefined)
     resetFilter()
@@ -80,8 +84,8 @@ export function MovingTicketFilters() {
     setStatusList(filter.statusList || undefined)
     setTransferType(filter.transferType)
     setTicketCode(filter.ticketCode || "")
-    setApartmentId(filter.apartmentId || "")
-    setBuildingId(filter.buildingId || "")
+    setManageBuildingList(filter.manageBuildingList || undefined)
+    setManageApartmentList(filter.manageApartmentList || undefined)
     setMovingDayTimeFrom(
       filter.movingDayTimeFrom ? new Date(filter.movingDayTimeFrom) : undefined
     )
@@ -204,12 +208,12 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={buildingId || "all"}
+            value={manageBuildingList?.[0]}
             onValueChange={(value) => {
               if (value !== "all") {
-                setBuildingId(value)
+                setManageBuildingList([value])
               } else {
-                setBuildingId("")
+                setManageBuildingList(undefined)
               }
             }}
             disabled={isLoadingBuildings}
@@ -234,15 +238,15 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Căn hộ</Label>
           <Select
-            value={apartmentId || "all"}
+            value={manageApartmentList?.[0]}
             onValueChange={(value) => {
               if (value !== "all") {
-                setApartmentId(value)
+                setManageApartmentList([value])
               } else {
-                setApartmentId("")
+                setManageApartmentList(undefined)
               }
             }}
-            disabled={!buildingId}
+            disabled={!manageBuildingList?.[0]}
           >
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Tất cả" />

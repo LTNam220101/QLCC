@@ -53,8 +53,6 @@ export default function LoginPage() {
   async function onSubmit(data: LoginFormValues) {
     setIsSubmitting(true);
     setLoginError(null);
-    // // Giả lập API call
-    // console.log("Login data:", data);
     const user = await signIn("credentials", {
       ...data,
       redirect: false,
@@ -63,7 +61,6 @@ export default function LoginPage() {
       // Hiển thị lỗi đăng nhập
       setLoginError("Tài khoản hoặc mật khẩu không chính xác");
     }
-    // Giả lập đăng nhập thành công - trong thực tế sẽ gọi API
     else {
       // Chuyển hướng đến trang home sau khi đăng nhập thành công
       router.push("/");

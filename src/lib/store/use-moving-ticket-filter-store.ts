@@ -8,13 +8,12 @@ interface MovingTicketFilterState {
 }
 
 const initialFilter: MovingTicketFilter = {
-  status: undefined,
   transferType: undefined,
   ticketCode: "",
   movingDayTimeFrom: undefined,
   movingDayTimeTo: undefined,
-  apartmentId: "",
-  buildingId: "",
+  manageBuildingList: undefined,
+  manageApartmentList: undefined,
   page: 0,
   size: 20,
 };

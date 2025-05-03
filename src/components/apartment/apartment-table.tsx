@@ -5,8 +5,10 @@ import { useApartmentStore } from "@/lib/store/use-apartment-store";
 import TableData from "../common/table-data";
 import { generateData } from "../../../utils/create-table/create-data-apartment-table";
 import { useApartments } from "@/lib/tanstack-query/apartments/queries";
+import { useRouter } from "next/navigation";
 
 export function ApartmentTable() {
+  const router = useRouter()
   const { filters, setFilter, clearFilters } = useApartmentStore();
 
   const { data, isLoading, isError } = useApartments(filters);
@@ -48,6 +50,9 @@ export function ApartmentTable() {
         filters={filters}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
+        onClickRow={(_, apartment)=>{
+          router.push(`/building-information/apartments/${apartment.id}`)
+        }}
       />
     </div>
   );

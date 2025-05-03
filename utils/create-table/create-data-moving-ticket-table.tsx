@@ -1,14 +1,6 @@
 import { Column } from "@/components/common/table-data"
 import { Button } from "@/components/ui/button"
-import {
-  Edit,
-  EllipsisVertical,
-  LockKeyhole,
-  LockKeyholeOpen,
-  ScanSearch,
-  Trash2
-} from "lucide-react"
-import Link from "next/link"
+import { EllipsisVertical } from "lucide-react"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { vi } from "date-fns/locale"
@@ -96,12 +88,7 @@ export const generateData = ({
     dataIndex: "status",
     name: "Thao tác",
     render: (movingTicket) => (
-      <div className="flex gap-2">
-        <Link href={`/services/moving-tickets/${movingTicket.ticketId}`}>
-          <Button variant="outline" size="icon">
-            <ScanSearch className="h-4 w-4" color="blue" />
-          </Button>
-        </Link>
+      <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
