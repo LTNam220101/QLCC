@@ -5,7 +5,7 @@ const { auth } = NextAuth(authConfig);
 
 import {PUBLIC_ROUTES, LOGIN, ROOT, PROTECTED_SUB_ROUTES} from "@/lib/routes";
 
-export async function middleware(request) {
+export async function middleware(request: any) {
   const { nextUrl } = request;
   const session = await auth();
   const isAuthenticated = !!session?.user;

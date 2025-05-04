@@ -16,6 +16,16 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
+        source: "/services",
+        destination: "/services/hotlines",
+        permanent: false,
+      },
+      {
+        source: "/boards",
+        destination: "/boards/notifications",
+        permanent: false,
+      },
+      {
         source: "/profile",
         destination: "/profile/profile-info",
         permanent: false,

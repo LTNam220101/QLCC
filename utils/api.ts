@@ -138,7 +138,7 @@ export async function apiRequest<T>(options: Omit<IRequest, "token">) {
       token,
     });
     return res
-  } catch (error) {
+  } catch (error: any) {
     // Nếu lỗi 401 Unauthorized, thử refresh token và gọi lại
     if (error.status === 401) {
       try {
