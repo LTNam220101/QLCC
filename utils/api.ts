@@ -114,14 +114,15 @@ export const sendRequestFile = async <T>({
   }
   return fetch(requestUrl, options).then((res) => {
     if (res.ok) {
-      return res.json() as T; //generic
+      return res.blob() as T; //generic
+      // return res.json() as T; //generic
     } else {
-      return res.json().then(function (json) {
+      return res.blob().then(function (json) {
         // to be able to access error status when you catch the error
         return {
           status: res.status,
-          message: json?.message ?? "",
-          error: json?.error ?? "",
+          message: "",
+          error: "",
         } as T;
       });
     }

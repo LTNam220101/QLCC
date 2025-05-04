@@ -1,123 +1,124 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { useEffect, useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+  FormMessage
+} from "@/components/ui/form"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue
+} from "@/components/ui/select"
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
-  SheetFooter,
-} from "@/components/ui/sheet";
-import { useApartmentStore } from "@/lib/store/use-apartment-store";
-import { toast } from "sonner";
-import { FileUp, Plus } from "lucide-react";
-import { useRouter } from "next/navigation";
+  SheetFooter
+} from "@/components/ui/sheet"
+import { useApartmentStore } from "@/lib/store/use-apartment-store"
+import { toast } from "sonner"
+import { FileUp, Plus } from "lucide-react"
+import { useRouter } from "next/navigation"
 import {
   useAddApartment,
-  useUpdateApartment,
-} from "@/lib/tanstack-query/apartments/queries";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
-import { ApartmentFormData } from "../../../types/apartments";
+  useImportApartment,
+  useUpdateApartment
+} from "@/lib/tanstack-query/apartments/queries"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
+import { ApartmentFormData } from "../../../types/apartments"
+import { downloadApartmentTemplate } from "@/lib/services/apartment-service"
 
 // Schema xác thực form
 const apartmentFormSchema = z.object({
   apartmentName: z.string().min(1, { message: "Căn hộ là bắt buộc" }),
-  manageBuildingList: z
-    .array(z.string())
-    .min(1, { message: "Tòa nhà là bắt buộc" }),
+  buildingId: z.string().min(1, { message: "Tòa nhà là bắt buộc" }),
+  buildingName: z.string().min(1, { message: "Tòa nhà là bắt buộc" }),
   area: z.coerce
     .number()
     .min(0, { message: "Diện tích phải lớn hơn hoặc bằng 0" }),
-  note: z.string().optional(),
-});
+  note: z.string().optional()
+})
 
 export function ApartmentDrawer() {
-  const router = useRouter();
+  const router = useRouter()
   const { drawerOpen, drawerType, selectedApartment, closeDrawer } =
-    useApartmentStore();
-  const { data: buildings } = useBuildings();
-  const createApartmentMutation = useAddApartment();
-  const updateApartmentMutation = useUpdateApartment();
+    useApartmentStore()
+  const { data: buildings } = useBuildings()
+  const createApartmentMutation = useAddApartment()
+  const updateApartmentMutation = useUpdateApartment()
 
   // Form
   const form = useForm<ApartmentFormData>({
     resolver: zodResolver(apartmentFormSchema),
     defaultValues: {
       apartmentName: "",
-      manageBuildingList: undefined,
-      area: 0,
-      note: "",
-    },
-  });
+      buildingId: "",
+      buildingName: "",
+      area: undefined,
+      note: ""
+    }
+  })
 
   // Cập nhật giá trị mặc định khi selectedApartment thay đổi
   useEffect(() => {
     if (selectedApartment && drawerType === "edit") {
       form.reset({
         apartmentName: selectedApartment.apartmentName || "",
-        manageBuildingList: [selectedApartment.buildingId],
+        buildingId: selectedApartment.buildingId || "",
         area: selectedApartment.area || 0,
-        note: selectedApartment.note || "",
-      });
+        note: selectedApartment.note || ""
+      })
     } else if (drawerType === "add") {
       form.reset({
         apartmentName: "",
-        manageBuildingList: undefined,
-        area: 0,
-        note: "",
-      });
+        buildingId: "",
+        area: undefined,
+        note: ""
+      })
     }
-  }, [selectedApartment, drawerType, form]);
-
+  }, [selectedApartment, drawerType, form])
   // Xử lý submit form
   const onSubmit = async (values: ApartmentFormData) => {
     try {
       const data = {
         apartmentName: values.apartmentName ?? "",
-        manageBuildingList: values.manageBuildingList ?? "",
+        buildingId: values.buildingId ?? "",
+        buildingName: values.buildingName ?? "",
         note: values.note ?? "",
-        area: values.area ?? 1,
-      };
-
+        area: values.area ?? 1
+      }
       if (drawerType === "edit" && selectedApartment) {
         await updateApartmentMutation.mutateAsync({
           id: selectedApartment?.id,
-          data,
-        });
-        closeDrawer();
-        toast("Thông tin căn hộ đã được cập nhật");
-        router.push("/building-information/apartments");
+          data
+        })
+        closeDrawer()
+        toast("Thông tin căn hộ đã được cập nhật")
+        router.push("/building-information/apartments")
       } else if (drawerType === "add") {
-        await createApartmentMutation.mutateAsync(data);
-        closeDrawer();
-        toast("Căn hộ mới đã được tạo");
-        router.push("/building-information/apartments");
+        await createApartmentMutation.mutateAsync(data)
+        closeDrawer()
+        toast("Căn hộ mới đã được tạo")
+        router.push("/building-information/apartments")
       }
     } catch (error) {
-      toast("Đã xảy ra lỗi, vui lòng thử lại");
+      toast("Đã xảy ra lỗi, vui lòng thử lại")
     }
-  };
+  }
 
   // Tiêu đề drawer
   const drawerTitle =
@@ -125,7 +126,7 @@ export function ApartmentDrawer() {
       ? "Thêm mới căn hộ"
       : drawerType === "edit"
       ? "Sửa căn hộ"
-      : "Thêm mới từ Excel";
+      : "Thêm mới từ Excel"
 
   return (
     <Sheet open={drawerOpen} onOpenChange={(open) => !open && closeDrawer()}>
@@ -136,7 +137,7 @@ export function ApartmentDrawer() {
         {(drawerType === "add" || drawerType === "edit") && (
           <Form {...form}>
             <form className="px-4 grid grid-cols-2 gap-x-5 gap-y-4">
-              {/* <FormField
+              <FormField
                 control={form.control}
                 name="apartmentName"
                 render={({ field }) => (
@@ -150,11 +151,11 @@ export function ApartmentDrawer() {
                     <FormMessage />
                   </FormItem>
                 )}
-              /> */}
+              />
 
               <FormField
                 control={form.control}
-                name="manageBuildingList"
+                name="buildingId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
@@ -162,9 +163,14 @@ export function ApartmentDrawer() {
                     </FormLabel>
                     <Select
                       onValueChange={(e) => {
-                        field.onChange([e]);
+                        field.onChange(e)
+                        form.setValue(
+                          "buildingName",
+                          buildings?.find((build) => build.buildingId === e)
+                            ?.buildingName || ""
+                        )
                       }}
-                      defaultValue={field.value?.[0]}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">
@@ -234,36 +240,53 @@ export function ApartmentDrawer() {
         {drawerType === "import" && <ImportExcelForm />}
       </SheetContent>
     </Sheet>
-  );
+  )
 }
 
 function ImportExcelForm() {
-  const { closeDrawer, importApartments } = useApartmentStore();
+  const router = useRouter()
+  const { closeDrawer } = useApartmentStore()
+  const [file, setFile] = useState<File | null>(null)
+  const importApartmentMutation = useImportApartment()
 
-  const handleImport = () => {
-    // Giả lập nhập dữ liệu từ Excel
-    const excelData = [
-      {
-        apartmentNumber: "E-501",
-        building: "E",
-        area: 85.5,
-        vehicleCount: 1,
-        vehicleType: "car",
-        note: "Căn hộ nhập từ Excel",
-      },
-      {
-        apartmentNumber: "E-502",
-        building: "E",
-        area: 90.2,
-        vehicleCount: 2,
-        vehicleType: "both",
-        note: "Căn hộ nhập từ Excel",
-      },
-    ];
+  const handleDownloadTemplate = async () => {
+    try {
+      await downloadApartmentTemplate()
+      toast("Tải xuống thành công")
+    } catch (error) {
+      toast("Không thể tải xuống file mẫu")
+    }
+  }
 
-    importApartments(excelData);
-    toast(`Đã nhập ${excelData.length} căn hộ từ file Excel`);
-  };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFile(e.target.files[0])
+    }
+  }
+
+  const handleImport = async () => {
+    try {
+      if (file) {
+        await importApartmentMutation.mutateAsync(file)
+        closeDrawer()
+        toast("Vui lòng xem file kết quả")
+        router.push("/building-information/apartments")
+      }
+    } catch (error) {
+      toast("Đã xảy ra lỗi, vui lòng thử lại")
+    }
+  }
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      setFile(e.dataTransfer.files[0])
+    }
+  }
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault()
+  }
 
   return (
     <>
@@ -274,6 +297,7 @@ function ImportExcelForm() {
             <Button
               variant="outline"
               className="border-blue text-blue hover:text-blue"
+              onClick={handleDownloadTemplate}
             >
               <FileUp />
               Tải file Excel mẫu
@@ -288,31 +312,87 @@ function ImportExcelForm() {
 
         <div className="space-y-4">
           <h3 className="text-md font-medium">Tải file lên</h3>
-          <div className="border-2 border-dashed rounded-md p-6 text-center">
-            <p className="mb-2">
-              Kéo và thả file vào đây hoặc nhấn Chọn file để tải lên
-            </p>
-            <p className="text-sm text-muted-foreground">
-              File phải có định dạng Excel
-            </p>
-            <Button
-              variant="outline"
-              className="mt-4 border-blue text-blue hover:text-blue"
-            >
-              <Plus />
-              Chọn file
-            </Button>
+          <div
+            className="border-2 border-dashed rounded-md p-6 text-center"
+            onDrop={handleDrop}
+            onDragOver={handleDragOver}
+          >
+            {file ? (
+              <>
+                <div className="flex flex-col items-center">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="text-green-500 mb-2"
+                  >
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <path d="M8 13h2" />
+                    <path d="M8 17h2" />
+                    <path d="M14 13h2" />
+                    <path d="M14 17h2" />
+                  </svg>
+                  <p className="font-medium">{file.name}</p>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    {(file.size / 1024).toFixed(2)} KB
+                  </p>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="mt-2"
+                    onClick={() => {
+                      setFile(null)
+                    }}
+                  >
+                    Xóa file
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="mb-2">
+                  Kéo và thả file vào đây hoặc nhấn Chọn file để tải lên
+                </p>
+                <p className="text-sm text-muted-foreground">
+                  File phải có định dạng Excel
+                </p>
+                <Button
+                  variant="outline"
+                  className="mt-4 border-blue text-blue hover:text-blue"
+                  onClick={() =>
+                    document.getElementById("file-upload")?.click()
+                  }
+                >
+                  <Plus />
+                  Chọn file
+                </Button>
+                <input
+                  id="file-upload"
+                  type="file"
+                  accept=".xlsx,.xls"
+                  className="hidden"
+                  onChange={handleFileChange}
+                />
+              </>
+            )}
           </div>
         </div>
 
-        <div className="space-y-4 flex flex-start justify-between">
+        {/* <div className="space-y-4 flex flex-start justify-between">
           <div>
             <p className="text-sm text-muted-foreground">Chưa có dữ liệu</p>
           </div>
           <Button type="button" onClick={handleImport}>
             Đọc file
           </Button>
-        </div>
+        </div> */}
       </div>
       <SheetFooter className="flex-row justify-center">
         <Button type="button" variant="outline" onClick={closeDrawer}>
@@ -323,5 +403,5 @@ function ImportExcelForm() {
         </Button>
       </SheetFooter>
     </>
-  );
+  )
 }

@@ -22,7 +22,8 @@ export interface ApartmentFilter {
 
 export interface ApartmentFormData {
   apartmentName: string
-  manageBuildingList: string[]
+  buildingId: string
+  buildingName: string
   area: number
   note?: string
 }
