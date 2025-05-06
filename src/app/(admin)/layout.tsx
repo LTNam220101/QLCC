@@ -1,19 +1,25 @@
-import { auth } from "@/auth";
-import { AppSidebar } from "@/components/app-nav";
-import NavBreadcrumb from "@/components/app-nav/nav-breadcrumb";
-import NavTrigger from "@/components/app-nav/nav-trigger";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { Toaster } from "@/components/ui/sonner";
+import { auth } from "@/auth"
+import { AppSidebar } from "@/components/app-nav"
+import NavBreadcrumb from "@/components/app-nav/nav-breadcrumb"
+import NavTrigger from "@/components/app-nav/nav-trigger"
+import { SidebarProvider } from "@/components/ui/sidebar"
+import { Toaster } from "@/components/ui/sonner"
 export default async function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
-  const session = await auth();
-  if (!session) return <div>Not authenticated</div>;
+  const session = await auth()
+  if (!session) return <div>Not authenticated</div>
   return (
     <>
-      <SidebarProvider>
+      <SidebarProvider
+        style={{
+          "--sidebar-width": "305px",
+          "--sidebar-width-icon": "40px",
+          "--sidebar-width-mobile": "20rem"
+        }}
+      >
         <div className="flex flex-1 h-screen">
           <AppSidebar />
           <div className="flex-1 flex flex-col overflow-hidden bg-[#F4F3F6]">
@@ -29,5 +35,5 @@ export default async function RootLayout({
         </div>
       </SidebarProvider>
     </>
-  );
+  )
 }

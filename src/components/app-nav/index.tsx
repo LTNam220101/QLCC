@@ -1,25 +1,27 @@
 "use client"
 
 import * as React from "react"
-import { BookOpen, Bot, Command, Settings2, SquareTerminal } from "lucide-react"
+import { Bot, Command, Settings2, SquareTerminal } from "lucide-react"
 
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail
 } from "@/components/ui/sidebar"
 import { NavMain } from "./nav-main"
 import { usePathname } from "next/navigation"
+import Image from "next/image"
 
 const data = {
   navMain: [
     {
       title: "TRANG CHỦ",
       url: "/",
-      icon: Settings2,
+      icon: Settings2
     },
     {
       title: "Thông tin toà nhà",
@@ -145,12 +147,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader className="bg-purple">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <div className="flex rounded-full size-[60px] items-center justify-center bg-sidebar-primary text-sidebar-primary-foreground">
-              <Command className="size-[60px]" />
-            </div>
-            <div className="grid flex-1 text-left text-sm leading-tight">
-              <span className="truncate text-xl text-white">CÔNG TY A</span>
-            </div>
+            <SidebarMenuButton size="lg" asChild>
+              <>
+                <div className="group-data-[collapsible=icon]:opacity-0 flex rounded-full size-[60px] items-center justify-center overflow-hidden">
+                  <Image
+                    alt="Công Ty Cổ Phần Sáng Tạo Văn Minh Số"
+                    src={"/logo.webp"}
+                    width={600}
+                    height={600}
+                  />
+                </div>
+                <div className="group-data-[collapsible=icon]:hidden grid flex-1 text-left text-sm leading-tight">
+                  <span className="text-lg text-white">
+                    Công Ty Cổ Phần Sáng Tạo Văn Minh Số
+                  </span>
+                </div>
+              </>
+            </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
