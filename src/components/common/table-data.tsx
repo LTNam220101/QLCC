@@ -77,7 +77,7 @@ function TableData<T>({
           </TableRow>
         </TableHeader>
         <TableBody className="whitespace-nowrap">
-          {isLoading && (!datas || datas.length === 0)
+          {isLoading
             ? Array.from({ length: 6 }).map((_, rowIndex) => (
                 <TableRow key={`skeleton-${rowIndex}`} className="border-b">
                   {columns?.map((column, colIndex) => (

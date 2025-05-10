@@ -131,25 +131,25 @@ const ReportService = {
 };
 
 // Query keys
-export const hotlineKeys = {
+export const reportKeys = {
   all: ["reports"] as const,
-  lists: () => [...hotlineKeys.all, "list"] as const,
-  list: (filters: ReportFilter) => [...hotlineKeys.lists(), filters] as const,
-  details: () => [...hotlineKeys.all, "detail"] as const,
-  detail: (id?: string) => [...hotlineKeys.details(), id] as const,
+  lists: () => [...reportKeys.all, "list"] as const,
+  list: (filters: ReportFilter) => [...reportKeys.lists(), filters] as const,
+  details: () => [...reportKeys.all, "detail"] as const,
+  detail: (id?: string) => [...reportKeys.details(), id] as const,
 };
 
 // Hooks
 export const useReports = (filter: ReportFilter) => {
   return useQuery({
-    queryKey: hotlineKeys.list(filter),
+    queryKey: reportKeys.list(filter),
     queryFn: () => ReportService.getReports(filter),
   });
 };
 
 export const useReport = (id?: string) => {
   return useQuery({
-    queryKey: hotlineKeys.detail(id),
+    queryKey: reportKeys.detail(id),
     queryFn: () => ReportService.getReportById(id),
     enabled: !!id,
   });
@@ -161,7 +161,7 @@ export const useCreateReport = () => {
   return useMutation({
     mutationFn: (data: ReportFormData) => ReportService.createReport(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: reportKeys.lists() });
     },
   });
 };
@@ -171,8 +171,8 @@ export const useUpdateReport = (id?: string) => {
   return useMutation({
     mutationFn: (data: ReportFormData) => ReportService.updateReport(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.detail(id) });
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: reportKeys.detail(id) });
+      queryClient.invalidateQueries({ queryKey: reportKeys.lists() });
     },
   });
 };
@@ -183,7 +183,7 @@ export const useDeleteReport = () => {
   return useMutation({
     mutationFn: (id: string) => ReportService.deleteReport(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: reportKeys.lists() });
     },
   });
 };

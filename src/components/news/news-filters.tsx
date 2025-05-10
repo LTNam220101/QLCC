@@ -23,8 +23,11 @@ import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
+import { useQueryClient } from "@tanstack/react-query"
+import { newsKeys } from "@/lib/tanstack-query/news/queries"
 
 export function NewsFilters() {
+  const queryClient = useQueryClient()
   const { filter, setFilter, resetFilter } = useNewsFilterStore()
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
 
@@ -47,7 +50,8 @@ export function NewsFilters() {
 
   // Áp dụng bộ lọc
   const applyFilter = () => {
-    setFilter({
+    queryClient.invalidateQueries({ queryKey: newsKeys.lists() })
+setFilter({
       title: title || "",
       manageBuildingList: manageBuildingList || undefined,
       sentTimeFrom: sentTimeFrom ? sentTimeFrom.getTime() : undefined,

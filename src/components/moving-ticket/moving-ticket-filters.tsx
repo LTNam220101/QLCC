@@ -25,8 +25,11 @@ import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
 import { TransferType } from "@/enum"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
+import { useQueryClient } from "@tanstack/react-query"
+import { movingTicketKeys } from "@/lib/tanstack-query/moving-tickets/queries"
 
 export function MovingTicketFilters() {
+  const queryClient = useQueryClient()
   const { filter, setFilter, resetFilter } = useMovingTicketFilterStore()
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
   const [statusList, setStatusList] = useState(filter.statusList)
@@ -55,6 +58,7 @@ export function MovingTicketFilters() {
   )
   // Áp dụng bộ lọc
   const applyFilter = () => {
+    queryClient.invalidateQueries({ queryKey: movingTicketKeys.lists() })
     setFilter({
       statusList: statusList || undefined,
       transferType: transferType,

@@ -15,7 +15,7 @@ interface NotificationDetailProps {
 export function NotificationDetail({
   notificationId
 }: NotificationDetailProps) {
-  const { data, isLoading, isError } = useNotification(notificationId)
+  const { data, isLoading, isError, isRefetching } = useNotification(notificationId)
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>

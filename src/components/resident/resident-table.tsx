@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 export function ResidentTable() {
   const router = useRouter()
   const { filters, setFilter, clearFilters } = useResidentStore();
-  const { data, isLoading, isError } = useResidents(filters);
+  const { data, isLoading, isError, isRefetching } = useResidents(filters);
   const updateResidentMutation = useUpdateResident();
   const deleteResidentMutation = useDeleteResident();
 
@@ -113,7 +113,7 @@ export function ResidentTable() {
       <TableData<Resident>
         columns={columns}
         datas={data?.data?.data}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filters}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

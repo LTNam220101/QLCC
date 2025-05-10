@@ -1,74 +1,76 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { Search, Trash2, Calendar as CalendarComponent } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useApartmentStore } from "@/lib/store/use-apartment-store";
+import { useEffect, useState } from "react"
+import { Search, Trash2, Calendar as CalendarComponent } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useApartmentStore } from "@/lib/store/use-apartment-store"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { Label } from "../ui/label";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
-import { cn } from "@/lib/utils";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { Label } from "../ui/label"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
+import { cn } from "@/lib/utils"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Input } from "../ui/input";
+  SelectValue
+} from "../ui/select"
+import { Input } from "../ui/input"
+import { useQueryClient } from "@tanstack/react-query"
+import { apartmentKeys } from "@/lib/tanstack-query/apartments/queries"
 
 export function ApartmentFilters() {
-  const { filters, setFilter, clearFilters } = useApartmentStore();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
+  const queryClient = useQueryClient()
+  const { filters, setFilter, clearFilters } = useApartmentStore()
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
   const [apartmentName, setApartmentName] = useState(
     filters.apartmentName || ""
-  );
+  )
   const [manageBuildingList, setManageBuildingList] = useState(
     filters.manageBuildingList || undefined
-  );
+  )
   const [createTimeFrom, setFromDate] = useState<Date | undefined>(
     filters.createTimeFrom ? new Date(filters.createTimeFrom) : undefined
-  );
+  )
   const [createTimeTo, setToDate] = useState<Date | undefined>(
     filters.createTimeTo ? new Date(filters.createTimeTo) : undefined
-  );
+  )
   // Xử lý tìm kiếm
   const handleSearch = () => {
+    queryClient.invalidateQueries({ queryKey: apartmentKeys.lists() })
     setFilter({
       apartmentName: apartmentName || undefined,
       manageBuildingList: manageBuildingList || undefined,
       createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
       createTimeTo: createTimeTo ? createTimeTo.getTime() : undefined,
-      page: 0,
-    });
-  };
+      page: 0
+    })
+  }
 
   // Xóa bộ lọc
   const clearFilter = () => {
-    setApartmentName("");
-    setManageBuildingList(undefined);
-    setFromDate(undefined);
-    setToDate(undefined);
-    clearFilters();
-  };
+    setApartmentName("")
+    setManageBuildingList(undefined)
+    setFromDate(undefined)
+    setToDate(undefined)
+    clearFilters()
+  }
 
   useEffect(() => {
-    setApartmentName(filters.apartmentName || "");
-    setManageBuildingList(filters.manageBuildingList);
+    setApartmentName(filters.apartmentName || "")
+    setManageBuildingList(filters.manageBuildingList)
     setFromDate(
       filters.createTimeFrom ? new Date(filters.createTimeFrom) : undefined
-    );
-    setToDate(
-      filters.createTimeTo ? new Date(filters.createTimeTo) : undefined
-    );
-  }, [filters]);
+    )
+    setToDate(filters.createTimeTo ? new Date(filters.createTimeTo) : undefined)
+  }, [filters])
 
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
@@ -79,9 +81,9 @@ export function ApartmentFilters() {
             value={manageBuildingList?.[0]}
             onValueChange={(value) => {
               if (value !== "all") {
-                setManageBuildingList([value]);
+                setManageBuildingList([value])
               } else {
-                setManageBuildingList([]);
+                setManageBuildingList([])
               }
             }}
           >
@@ -136,10 +138,10 @@ export function ApartmentFilters() {
                 selected={{ from: createTimeFrom, to: createTimeTo }}
                 onSelect={(range) => {
                   if (range?.from) {
-                    setFromDate(range?.from);
+                    setFromDate(range?.from)
                   }
                   if (range?.to) {
-                    setToDate(range?.to);
+                    setToDate(range?.to)
                   }
                 }}
                 disabled={(date) =>
@@ -166,5 +168,5 @@ export function ApartmentFilters() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

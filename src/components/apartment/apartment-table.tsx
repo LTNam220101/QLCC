@@ -11,7 +11,7 @@ export function ApartmentTable() {
   const router = useRouter()
   const { filters, setFilter, clearFilters } = useApartmentStore();
 
-  const { data, isLoading, isError } = useApartments(filters);
+  const { data, isLoading, isError, isRefetching } = useApartments(filters);
 
   const columns = generateData({
     startIndex: filters?.size * filters?.page || 0,
@@ -46,7 +46,7 @@ export function ApartmentTable() {
       <TableData
         columns={columns}
         datas={data?.data?.data}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filters}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

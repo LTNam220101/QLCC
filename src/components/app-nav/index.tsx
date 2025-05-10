@@ -152,7 +152,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <div className="group-data-[collapsible=icon]:opacity-0 flex rounded-full size-[60px] items-center justify-center overflow-hidden">
                   <Image
                     alt="Công Ty Cổ Phần Sáng Tạo Văn Minh Số"
-                    src={"/logo.webp"}
+                    src={"/logo.jpg"}
                     width={600}
                     height={600}
                   />

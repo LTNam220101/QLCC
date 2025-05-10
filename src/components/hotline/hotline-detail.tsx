@@ -11,7 +11,7 @@ interface HotlineDetailProps {
 }
 
 export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
-  const { data, isLoading, isError } = useHotline(hotlineId);
+  const { data, isLoading, isError, isRefetching } = useHotline(hotlineId);
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>;

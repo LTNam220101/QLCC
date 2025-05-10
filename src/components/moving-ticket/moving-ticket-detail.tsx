@@ -14,7 +14,7 @@ interface MovingTicketDetailProps {
 export function MovingTicketDetail({
   movingTicketId,
 }: MovingTicketDetailProps) {
-  const { data, isLoading, isError } = useMovingTicket(movingTicketId);
+  const { data, isLoading, isError, isRefetching } = useMovingTicket(movingTicketId);
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>;

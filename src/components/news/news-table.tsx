@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation"
 export function NewsTable() {
   const router = useRouter()
   const { filter, setFilter, resetFilter } = useNewsFilterStore()
-  const { data, isLoading, isError } = useNewss(filter)
+  const { data, isLoading, isError, isRefetching } = useNewss(filter)
   const deleteNewsMutation = useDeleteNews()
 
   const [newsToDelete, setNewsToDelete] =
@@ -80,7 +80,7 @@ export function NewsTable() {
       <TableData<News>
         datas={data?.data?.data}
         columns={columns}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

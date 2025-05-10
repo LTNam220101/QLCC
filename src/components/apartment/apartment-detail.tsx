@@ -12,7 +12,7 @@ interface ApartmentDetailProps {
 }
 
 export function ApartmentDetail({ apartmentId }: ApartmentDetailProps) {
-  const { data, isLoading, isError } = useApartment(apartmentId);
+  const { data, isLoading, isError, isRefetching } = useApartment(apartmentId);
   const { data: buildings } = useBuildings();
 
   if (isLoading) {

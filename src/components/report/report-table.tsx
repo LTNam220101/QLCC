@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 export function ReportTable() {
   const router = useRouter()
   const { filter, setFilter, resetFilter } = useReportFilterStore();
-  const { data, isLoading, isError } = useReports(filter);
+  const { data, isLoading, isError, isRefetching } = useReports(filter);
   const deleteReportMutation = useDeleteReport();
   const updateReportMutation = useUpdateReport();
   const [typeUpdate, setTypeUpdate] = useState<number | undefined>(undefined);
@@ -100,7 +100,7 @@ export function ReportTable() {
       <TableData<Report>
         datas={data?.data?.data}
         columns={columns}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

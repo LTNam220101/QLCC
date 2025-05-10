@@ -25,10 +25,10 @@ export default async function AuthLayout({
           }}
         >
           <div className="absolute top-[135px] left-[92px] flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full border-2 border-white/50 overflow-hidden">
+            <div className="w-16 rounded-full border-2 border-white/50 overflow-hidden">
               <Image
                 alt="Công Ty Cổ Phần Sáng Tạo Văn Minh Số"
-                src={"/logo.webp"}
+                src={"/logo.jpg"}
                 width={600}
                 height={600}
               />

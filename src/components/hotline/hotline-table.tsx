@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 export function HotlineTable() {
   const router = useRouter()
   const { filter, setFilter, resetFilter } = useHotlineFilterStore();
-  const { data, isLoading, isError } = useHotlines(filter);
+  const { data, isLoading, isError, isRefetching } = useHotlines(filter);
   const deleteHotlineMutation = useDeleteHotline();
   const updateHotlineMutation = useUpdateHotline();
 
@@ -107,7 +107,7 @@ export function HotlineTable() {
       <TableData<Hotline>
         datas={data?.data?.data}
         columns={columns}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

@@ -148,26 +148,26 @@ const MovingTicketService = {
 }
 
 // Query keys
-export const hotlineKeys = {
+export const movingTicketKeys = {
   all: ["moving-tickets"] as const,
-  lists: () => [...hotlineKeys.all, "list"] as const,
+  lists: () => [...movingTicketKeys.all, "list"] as const,
   list: (filters: MovingTicketFilter) =>
-    [...hotlineKeys.lists(), filters] as const,
-  details: () => [...hotlineKeys.all, "detail"] as const,
-  detail: (id?: string) => [...hotlineKeys.details(), id] as const
+    [...movingTicketKeys.lists(), filters] as const,
+  details: () => [...movingTicketKeys.all, "detail"] as const,
+  detail: (id?: string) => [...movingTicketKeys.details(), id] as const
 }
 
 // Hooks
 export const useMovingTickets = (filter: MovingTicketFilter) => {
   return useQuery({
-    queryKey: hotlineKeys.list(filter),
+    queryKey: movingTicketKeys.list(filter),
     queryFn: () => MovingTicketService.getMovingTickets(filter)
   })
 }
 
 export const useMovingTicket = (id?: string) => {
   return useQuery({
-    queryKey: hotlineKeys.detail(id),
+    queryKey: movingTicketKeys.detail(id),
     queryFn: () => MovingTicketService.getMovingTicketById(id),
     enabled: !!id
   })
@@ -180,7 +180,7 @@ export const useCreateMovingTicket = () => {
     mutationFn: (data: MovingTicketFormData) =>
       MovingTicketService.createMovingTicket(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: movingTicketKeys.lists() })
     }
   })
 }
@@ -191,8 +191,8 @@ export const useUpdateMovingTicket = (id?: string) => {
     mutationFn: (data: MovingTicketFormData) =>
       MovingTicketService.updateMovingTicket(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.detail(id) })
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: movingTicketKeys.detail(id) })
+      queryClient.invalidateQueries({ queryKey: movingTicketKeys.lists() })
     }
   })
 }
@@ -203,7 +203,7 @@ export const useDeleteMovingTicket = () => {
   return useMutation({
     mutationFn: (id: string) => MovingTicketService.deleteMovingTicket(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: movingTicketKeys.lists() })
     }
   })
 }

@@ -20,8 +20,11 @@ import { Calendar } from "../ui/calendar"
 import { vi } from "date-fns/locale"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
+import { useQueryClient } from "@tanstack/react-query"
+import { residentKeys } from "@/lib/tanstack-query/residents/queries"
 
 export function ResidentFilters() {
+  const queryClient = useQueryClient()
   const { filters, setFilter, clearFilters } = useResidentStore()
   const [fullName, setFullName] = useState(filters.fullName || "")
   const [phoneNumber, setPhoneNumber] = useState(filters.phoneNumber || "")
@@ -36,6 +39,7 @@ export function ResidentFilters() {
 
   // Xử lý tìm kiếm
   const handleSearch = () => {
+    queryClient.invalidateQueries({ queryKey: residentKeys.lists() })
     setFilter({
       fullName: fullName || undefined,
       phoneNumber: phoneNumber || undefined,
@@ -89,7 +93,10 @@ export function ResidentFilters() {
           </div>
           <div>
             <Label className="mb-2">Số CMND/CCCD/Hộ chiếu</Label>
-            <Input value={identifyId} onChange={(e) => setIdentifyId(e.target.value)} />
+            <Input
+              value={identifyId}
+              onChange={(e) => setIdentifyId(e.target.value)}
+            />
           </div>
           <div>
             <Label className="mb-2">Trạng thái</Label>

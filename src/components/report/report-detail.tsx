@@ -12,7 +12,7 @@ interface ReportDetailProps {
 }
 
 export function ReportDetail({ reportId }: ReportDetailProps) {
-  const { data, isLoading, isError } = useReport(reportId);
+  const { data, isLoading, isError, isRefetching } = useReport(reportId);
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>;

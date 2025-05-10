@@ -12,7 +12,7 @@ interface NewsDetailProps {
 }
 
 export function NewsDetail({ newsId }: NewsDetailProps) {
-  const { data, isLoading, isError } = useNews(newsId)
+  const { data, isLoading, isError, isRefetching } = useNews(newsId)
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>

@@ -25,8 +25,11 @@ import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
 import { ReportStatus } from "../../../types/reports"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
+import { useQueryClient } from "@tanstack/react-query"
+import { reportKeys } from "@/lib/tanstack-query/reports/queries"
 
 export function ReportFilters() {
+  const queryClient = useQueryClient()
   const { filter, setFilter, resetFilter } = useReportFilterStore()
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
 
@@ -56,6 +59,7 @@ export function ReportFilters() {
 
   // Áp dụng bộ lọc
   const applyFilter = () => {
+    queryClient.invalidateQueries({ queryKey: reportKeys.lists() })
     setFilter({
       statusList: statusList || undefined,
       reportContent: reportContent,

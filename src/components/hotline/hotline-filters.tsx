@@ -23,8 +23,11 @@ import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
+import { useQueryClient } from "@tanstack/react-query"
+import { hotlineKeys } from "@/lib/tanstack-query/hotlines/queries"
 
 export function HotlineFilters() {
+  const queryClient = useQueryClient()
   const { filter, setFilter, resetFilter } = useHotlineFilterStore()
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
   const [statusList, setStatusList] = useState(filter.statusList || undefined)
@@ -42,6 +45,7 @@ export function HotlineFilters() {
 
   // Áp dụng bộ lọc
   const applyFilter = () => {
+    queryClient.invalidateQueries({ queryKey: hotlineKeys.lists() })
     setFilter({
       statusList: statusList || undefined,
       name: name || undefined,

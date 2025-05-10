@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation"
 export function MovingTicketTable() {
   const router = useRouter()
   const { filter, setFilter, resetFilter } = useMovingTicketFilterStore()
-  const { data, isLoading, isError } = useMovingTickets(filter)
+  const { data, isLoading, isError, isRefetching } = useMovingTickets(filter)
   const deleteMovingTicketMutation = useDeleteMovingTicket()
   const updateMovingTicketMutation = useUpdateMovingTicket()
   const [typeUpdate, setTypeUpdate] = useState<number | undefined>(undefined)
@@ -103,7 +103,7 @@ export function MovingTicketTable() {
       <TableData<MovingTicket>
         datas={data?.data?.data}
         columns={columns}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

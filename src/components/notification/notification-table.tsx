@@ -24,7 +24,7 @@ import { useRouter } from "next/navigation"
 export function NotificationTable() {
   const router = useRouter()
   const { filter, setFilter, resetFilter } = useNotificationFilterStore()
-  const { data, isLoading, isError } = useNotifications(filter)
+  const { data, isLoading, isError, isRefetching } = useNotifications(filter)
   const deleteNotificationMutation = useDeleteNotification()
 
   const [notificationToDelete, setNotificationToDelete] =
@@ -80,7 +80,7 @@ export function NotificationTable() {
       <TableData<Notification>
         datas={data?.data?.data}
         columns={columns}
-        isLoading={isLoading}
+        isLoading={isLoading || isRefetching}
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}

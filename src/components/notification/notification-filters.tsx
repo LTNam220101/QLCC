@@ -24,8 +24,11 @@ import { vi } from "date-fns/locale"
 import { cn } from "@/lib/utils"
 import { Label } from "../ui/label"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
+import { notificationKeys } from "@/lib/tanstack-query/notifications/queries"
+import { useQueryClient } from "@tanstack/react-query"
 
 export function NotificationFilters() {
+  const queryClient = useQueryClient()
   const { filter, setFilter, resetFilter } = useNotificationFilterStore()
   const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
 
@@ -63,6 +66,7 @@ export function NotificationFilters() {
 
   // Áp dụng bộ lọc
   const applyFilter = () => {
+    queryClient.invalidateQueries({ queryKey: notificationKeys.lists() })
     setFilter({
       title: title || "",
       content: content || "",

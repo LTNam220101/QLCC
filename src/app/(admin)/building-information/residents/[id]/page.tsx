@@ -19,7 +19,7 @@ export default function ResidentDetailPage({
 }) {
   const { id } = use(params);
   const { data: buildings } = useBuildings();
-  const { data: resident, isLoading, isError } = useResident(id);
+  const { data: resident, isLoading, isError, isRefetching } = useResident(id);
 
   if (isLoading) {
     return <div className="container mx-auto p-4">Đang tải...</div>;
