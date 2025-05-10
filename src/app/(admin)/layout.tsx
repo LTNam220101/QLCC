@@ -20,7 +20,7 @@ export default async function RootLayout({
           "--sidebar-width-mobile": "20rem"
         }}
       >
-        <div className="flex flex-1 h-screen">
+        <div className="flex flex-1 h-screen overflow-hidden">
           <AppSidebar />
           <div className="flex-1 flex flex-col overflow-hidden bg-[#F4F3F6]">
             <header className="h-[98px] gap-2 bg-white flex items-center">

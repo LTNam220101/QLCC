@@ -32,11 +32,13 @@ export const generateData = ({
   },
   {
     dataIndex: "reportContent",
-    name: "Nội dung"
+    name: "Nội dung",
+    className: "max-w-[400px] overflow-hidden"
   },
   {
     dataIndex: "buildingName",
-    name: "Căn hộ"
+    name: "Căn hộ",
+    textAlign: 'text-center'
   },
   {
     dataIndex: "residentName",
@@ -44,7 +46,8 @@ export const generateData = ({
   },
   {
     dataIndex: "note",
-    name: "Ghi chú"
+    name: "Ghi chú",
+    className: "max-w-[400px] overflow-hidden"
   },
   {
     dataIndex: "createTime",
@@ -53,7 +56,8 @@ export const generateData = ({
       return hotline.createTime
         ? format(new Date(hotline.createTime), "dd/MM/yyyy", { locale: vi })
         : "-"
-    }
+    },
+    textAlign: 'text-center'
   },
   {
     dataIndex: "status",
