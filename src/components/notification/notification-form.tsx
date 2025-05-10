@@ -194,7 +194,7 @@ export function NotificationForm({
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>
@@ -226,7 +226,7 @@ export function NotificationForm({
                 <FormLabel>Căn hộ</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>

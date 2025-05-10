@@ -170,7 +170,7 @@ export function ApartmentDrawer() {
                             ?.buildingName || ""
                         )
                       }}
-                      value={field.value}
+                      value={field.value || ""}
                     >
                       <FormControl>
                         <SelectTrigger className="w-full">

@@ -220,7 +220,7 @@ export function MovingTicketForm({
                 <FormLabel>Tòa nhà</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>
@@ -251,7 +251,7 @@ export function MovingTicketForm({
                 <FormLabel>Căn hộ</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>
@@ -281,7 +281,7 @@ export function MovingTicketForm({
                   onValueChange={(e) => {
                     field.onChange(+e)
                   }}
-                  value={`${field.value}`}
+                  value={`${field.value}` || ""}
                   disabled={isLoading}
                 >
                   <FormControl>

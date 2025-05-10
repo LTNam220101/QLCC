@@ -327,7 +327,7 @@ export default function EditResidentPage({
                     onValueChange={(e) => {
                       field.onChange(+e)
                     }}
-                    value={field.value ? `${field.value}` : undefined}
+                    value={field.value ? `${field.value}` : ""}
                   >
                     <FormControl>
                       <SelectTrigger disabled={isLoading} className="w-full">

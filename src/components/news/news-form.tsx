@@ -169,7 +169,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                 </FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>

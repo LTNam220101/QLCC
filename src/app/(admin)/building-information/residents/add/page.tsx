@@ -284,7 +284,7 @@ export default function AddResidentPage() {
                     onValueChange={(e) => {
                       field.onChange(+e)
                     }}
-                    value={`${field.value}`}
+                    value={`${field.value}` || ""}
                   >
                     <FormControl>
                       <SelectTrigger disabled={isSubmitting} className="w-full">

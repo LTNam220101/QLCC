@@ -129,7 +129,7 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
                 <FormLabel>Tòa nhà</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>

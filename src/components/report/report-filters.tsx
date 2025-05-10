@@ -137,7 +137,7 @@ export function ReportFilters() {
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
-            value={manageBuildingList?.[0]}
+            value={manageBuildingList?.[0] || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setManageBuildingId([value])
@@ -167,7 +167,7 @@ export function ReportFilters() {
         <div>
           <Label className="mb-2">Căn hộ</Label>
           <Select
-            value={manageApartmentList?.[0]}
+            value={manageApartmentList?.[0] || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setManageApartmentList([value])

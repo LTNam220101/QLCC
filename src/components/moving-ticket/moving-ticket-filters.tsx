@@ -104,7 +104,7 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={`${statusList?.[0]}`}
+            value={`${statusList?.[0]}` || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setStatusList([+value])

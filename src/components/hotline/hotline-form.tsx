@@ -173,7 +173,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
                 <FormLabel>Tòa nhà</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  value={field.value || ""}
                   disabled={isLoading}
                 >
                   <FormControl>
