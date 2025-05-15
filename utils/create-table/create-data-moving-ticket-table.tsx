@@ -4,7 +4,7 @@ import { EllipsisVertical } from "lucide-react"
 import { format } from "date-fns"
 import { Badge } from "@/components/ui/badge"
 import { vi } from "date-fns/locale"
-import { MovingTicket } from "../../types/moving-tickets"
+import { MovingStatus, MovingTicket } from "../../types/moving-tickets"
 import { TransferType } from "@/enum"
 import {
   DropdownMenu,
@@ -74,15 +74,11 @@ export const generateData = ({
   {
     dataIndex: "status",
     name: "Trạng thái",
-    render: (movingTicket) => (
-      <Badge
-        variant={
-          movingTicket.status === 1 ? "green_outline" : "destructive_outline"
-        }
-      >
-        {movingTicket.status === 1 ? "Đang hoạt động" : "Đã khóa"}
-      </Badge>
-    )
+    render: (movingTicket) => {
+      const color = `${MovingStatus?.[movingTicket?.status]?.color}_outline`
+      const statusName = MovingStatus?.[movingTicket?.status]?.name
+      return <Badge variant={color as any}>{statusName}</Badge>
+    }
   },
   {
     dataIndex: "status",

@@ -233,7 +233,6 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                           <ScrollArea className="w-64 sm:w-auto">
                             <div className="flex sm:flex-col p-2">
                               {Array.from({ length: 12 }, (_, i) => i + 1)
-                                .reverse()
                                 .map((hour) => (
                                   <Button
                                     key={hour}
@@ -261,7 +260,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                           </ScrollArea>
                           <ScrollArea className="w-64 sm:w-auto">
                             <div className="flex sm:flex-col p-2">
-                              {Array.from({ length: 12 }, (_, i) => i * 5).map(
+                              {Array.from({ length: 60 }, (_, i) => i).map(
                                 (minute) => (
                                   <Button
                                     key={minute}

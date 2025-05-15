@@ -37,12 +37,12 @@ export const generateData = ({
   },
   {
     dataIndex: "buildingName",
-    name: "Căn hộ",
+    name: "Toà nhà",
     textAlign: 'text-center'
   },
   {
     dataIndex: "residentName",
-    name: "Toà nhà"
+    name: "Căn hộ"
   },
   {
     dataIndex: "note",

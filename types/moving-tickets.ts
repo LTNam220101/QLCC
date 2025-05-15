@@ -1,9 +1,9 @@
-export const ReportStatus: {
+export const MovingStatus: {
   [key: number]: { name: string; color: string }
 } = {
   '-3': { name: "Đã hết hạn", color: "gray" },
   '-2': { name: "Từ chối", color: "red" },
-  '-1': { name: "Đã xoá", color: "gray" },
+  '-1': { name: "Đã xoá", color: "red" },
   0: { name: "Chờ xác nhận", color: "gray" },
   1: { name: "Chưa đến hạn", color: "orange" },
   2: { name: "Đang chuyển đồ", color: "blue" },

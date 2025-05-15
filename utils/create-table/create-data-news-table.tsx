@@ -57,9 +57,9 @@ export const generateData = ({
     name: "Trạng thái",
     render: (news) => (
       <Badge
-        variant={news?.status === 1 ? "gray_outline" : "green_outline"}
+        variant={news?.status === 0 ? "gray_outline" : "green_outline"}
       >
-        {news?.status === 1 ? "Đã lưu" : "Đã gửi"}
+        {news?.status === 0 ? "Đã lưu" : "Đã gửi"}
       </Badge>
     )
   },

@@ -36,17 +36,17 @@ const data = {
           title: "Quản lý căn hộ",
           url: "/apartments"
         },
+        // {
+        //   title: "Quản lý tài liệu căn hộ",
+        //   url: "/documents"
+        // },
+        // {
+        //   title: "Quản lý sổ tay cư dân",
+        //   url: "/apartments"
+        // },
         {
-          title: "Quản lý tài liệu căn hộ",
-          url: "/documents"
-        },
-        {
-          title: "Quản lý sổ tay cư dân",
-          url: "/apartments"
-        },
-        {
-          title: "Quản lý thông tin toà nhà",
-          url: "/apartments"
+          title: "Quản lý liên kết căn hộ",
+          url: "/links"
         }
       ]
     },
@@ -55,14 +55,14 @@ const data = {
       url: "/services",
       icon: Bot,
       items: [
-        {
-          title: "Quản lý khách thăm",
-          url: "/news_feed"
-        },
-        {
-          title: "Quản lý đăng ký thi công",
-          url: "/transport"
-        },
+        // {
+        //   title: "Quản lý khách thăm",
+        //   url: "/news_feed"
+        // },
+        // {
+        //   title: "Quản lý đăng ký thi công",
+        //   url: "/transport"
+        // },
         {
           title: "Quản lý đăng ký chuyển đồ",
           url: "/moving-tickets"
@@ -75,27 +75,12 @@ const data = {
           title: "Quản lý hotline",
           url: "/hotlines"
         },
-        {
-          title: "Giao tiếp",
-          url: "/hotlines"
-        }
+        // {
+        //   title: "Giao tiếp",
+        //   url: "/hotlines"
+        // }
       ]
     },
-    // {
-    //   title: "Thanh toán/Chi phí",
-    //   url: "/notification",
-    //   icon: BookOpen,
-    //   items: [
-    //     {
-    //       title: "Bảng kê chi phí",
-    //       url: "#"
-    //     },
-    //     {
-    //       title: "Quản lý thanh toán",
-    //       url: "#"
-    //     }
-    //   ]
-    // },
     {
       title: "Thông báo/Bảng tin",
       url: "/boards",

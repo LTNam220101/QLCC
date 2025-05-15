@@ -1,7 +1,7 @@
 export const ResidentStatus: {
   [key: number]: { name: string; color: string }
 } = {
-  0: { name: "Huỷ kích hoạt", color: "red" },
+  0: { name: "Đã xoá", color: "red" },
   1: { name: "Soạn thảo", color: "gray" },
   2: { name: "Tạo mới", color: "gray" },
   3: { name: "Chờ xác minh", color: "orange" },

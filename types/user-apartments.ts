@@ -1,0 +1,62 @@
+export const UserApartmentStatus: {
+  [key: number]: { name: string; color: string }
+} = {
+  "-1": { name: "Từ chối", color: "red" },
+  0: { name: "Huỷ liên kết", color: "red" },
+  1: { name: "Đã liên kết", color: "green" },
+  2: { name: "Chờ liên kết", color: "gray" }
+}
+
+export interface UserApartment {
+  status: number
+  userApartmentMappingId: string
+  userId: string
+  userPhone: string
+  fullName: string
+  apartmentName: string
+  apartmentId: string
+  buildingName: string
+  buildingId: string
+  userApartmentRole: number
+  note: string
+  rejectReason: string
+  createBy: string
+  createTime: number
+  updateBy: string
+  updateTime: number
+}
+
+export interface UserApartmentFilter {
+  userPhone?: string
+  fullName?: string
+  manageBuildingList?: string[]
+  manageApartmentList?: string[]
+  statusList?: number[]
+  userApartmentRole?: number
+  createTimeFrom?: number
+  createTimeTo?: number
+  page: number
+  size: number
+}
+
+export interface UserApartmentFormData {
+  userPhone: string
+  userApartmentRole: number
+  buildingId: string
+  apartmentName: string
+  buildingName: string
+  // area: number
+  note?: string
+}
+
+export interface UserApartmentPaginatedResponse {
+  data: { data: UserApartment[]; recordsTotal: number }
+  status: string
+  message: string
+}
+
+export interface UserApartmentDetailResponse {
+  data: UserApartment
+  status: string
+  message: string
+}

@@ -27,6 +27,7 @@ import { TransferType } from "@/enum"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 import { useQueryClient } from "@tanstack/react-query"
 import { movingTicketKeys } from "@/lib/tanstack-query/moving-tickets/queries"
+import { MovingStatus } from "../../../types/moving-tickets"
 
 export function MovingTicketFilters() {
   const queryClient = useQueryClient()
@@ -118,8 +119,11 @@ export function MovingTicketFilters() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
-              <SelectItem value="1">Đang hoạt động</SelectItem>
-              <SelectItem value="0">Đã khóa</SelectItem>
+              {Object.entries(MovingStatus).map(([id, status]) => (
+                <SelectItem key={id} value={id}>
+                  {status.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -242,7 +246,7 @@ export function MovingTicketFilters() {
         <div>
           <Label className="mb-2">Căn hộ</Label>
           <Select
-            value={manageApartmentList?.[0]}
+            value={manageApartmentList?.[0] || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setManageApartmentList([value])

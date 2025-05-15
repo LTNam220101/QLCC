@@ -28,7 +28,7 @@ export default function NewsDetailPage({
             {news?.data && (
               <Badge
                 variant={
-                  news?.data?.status === 1
+                  news?.data?.status === 0
                     ? "gray_outline"
                     : "green_outline"
                 }
