@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -31,14 +31,13 @@ import {
 } from "@/components/ui/sheet"
 import { useUserApartmentStore } from "@/lib/store/use-user-apartment-store"
 import { toast } from "sonner"
-import { FileUp, Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import {
   useAddUserApartment,
   useUpdateUserApartment
 } from "@/lib/tanstack-query/user-apartments/queries"
 import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
-import { UserApartmentFormData } from "../../../types/user-apartments"
+import { UserApartmentFormData, UserApartmentRole } from "../../../types/user-apartments"
 
 // Schema xác thực form
 const userApartmentFormSchema = z.object({
@@ -135,8 +134,8 @@ export function UserApartmentDrawer() {
     drawerType === "add"
       ? "Thêm mới liên kết"
       : drawerType === "edit"
-      ? "Sửa liên kết"
-      : "Thêm mới từ Excel"
+        ? "Sửa liên kết"
+        : "Thêm mới từ Excel"
 
   return (
     <Sheet open={drawerOpen} onOpenChange={(open) => !open && closeDrawer()}>
@@ -158,6 +157,41 @@ export function UserApartmentDrawer() {
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="userApartmentRole"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
+                      Vai trò
+                    </FormLabel>
+                    <Select
+                      onValueChange={(e) => {
+                        field.onChange(+e)
+                      }}
+                      value={`${field.value}` || ""}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {Object.entries(UserApartmentRole).map(([id, role]) => (
+                          <SelectItem
+                            key={id}
+                            value={id}
+                          >
+                            {role}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

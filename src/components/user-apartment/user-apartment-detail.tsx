@@ -7,7 +7,6 @@ import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
-
 interface UserApartmentDetailProps {
   userApartmentId: string
 }
@@ -58,7 +57,7 @@ export function UserApartmentDetail({ userApartmentId }: UserApartmentDetailProp
           />
           <InfoRow
             label="Vai trò"
-            value={data?.data?.userApartmentRole || "-"}
+            value={data?.data?.userApartmentRoleName}
           />
           <InfoRow label="Ghi chú" value={data?.data?.note || "-"} />
         </div>

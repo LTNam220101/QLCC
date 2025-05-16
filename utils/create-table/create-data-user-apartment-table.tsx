@@ -1,5 +1,5 @@
 import { Column } from "@/components/common/table-data";
-import { UserApartment } from "../../types/user-apartments";
+import { UserApartment, UserApartmentRole } from "../../types/user-apartments";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Badge } from "@/components/ui/badge";
@@ -15,82 +15,82 @@ export const generateData = ({
   startIndex: number;
   handleChangeStatus?: (userApartment: UserApartment, status: number) => void;
 }): Column<UserApartment>[] => [
-  {
-    dataIndex: "index",
-    name: "STT",
-    render: (_, index) => startIndex + index + 1,
-  },
-  {
-    dataIndex: "userPhone",
-    name: "Số điện thoại",
-  },
-  {
-    dataIndex: "fullName",
-    name: "Họ và tên",
-  },
-  {
-    dataIndex: "buildingName",
-    name: "Tòa nhà",
-  },
-  {
-    dataIndex: "apartmentName",
-    name: "Căn hộ",
-  },
-  {
-    dataIndex: "userApartmentRole",
-    name: "Vai trò",
-  },
-  {
-    dataIndex: "createTime",
-    name: "Ngày tạo",
-    render: (apartment) => {
-      return apartment.createTime
-        ? format(new Date(apartment.createTime), "dd/MM/yyyy", { locale: vi })
-        : "-";
+    {
+      dataIndex: "index",
+      name: "STT",
+      render: (_, index) => startIndex + index + 1,
     },
-  },
-  {
-    dataIndex: "status",
-    name: "Trạng thái",
-    render: (userApartment) => {
-      const color = `${UserApartmentStatus?.[userApartment?.status]?.color}_outline`
-      const statusName = UserApartmentStatus?.[userApartment?.status]?.name
-      return <Badge variant={color as any}>{statusName}</Badge>
-    }
-  },
-  {
-    dataIndex: "status",
-    name: "Thao tác",
-    render: (movingTicket) => (
-      <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="icon">
-              <EllipsisVertical className="h-4 w-4" color="#194FFF" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {/* <DropdownMenuItem onClick={() => handleDeleteClick?.(movingTicket)}> */}
+    {
+      dataIndex: "userPhone",
+      name: "Số điện thoại",
+    },
+    {
+      dataIndex: "fullName",
+      name: "Họ và tên",
+    },
+    {
+      dataIndex: "buildingName",
+      name: "Tòa nhà",
+    },
+    {
+      dataIndex: "apartmentName",
+      name: "Căn hộ",
+    },
+    {
+      dataIndex: "userApartmentRoleName",
+      name: "Vai trò",
+    },
+    {
+      dataIndex: "createTime",
+      name: "Ngày tạo",
+      render: (apartment) => {
+        return apartment.createTime
+          ? format(new Date(apartment.createTime), "dd/MM/yyyy", { locale: vi })
+          : "-";
+      },
+    },
+    {
+      dataIndex: "status",
+      name: "Trạng thái",
+      render: (userApartment) => {
+        const color = `${UserApartmentStatus?.[userApartment?.status]?.color}_outline`
+        const statusName = UserApartmentStatus?.[userApartment?.status]?.name
+        return <Badge variant={color as any}>{statusName}</Badge>
+      }
+    },
+    {
+      dataIndex: "status",
+      name: "Thao tác",
+      render: (movingTicket) => (
+        <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon">
+                <EllipsisVertical className="h-4 w-4" color="#194FFF" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {/* <DropdownMenuItem onClick={() => handleDeleteClick?.(movingTicket)}> */}
               {/* Xoá */}
-            {/* </DropdownMenuItem> */}
-            <DropdownMenuItem
-              onClick={() => handleChangeStatus?.(movingTicket, 0)}
-            >
-              Huỷ liên kết
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleChangeStatus?.(movingTicket, 1)}
-            >
-              Phê duyệt
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleChangeStatus?.(movingTicket, -1)}
-            >
-              Từ chối
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-    )
-  }
-];
+              {/* </DropdownMenuItem> */}
+              <DropdownMenuItem
+                onClick={() => handleChangeStatus?.(movingTicket, 0)}
+              >
+                Huỷ liên kết
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleChangeStatus?.(movingTicket, 1)}
+              >
+                Phê duyệt
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleChangeStatus?.(movingTicket, -1)}
+              >
+                Từ chối
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )
+    }
+  ];

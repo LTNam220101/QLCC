@@ -29,7 +29,7 @@ const initialFilter: UserApartmentFilter = {
   manageBuildingList: undefined,
   manageApartmentList: undefined,
   statusList: undefined,
-  userApartmentRole: undefined,
+  userApartmentRoleName: undefined,
   createTimeFrom: undefined,
   createTimeTo: undefined,
   page: 0,

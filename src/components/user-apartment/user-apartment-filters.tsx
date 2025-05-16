@@ -26,7 +26,7 @@ import { Input } from "../ui/input"
 import { useQueryClient } from "@tanstack/react-query"
 import { userApartmentKeys } from "@/lib/tanstack-query/user-apartments/queries"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
-import { UserApartmentStatus } from "../../../types/user-apartments"
+import { UserApartmentStatus, UserApartmentRole } from "../../../types/user-apartments"
 
 export function UserApartmentFilters() {
   const queryClient = useQueryClient()
@@ -41,8 +41,8 @@ export function UserApartmentFilters() {
     filters.manageApartmentList || undefined
   )
   const [statusList, setStatusList] = useState(filters.statusList || undefined)
-  const [userApartmentRole, setUserApartmentRole] = useState(
-    filters.userApartmentRole || undefined
+  const [userApartmentRoleName, setUserApartmentRoleName] = useState(
+    filters.userApartmentRoleName || undefined
   )
   const [createTimeFrom, setFromDate] = useState<Date | undefined>(
     filters.createTimeFrom ? new Date(filters.createTimeFrom) : undefined
@@ -64,7 +64,7 @@ export function UserApartmentFilters() {
     setFilter({
       userPhone: userPhone || undefined,
       fullName: fullName || undefined,
-      userApartmentRole: userApartmentRole || undefined,
+      userApartmentRoleName: userApartmentRoleName || undefined,
       manageBuildingList: manageBuildingList || undefined,
       manageApartmentList: manageApartmentList || undefined,
       statusList: statusList || undefined,
@@ -81,7 +81,7 @@ export function UserApartmentFilters() {
     setManageBuildingList(undefined)
     setManageApartmentList(undefined)
     setStatusList(undefined)
-    setUserApartmentRole(undefined)
+    setUserApartmentRoleName(undefined)
     setFromDate(undefined)
     setToDate(undefined)
     clearFilters()
@@ -93,7 +93,7 @@ export function UserApartmentFilters() {
     setManageBuildingList(filters.manageBuildingList)
     setManageApartmentList(filters.manageApartmentList)
     setStatusList(filters.statusList)
-    setUserApartmentRole(filters.userApartmentRole)
+    setUserApartmentRoleName(filters.userApartmentRoleName)
     setFromDate(
       filters.createTimeFrom ? new Date(filters.createTimeFrom) : undefined
     )
@@ -199,17 +199,17 @@ export function UserApartmentFilters() {
             </SelectContent>
           </Select>
         </div>
-        
+
         {/* Trạng thái */}
-        {/* <div>
-          <Label className="mb-2">Trạng thái</Label>
+        <div>
+          <Label className="mb-2">Vai trò</Label>
           <Select
-            value={`${statusList?.[0]}` || "all"}
+            value={`${userApartmentRoleName}` || "all"}
             onValueChange={(value) => {
               if (value !== "all") {
-                setStatusList([+value])
+                setUserApartmentRoleName(value)
               } else {
-                setStatusList(undefined)
+                setUserApartmentRoleName(undefined)
               }
             }}
           >
@@ -218,14 +218,14 @@ export function UserApartmentFilters() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Tất cả</SelectItem>
-              {Object.entries(UserApartmentStatus).map(([id, status]) => (
-                <SelectItem key={id} value={id}>
-                  {status.name}
+              {Object.entries(UserApartmentRole).map(([id, role]) => (
+                <SelectItem key={id} value={role}>
+                  {role}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
-        </div> */}
+        </div>
 
         <div>
           <Label className="mb-2">Ngày tạo (Từ - Đến)</Label>

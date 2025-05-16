@@ -32,8 +32,8 @@ const UserApartmentService = {
         ...(filters.statusList && {
           statusList: filters.statusList
         }),
-        ...(filters.userApartmentRole && {
-          userApartmentRole: filters.userApartmentRole
+        ...(filters.userApartmentRoleName && {
+          userApartmentRoleName: filters.userApartmentRoleName
         }),
         ...(filters.createTimeFrom && {
           createTimeFrom: filters.createTimeFrom
