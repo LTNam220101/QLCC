@@ -61,7 +61,7 @@ export const generateData = ({
     {
       dataIndex: "status",
       name: "Thao tác",
-      render: (movingTicket) => (
+      render: (userApartment) => (userApartment?.status === 2 ?
         <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -70,27 +70,29 @@ export const generateData = ({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              {/* <DropdownMenuItem onClick={() => handleDeleteClick?.(movingTicket)}> */}
+              {/* <DropdownMenuItem onClick={() => handleDeleteClick?.(userApartment)}> */}
               {/* Xoá */}
               {/* </DropdownMenuItem> */}
               <DropdownMenuItem
-                onClick={() => handleChangeStatus?.(movingTicket, 0)}
+                onClick={() => handleChangeStatus?.(userApartment, 0)}
               >
                 Huỷ liên kết
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleChangeStatus?.(movingTicket, 1)}
+                onClick={() => handleChangeStatus?.(userApartment, 1)}
               >
                 Phê duyệt
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => handleChangeStatus?.(movingTicket, -1)}
+                onClick={() => handleChangeStatus?.(userApartment, -1)}
               >
                 Từ chối
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </div>
+        </div> : (
+          null
+        )
       )
     }
   ];

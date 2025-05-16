@@ -38,6 +38,7 @@ import {
 } from "@/lib/tanstack-query/user-apartments/queries"
 import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
 import { UserApartmentFormData, UserApartmentRole } from "../../../types/user-apartments"
+import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 
 // Schema xác thực form
 const userApartmentFormSchema = z.object({
@@ -46,6 +47,7 @@ const userApartmentFormSchema = z.object({
   buildingId: z.string().min(1, { message: "Tòa nhà là bắt buộc" }),
   buildingName: z.string().min(1, { message: "Tòa nhà là bắt buộc" }),
   apartmentName: z.string().min(1, { message: "Căn hộ là bắt buộc" }),
+  apartmentId: z.string().min(1, { message: "Căn hộ là bắt buộc" }),
   // area: z.coerce
   //   .number()
   //   .min(0, { message: "Diện tích phải lớn hơn hoặc bằng 0" }),
@@ -69,10 +71,21 @@ export function UserApartmentDrawer() {
       buildingId: "",
       buildingName: "",
       apartmentName: "",
+      apartmentId: "",
       // area: undefined,
       note: ""
     }
   })
+
+  const watchBuilding = form.watch("buildingId")
+  const { data: apartments } = useApartments(
+    {
+      manageBuildingList: [watchBuilding],
+      page: 0,
+      size: 1000
+    },
+    !!watchBuilding
+  )
 
   // Cập nhật giá trị mặc định khi selectedUserApartment thay đổi
   useEffect(() => {
@@ -106,6 +119,7 @@ export function UserApartmentDrawer() {
         userApartmentRole: values.userApartmentRole ?? undefined,
         buildingId: values.buildingId ?? "",
         buildingName: values.buildingName ?? "",
+        apartmentId: values.apartmentId ?? "",
         apartmentName: values.apartmentName ?? "",
         note: values.note ?? ""
         // area: values.area ?? 1
@@ -117,12 +131,12 @@ export function UserApartmentDrawer() {
         })
         closeDrawer()
         toast("Thông tin liên kết đã được cập nhật")
-        router.push("/building-information/userApartments")
+        router.push("/building-information/links")
       } else if (drawerType === "add") {
         await createUserApartmentMutation.mutateAsync(data)
         closeDrawer()
         toast("Căn hộ mới đã được tạo")
-        router.push("/building-information/userApartments")
+        router.push("/building-information/links")
       }
     } catch (error) {
       toast("Đã xảy ra lỗi, vui lòng thử lại")
@@ -239,15 +253,40 @@ export function UserApartmentDrawer() {
 
               <FormField
                 control={form.control}
-                name="apartmentName"
+                name="apartmentId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
                       Căn hộ
                     </FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
+                    <Select
+                      onValueChange={(e) => {
+                        field.onChange(e)
+                        form.setValue(
+                          "apartmentName",
+                          apartments?.data?.data?.find((apartment) => apartment.id === e)
+                            ?.apartmentName || ""
+                        )
+                      }}
+                      value={field.value || ""}
+                      disabled={!apartments && !watchBuilding}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {apartments?.data?.data?.map((apartment) => (
+                          <SelectItem
+                            key={apartment.id}
+                            value={apartment.id}
+                          >
+                            {apartment.apartmentName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

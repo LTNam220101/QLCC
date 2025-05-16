@@ -52,6 +52,7 @@ export interface UserApartmentFormData {
   userPhone: string;
   userApartmentRole: number;
   buildingId: string;
+  apartmentId: string;
   apartmentName: string;
   buildingName: string;
   // area: number
