@@ -3,12 +3,14 @@ import InfoRow from "@/components/common/info-row";
 import PageHeader from "@/components/common/page-header";
 import DeleteAccountModal from "@/components/profile/delete-account-modal";
 import { Button } from "@/components/ui/button";
+import { useProfile } from "@/lib/tanstack-query/profiles/queries";
 import { KeyRound, Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 const ProfileInfo = () => {
   const { push } = useRouter();
+  const {data} = useProfile()
   const changeProfile = () => {
     push("/profile/profile-info/change-profile");
   };
@@ -28,16 +30,16 @@ const ProfileInfo = () => {
           <h2 className="text-lg font-bold">Thông tin chung</h2>
           <div className="grid md:grid-cols-2 gap-x-10">
             <div>
-              <InfoRow label="Số điện thoại" value="0912345678" />
-              <InfoRow label="Họ và tên" value="Nguyễn Văn A" highlight />
-              <InfoRow label="Số CMND/CCCD/Hộ chiếu" value="123456789012" />
-              <InfoRow label="Nơi cấp CMND/CCCD/Hộ chiếu" value="Hà Nội" />
+              <InfoRow label="Số điện thoại" value={data?.data?.phone} />
+              <InfoRow label="Họ và tên" value={data?.data?.username} highlight />
+              <InfoRow label="Số CMND/CCCD/Hộ chiếu" />
+              <InfoRow label="Nơi cấp CMND/CCCD/Hộ chiếu" />
             </div>
             <div>
-              <InfoRow label="Email" value="example@gmail.com" />
-              <InfoRow label="Ngày sinh" value="01/01/1990" />
-              <InfoRow label="Ngày cấp CMND/CCCD/Hộ chiếu" value="01/01/2020" />
-              <InfoRow label="Giới tính" value="Nam" />
+              <InfoRow label="Email" />
+              <InfoRow label="Ngày sinh" />
+              <InfoRow label="Ngày cấp CMND/CCCD/Hộ chiếu" />
+              <InfoRow label="Giới tính" />
             </div>
           </div>
         </div>

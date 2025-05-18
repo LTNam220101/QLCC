@@ -1,93 +1,193 @@
-"use client";
+"use client"
 
-import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { useState } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { PasswordInput } from "@/components/ui/password-input";
+  FormMessage
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { PasswordInput } from "@/components/ui/password-input"
+import { sendRequest } from "../../../../utils/api"
+import { OTPVerification } from "@/components/common/otp-verification"
+import { v4 as uuidv4 } from "uuid"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+const apiUrl = process.env.NEXT_PUBLIC_API_URL
 
 // Định nghĩa schema xác thực form
 const registerSchema = z
   .object({
-    phone: z
+    phoneNumber: z
       .string()
       .min(10, { message: "Số điện thoại phải có ít nhất 10 số" })
       .regex(/^[0-9]+$/, { message: "Số điện thoại chỉ được chứa số" }),
-    email: z.string().email({ message: "Email không hợp lệ" }),
-    fullName: z
-      .string()
-      .min(2, { message: "Họ và tên phải có ít nhất 2 ký tự" }),
-    gender: z.enum(["male", "female", "other"], {
-      required_error: "Vui lòng chọn giới tính",
-    }),
     password: z
       .string()
       .min(8, { message: "Mật khẩu phải có ít nhất 8 ký tự" })
       .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/, {
-        message: "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số",
+        message: "Mật khẩu phải chứa ít nhất 1 chữ hoa, 1 chữ thường và 1 số"
       }),
     confirmPassword: z.string(),
     terms: z.boolean().refine((val) => val === true, {
-      message: "Bạn phải đồng ý với điều khoản sử dụng",
+      message: "Bạn phải đồng ý với điều khoản sử dụng"
     }),
+    uuid: z.string()
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Mật khẩu nhập lại không khớp",
-    path: ["confirmPassword"],
-  });
+    path: ["confirmPassword"]
+  })
 
-type RegisterFormValues = z.infer<typeof registerSchema>;
+type RegisterFormValues = z.infer<typeof registerSchema>
 
 export default function RegisterPage() {
-  const router = useRouter();
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [loginError, setLoginError] = useState<string | null>(null)
+  const [showOTPModal, setShowOTPModal] = useState(false)
+  const [registrationData, setRegistrationData] =
+    useState<RegisterFormValues | null>(null)
 
   // Khởi tạo form với React Hook Form và Zod
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      phone: "",
-      email: "",
-      fullName: "",
-      gender: "male",
+      phoneNumber: "",
       password: "",
       confirmPassword: "",
       terms: false,
+      uuid: uuidv4()
     },
-    mode: "onChange",
-  });
+    mode: "onChange"
+  })
 
   // Xử lý khi submit form
   async function onSubmit(data: RegisterFormValues) {
-    setIsSubmitting(true);
+    setIsSubmitting(true)
+    setLoginError(null)
 
     try {
-      // Giả lập API call
-      console.log("Form data:", data);
+      // Kiểm tra số điện thoại đã tồn tại chưa
+      const res = await sendRequest<{ data: { exist: boolean } }>({
+        method: "POST",
+        url: "/user/is-exist",
+        body: {
+          phoneNumber: data?.phoneNumber
+        }
+      })
 
-      // Giả lập delay xử lý
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      if (res?.data?.exist === true) {
+        setLoginError("Số điện thoại đã được đăng ký, vui lòng điền số khác")
+        setIsSubmitting(false)
+        return
+      }
 
-      // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
-      router.push("/login?registered=true");
+      // Lưu dữ liệu đăng ký để sử dụng sau khi xác thực OTP
+      setRegistrationData(data)
+
+      // Gửi OTP
+      const otpSent = await sendRequest<{ data: { exist: boolean } }>({
+        method: "POST",
+        url: "/auth/send-otp",
+        body: {
+          phoneNumber: data?.phoneNumber,
+          deviceId: data?.uuid
+        }
+      })
+
+      if (otpSent) {
+        // Hiển thị modal xác thực OTP
+        setShowOTPModal(true)
+      } else {
+        setLoginError("Không thể gửi mã OTP. Vui lòng thử lại sau.")
+      }
     } catch (error) {
-      console.error("Registration error:", error);
+      console.error("Registration error:", error)
+      setLoginError("Đã xảy ra lỗi. Vui lòng thử lại sau.")
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
+    }
+  }
+
+  // Hàm xác thực OTP
+  async function verifyOTP(otpValue: string): Promise<boolean> {
+    if (!registrationData) return false
+
+    try {
+      // Trong môi trường thực tế, bạn sẽ gọi API để xác thực OTP
+      // Ví dụ:
+      const response = await sendRequest({
+        method: "POST",
+        url: "/auth/verify-otp",
+        body: {
+          phoneNumber: registrationData.phoneNumber,
+          otp: otpValue,
+          deviceId: registrationData?.uuid
+        }
+      })
+      if (response?.status === "success") {
+        localStorage.setItem("tokenRegister", response?.data?.token)
+        return true
+      }
+      return false
+    } catch (error) {
+      console.error("OTP verification error:", error)
+      return false
+    }
+  }
+
+  // Xử lý khi xác thực OTP thành công
+  const handleOTPVerificationSuccess = async () => {
+    if (!registrationData) return
+
+    setIsSubmitting(true)
+    setLoginError(null)
+
+    try {
+      // Gửi API đăng ký
+      await fetch(`${apiUrl}/user/register`, {
+        method: "POST",
+        // by default setting the content-type to be json type
+        headers: new Headers({
+          "content-type": "application/json",
+          // Thêm Authorization header nếu token được cung cấp
+          Authorization: `Bearer ${localStorage.getItem("tokenRegister") || ""}`
+        }),
+        body: JSON.stringify({
+          phoneNumber: registrationData?.phoneNumber,
+          password: registrationData?.password,
+          confirmPassword: registrationData?.confirmPassword
+        })
+      }).then((res) => {
+        if (res.ok) {
+          // Đóng modal OTP
+          setShowOTPModal(false)
+
+          // Chuyển hướng đến trang đăng nhập sau khi đăng ký thành công
+          router.push("/login?registered=true")
+          return
+        } else {
+          // Đóng modal OTP
+          setShowOTPModal(false)
+          setLoginError("Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.")
+          return;
+        }
+      })
+    } catch (error) {
+      console.error("Registration error:", error)
+      setLoginError("Đã xảy ra lỗi khi đăng ký. Vui lòng thử lại.")
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -99,92 +199,24 @@ export default function RegisterPage() {
           Quản lý tòa nhà [Tên tòa nhà/Khu chung cư]
         </h2>
       </div>
+      {loginError && (
+        <Alert variant="destructive">
+          <AlertDescription>{loginError}</AlertDescription>
+        </Alert>
+      )}
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
             control={form.control}
-            name="phone"
+            name="phoneNumber"
             render={({ field }) => (
               <FormItem>
                 <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
                   Số điện thoại
                 </FormLabel>
                 <FormControl>
-                  <Input placeholder="0901234567" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="example@email.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="fullName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">
-                  Họ và tên
-                </FormLabel>
-                <FormControl>
-                  <Input placeholder="Nguyễn Văn A" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="gender"
-            render={({ field }) => (
-              <FormItem className="gap-3">
-                <FormLabel className="font-medium">Giới tính</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="flex flex-col gap-2"
-                  >
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="male" />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        Nam
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="female" />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        Nữ
-                      </FormLabel>
-                    </FormItem>
-                    <FormItem className="flex items-center space-x-2 space-y-0">
-                      <FormControl>
-                        <RadioGroupItem value="other" />
-                      </FormControl>
-                      <FormLabel className="font-normal cursor-pointer">
-                        Khác
-                      </FormLabel>
-                    </FormItem>
-                  </RadioGroup>
+                  <Input {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -280,6 +312,16 @@ export default function RegisterPage() {
           Đăng nhập
         </Link>
       </div>
+
+      {/* OTP Verification Modal */}
+      {showOTPModal && registrationData && (
+        <OTPVerification
+          phoneNumber={registrationData.phoneNumber}
+          onVerificationSuccess={handleOTPVerificationSuccess}
+          onCancel={() => setShowOTPModal(false)}
+          onVerify={verifyOTP}
+        />
+      )}
     </div>
-  );
+  )
 }

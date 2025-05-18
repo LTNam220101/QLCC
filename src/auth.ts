@@ -19,23 +19,26 @@ const isTokenExpired = (token: string) => {
 }
 
 // Hàm refresh token
-const refreshAccessToken = async (refreshToken: string) => {
+const refreshAccessToken = async (token: any) => {
   try {
     // Gọi API refresh token của bạn
     const response = await fetch(`${apiUrl}/auth/refresh-token`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${refreshToken}`
+        Authorization: `Bearer ${token.user?.refreshToken}`
       }
     })
     const refreshedTokens = await response.json()
-
-    if (!response.ok) {
-      throw refreshedTokens
+    return {
+      ...token,
+      user: {
+        ...token.user,
+        token: refreshedTokens?.data?.token || token.user.token,
+        refreshToken:
+          refreshedTokens?.data?.refreshToken || token.user.refreshToken
+      }
     }
-
-    return refreshedTokens
   } catch (error) {
     console.error("Error refreshing token:", error)
     return {
@@ -86,16 +89,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return token
       }
       // Kiểm tra token còn hạn không
-      if (!isTokenExpired(token.user.token)) {
+      if (!isTokenExpired(token?.user?.token)) {
         return token
       }
 
       // Token hết hạn, thực hiện refresh
-      return refreshAccessToken(token.user?.refreshToken)
+      return refreshAccessToken(token)
     },
     session: async ({ session, token }) => {
+      // Kiểm tra nếu có lỗi refresh token
+      if (token.error === "RefreshTokenError") {
+        // Có thể xử lý đăng xuất tại đây nếu cần
+        return { ...session, error: token.error }
+      }
+      // Cập nhật thông tin user trong session
       ;(session.user as IUser) = token.user
       return session
     }
+  },
+  jwt: {
+    maxAge: 3600
   }
 })

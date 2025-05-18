@@ -1,18 +1,16 @@
 import React from "react"
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"
 import { Button } from "../ui/button"
-import { Trash2 } from "lucide-react"
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "../ui/form"
+import { Router, Trash2 } from "lucide-react"
+import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { PasswordInput } from "../ui/password-input"
+import { useDeleteProfile } from "@/lib/tanstack-query/profiles/queries"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
+import { signOut } from "next-auth/react"
 
 const formSchema = z.object({
   password: z.string().trim().min(1, { message: "Vui lòng nhập mật khẩu" })
@@ -24,11 +22,28 @@ const defaultValues: Partial<FormValues> = {
   password: ""
 }
 const DeleteAccountModal = () => {
+  const router = useRouter()
+  const deleteProfileMutation = useDeleteProfile()
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues,
     mode: "onChange" // Kích hoạt validate realtime
   })
+
+  const onSubmit = async () => {
+    try {
+      const a = await deleteProfileMutation.mutateAsync()
+      console.log(a)
+      // toast(`Đã xóa tài khoản, vui lòng đăng nhập lại`)
+      // signOut({
+      //   redirectTo: "/login",
+      // });
+    } catch (error) {
+      toast("Đã xảy ra lỗi khi xóa tài khoản")
+    }
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -49,7 +64,11 @@ const DeleteAccountModal = () => {
           khoản
         </div>
         <Form {...form}>
-          <form id="account-form" className="m-auto w-[336px] flex flex-col">
+          <form
+            id="account-form"
+            className="m-auto w-[336px] flex flex-col"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
             <FormField
               control={form.control}
               name="password"
@@ -71,6 +90,7 @@ const DeleteAccountModal = () => {
             <Button
               variant={form.formState.isValid ? "default" : "ghost"}
               className="mt-[60px] text-[22px] text-white rounded-[3px] h-[52px] w-[300px] mx-auto"
+              type="submit"
             >
               Đồng ý
             </Button>
