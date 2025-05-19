@@ -132,23 +132,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarHeader className="bg-purple">
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton size="lg" asChild>
-              <>
-                <div className="group-data-[collapsible=icon]:opacity-0 flex rounded-full size-[60px] items-center justify-center overflow-hidden">
-                  <Image
-                    alt="Công Ty Cổ Phần Sáng Tạo Văn Minh Số"
-                    src={"/logo.jpg"}
-                    width={600}
-                    height={600}
-                  />
-                </div>
-                <div className="group-data-[collapsible=icon]:hidden grid flex-1 text-left text-sm leading-tight">
-                  <span className="text-lg text-white">
-                    Công Ty Cổ Phần Sáng Tạo Văn Minh Số
-                  </span>
-                </div>
-              </>
-            </SidebarMenuButton>
+            <div className="group-data-[collapsible=icon]:opacity-0 flex rounded-full size-[60px] items-center justify-center overflow-hidden">
+              <Image
+                alt="Công Ty Cổ Phần Sáng Tạo Văn Minh Số"
+                src={"/logo.jpg"}
+                width={600}
+                height={600}
+              />
+            </div>
+            <div className="group-data-[collapsible=icon]:hidden grid flex-1 text-left text-sm leading-tight">
+              <span className="text-lg text-white">
+                Công Ty Cổ Phần Sáng Tạo Văn Minh Số
+              </span>
+            </div>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>

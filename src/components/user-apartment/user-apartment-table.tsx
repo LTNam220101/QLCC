@@ -6,12 +6,21 @@ import TableData from "../common/table-data";
 import { generateData } from "../../../utils/create-table/create-data-user-apartment-table";
 import { useUserApartments } from "@/lib/tanstack-query/user-apartments/queries";
 import { useRouter } from "next/navigation";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
+import { UserApartment } from "../../../types/user-apartments";
+import { useState } from "react";
 
 export function UserApartmentTable() {
   const router = useRouter()
   const { filters, setFilter, clearFilters } = useUserApartmentStore();
 
   const { data, isLoading, isError, isRefetching } = useUserApartments(filters);
+
+
+  const [userApartmentToUpdate, setUserApartmentToUpdate] = useState<{
+    userApartment: UserApartment;
+    newStatus: number;
+  } | null>(null);
 
   const columns = generateData({
     startIndex: filters?.size * filters?.page || 0,
@@ -50,10 +59,31 @@ export function UserApartmentTable() {
         filters={filters}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
-        onClickRow={(_, userApartment)=>{
+        onClickRow={(_, userApartment) => {
           router.push(`/building-information/links/${userApartment.userApartmentMappingId}`)
         }}
       />
+      {/* <Dialog
+        open={!!residentToDelete}
+        onOpenChange={(open) => !open && setResidentToDelete(null)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Xác nhận xoá cư dân</DialogTitle>
+            <DialogDescription>
+              Bạn có chắc chắn muốn xoá cư dân này?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setResidentToDelete(null)}>
+              Hủy
+            </Button>
+            <Button variant="destructive" onClick={confirmDelete}>
+              Xác nhận
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog> */}
     </div>
   );
 }
