@@ -108,6 +108,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     }
   },
   jwt: {
-    maxAge: 3600
+    maxAge: 1800
   }
 })

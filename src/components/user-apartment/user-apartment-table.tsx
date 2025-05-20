@@ -6,6 +6,7 @@ import TableData from "../common/table-data"
 import { generateData } from "../../../utils/create-table/create-data-user-apartment-table"
 import {
   useRejectUserApartment,
+  useUnlinkUserApartment,
   useUpdateUserApartment,
   useUserApartments,
   useVerifyUserApartment
@@ -33,6 +34,7 @@ export function UserApartmentTable() {
   const { data, isLoading, isError, isRefetching } = useUserApartments(filters)
   const verifyUserApartmentMutation = useVerifyUserApartment()
   const rejectUserApartmentMutation = useRejectUserApartment()
+  const unlinkUserApartmentMutation = useUnlinkUserApartment()
 
   const [userApartmentToUpdate, setUserApartmentToUpdate] = useState<{
     userApartment: UserApartment
@@ -52,6 +54,13 @@ export function UserApartmentTable() {
           id: userApartmentToUpdate?.userApartment?.userApartmentMappingId
         })
       } else if (userApartmentToUpdate?.newStatus === 0) {
+        await unlinkUserApartmentMutation.mutateAsync({
+          id: userApartmentToUpdate?.userApartment?.userApartmentMappingId,
+          data: {
+            rejectReason
+          }
+        })
+      } else if (userApartmentToUpdate?.newStatus === -1) {
         await rejectUserApartmentMutation.mutateAsync({
           id: userApartmentToUpdate?.userApartment?.userApartmentMappingId,
           data: {

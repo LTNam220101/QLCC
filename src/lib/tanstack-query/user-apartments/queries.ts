@@ -10,7 +10,7 @@ import { apiRequest, apiRequestFile } from "../../../../utils/api"
 
 // Giả lập API service
 const UserApartmentService = {
-  // Lấy danh sách căn hộ với phân trang và lọc
+  // Lấy danh sách liên kết với phân trang và lọc
   async getUserApartments(
     filters: UserApartmentFilter
   ): Promise<UserApartmentPaginatedResponse> {
@@ -62,7 +62,7 @@ const UserApartmentService = {
     }
   },
 
-  // Lấy chi tiết căn hộ
+  // Lấy chi tiết liên kết
   async getUserApartment(id: string): Promise<UserApartmentDetailResponse> {
     try {
       // Gọi API sử dụng sendRequest
@@ -82,7 +82,7 @@ const UserApartmentService = {
     }
   },
 
-  // Thêm căn hộ mới
+  // Thêm liên kết mới
   async addUserApartment(
     data: UserApartmentFormData
   ): Promise<UserApartmentDetailResponse> {
@@ -105,7 +105,7 @@ const UserApartmentService = {
     }
   },
 
-  // Cập nhật căn hộ
+  // Cập nhật liên kết
   async updateUserApartment(
     id: string,
     data: UserApartmentFormData
@@ -129,7 +129,7 @@ const UserApartmentService = {
     }
   },
 
-  // Cập nhật căn hộ
+  // Cập nhật liên kết
   async verifyUserApartment(id: string): Promise<UserApartmentDetailResponse> {
     try {
       // Gọi API sử dụng sendRequest
@@ -149,7 +149,7 @@ const UserApartmentService = {
     }
   },
 
-  // Cập nhật căn hộ
+  // Cập nhật liên kết
   async rejectUserApartment(
     id: string,
     data: {
@@ -160,6 +160,32 @@ const UserApartmentService = {
       // Gọi API sử dụng sendRequest
       const response = await apiRequest<UserApartmentDetailResponse>({
         url: `/user-apartment-mapping/reject/${id}`,
+        method: "POST",
+        useCredentials: true,
+        body: data
+      })
+      // Kiểm tra lỗi từ API (nếu có)
+      if ("status" in response && response.status !== "success") {
+        throw new Error(response.message || "Failed to fetch userApartments")
+      }
+      return response
+    } catch (error) {
+      console.error("Error fetching userApartments:", error)
+      throw error
+    }
+  },
+
+  // Cập nhật liên kết
+  async unlinkUserApartment(
+    id: string,
+    data: {
+      rejectReason: string
+    }
+  ): Promise<UserApartmentDetailResponse> {
+    try {
+      // Gọi API sử dụng sendRequest
+      const response = await apiRequest<UserApartmentDetailResponse>({
+        url: `/user-apartment-mapping/unlink/${id}`,
         method: "POST",
         useCredentials: true,
         body: data
@@ -188,7 +214,7 @@ export const userApartmentKeys = {
 
 // Custom hooks
 
-// Hook lấy danh sách căn hộ với phân trang và lọc
+// Hook lấy danh sách liên kết với phân trang và lọc
 export function useUserApartments(
   filters: UserApartmentFilter,
   enabled = true
@@ -200,7 +226,7 @@ export function useUserApartments(
   })
 }
 
-// Hook lấy chi tiết căn hộ
+// Hook lấy chi tiết liên kết
 export function useUserApartment(id: string) {
   return useQuery({
     queryKey: userApartmentKeys.detail(id),
@@ -209,7 +235,7 @@ export function useUserApartment(id: string) {
   })
 }
 
-// Hook thêm căn hộ mới
+// Hook thêm liên kết mới
 export function useAddUserApartment() {
   const queryClient = useQueryClient()
 
@@ -217,16 +243,16 @@ export function useAddUserApartment() {
     mutationFn: (data: UserApartmentFormData) =>
       UserApartmentService.addUserApartment(data),
     onSuccess: () => {
-      // Invalidate và refetch danh sách căn hộ
+      // Invalidate và refetch danh sách liên kết
       queryClient.invalidateQueries({ queryKey: userApartmentKeys.lists() })
     },
     onError: (error: any) => {
-      toast(error.message || "Có lỗi xảy ra khi thêm căn hộ")
+      toast(error.message || "Có lỗi xảy ra khi thêm liên kết")
     }
   })
 }
 
-// Hook cập nhật căn hộ
+// Hook cập nhật liên kết
 export function useUpdateUserApartment() {
   const queryClient = useQueryClient()
 
@@ -234,22 +260,22 @@ export function useUpdateUserApartment() {
     mutationFn: ({ id, data }: { id: string; data: UserApartmentFormData }) =>
       UserApartmentService.updateUserApartment(id, data),
     onSuccess: (data) => {
-      // Cập nhật cache cho chi tiết căn hộ
+      // Cập nhật cache cho chi tiết liên kết
       queryClient.setQueryData(
         userApartmentKeys.detail(data.data.userApartmentMappingId),
         data
       )
 
-      // Invalidate và refetch danh sách căn hộ
+      // Invalidate và refetch danh sách liên kết
       queryClient.invalidateQueries({ queryKey: userApartmentKeys.lists() })
     },
     onError: (error: any) => {
-      toast(error.message || "Có lỗi xảy ra khi cập nhật căn hộ")
+      toast(error.message || "Có lỗi xảy ra khi cập nhật liên kết")
     }
   })
 }
 
-// Hook cập nhật căn hộ
+// Hook cập nhật liên kết
 export function useVerifyUserApartment() {
   const queryClient = useQueryClient()
 
@@ -257,22 +283,22 @@ export function useVerifyUserApartment() {
     mutationFn: ({ id }: { id: string }) =>
       UserApartmentService.verifyUserApartment(id),
     onSuccess: (data) => {
-      // Cập nhật cache cho chi tiết căn hộ
+      // Cập nhật cache cho chi tiết liên kết
       queryClient.setQueryData(
         userApartmentKeys.detail(data.data.userApartmentMappingId),
         data
       )
 
-      // Invalidate và refetch danh sách căn hộ
+      // Invalidate và refetch danh sách liên kết
       queryClient.invalidateQueries({ queryKey: userApartmentKeys.lists() })
     },
     onError: (error: any) => {
-      toast(error.message || "Có lỗi xảy ra khi cập nhật căn hộ")
+      toast(error.message || "Có lỗi xảy ra khi cập nhật liên kết")
     }
   })
 }
 
-// Hook cập nhật căn hộ
+// Hook cập nhật liên kết
 export function useRejectUserApartment() {
   const queryClient = useQueryClient()
 
@@ -287,17 +313,47 @@ export function useRejectUserApartment() {
       }
     }) => UserApartmentService.rejectUserApartment(id, data),
     onSuccess: (data) => {
-      // Cập nhật cache cho chi tiết căn hộ
+      // Cập nhật cache cho chi tiết liên kết
       queryClient.setQueryData(
         userApartmentKeys.detail(data.data.userApartmentMappingId),
         data
       )
 
-      // Invalidate và refetch danh sách căn hộ
+      // Invalidate và refetch danh sách liên kết
       queryClient.invalidateQueries({ queryKey: userApartmentKeys.lists() })
     },
     onError: (error: any) => {
-      toast(error.message || "Có lỗi xảy ra khi cập nhật căn hộ")
+      toast(error.message || "Có lỗi xảy ra khi cập nhật liên kết")
+    }
+  })
+}
+
+// Hook cập nhật liên kết
+export function useUnlinkUserApartment() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({
+      id,
+      data
+    }: {
+      id: string
+      data: {
+        rejectReason: string
+      }
+    }) => UserApartmentService.unlinkUserApartment(id, data),
+    onSuccess: (data) => {
+      // Cập nhật cache cho chi tiết liên kết
+      queryClient.setQueryData(
+        userApartmentKeys.detail(data.data.userApartmentMappingId),
+        data
+      )
+
+      // Invalidate và refetch danh sách liên kết
+      queryClient.invalidateQueries({ queryKey: userApartmentKeys.lists() })
+    },
+    onError: (error: any) => {
+      toast(error.message || "Có lỗi xảy ra khi cập nhật liên kết")
     }
   })
 }
