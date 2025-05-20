@@ -57,6 +57,8 @@ export interface UserApartmentFormData {
   buildingName: string;
   // area: number
   note?: string;
+  status?: number;
+  rejectReason?: string;
 }
 
 export interface UserApartmentPaginatedResponse {

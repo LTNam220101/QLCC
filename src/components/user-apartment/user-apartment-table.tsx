@@ -1,30 +1,76 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { useUserApartmentStore } from "@/lib/store/use-user-apartment-store";
-import TableData from "../common/table-data";
-import { generateData } from "../../../utils/create-table/create-data-user-apartment-table";
-import { useUserApartments } from "@/lib/tanstack-query/user-apartments/queries";
-import { useRouter } from "next/navigation";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "../ui/dialog";
-import { UserApartment } from "../../../types/user-apartments";
-import { useState } from "react";
+import { Button } from "@/components/ui/button"
+import { useUserApartmentStore } from "@/lib/store/use-user-apartment-store"
+import TableData from "../common/table-data"
+import { generateData } from "../../../utils/create-table/create-data-user-apartment-table"
+import {
+  useRejectUserApartment,
+  useUpdateUserApartment,
+  useUserApartments,
+  useVerifyUserApartment
+} from "@/lib/tanstack-query/user-apartments/queries"
+import { useRouter } from "next/navigation"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from "../ui/dialog"
+import { UserApartment } from "../../../types/user-apartments"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Label } from "@radix-ui/react-dropdown-menu"
+import { Input } from "../ui/input"
 
 export function UserApartmentTable() {
   const router = useRouter()
-  const { filters, setFilter, clearFilters } = useUserApartmentStore();
+  const { filters, setFilter, clearFilters } = useUserApartmentStore()
+  const [rejectReason, setRejectReason] = useState("")
 
-  const { data, isLoading, isError, isRefetching } = useUserApartments(filters);
-
+  const { data, isLoading, isError, isRefetching } = useUserApartments(filters)
+  const verifyUserApartmentMutation = useVerifyUserApartment()
+  const rejectUserApartmentMutation = useRejectUserApartment()
 
   const [userApartmentToUpdate, setUserApartmentToUpdate] = useState<{
-    userApartment: UserApartment;
-    newStatus: number;
-  } | null>(null);
+    userApartment: UserApartment
+    newStatus: number
+  } | null>(null)
+
+  const handleUpdateClick = (userApartment: UserApartment, status: number) => {
+    setUserApartmentToUpdate({ userApartment, newStatus: status })
+  }
+
+  const confirmUpdate = async () => {
+    if (!userApartmentToUpdate) return
+
+    try {
+      if (userApartmentToUpdate?.newStatus === 1) {
+        await verifyUserApartmentMutation.mutateAsync({
+          id: userApartmentToUpdate?.userApartment?.userApartmentMappingId
+        })
+      } else if (userApartmentToUpdate?.newStatus === 0) {
+        await rejectUserApartmentMutation.mutateAsync({
+          id: userApartmentToUpdate?.userApartment?.userApartmentMappingId,
+          data: {
+            rejectReason
+          }
+        })
+      }
+      toast(`Đã cập nhật liên kết`)
+      setRejectReason("")
+      setUserApartmentToUpdate(null)
+    } catch (error) {
+      toast("Đã xảy ra lỗi khi cập nhật liên kết")
+    }
+  }
 
   const columns = generateData({
     startIndex: filters?.size * filters?.page || 0,
-  });
+    handleUpdateClick
+  })
 
   // Render lỗi
   if (isError) {
@@ -35,7 +81,7 @@ export function UserApartmentTable() {
           <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
-    );
+    )
   }
   // Render khi không có dữ liệu
   if (data?.data?.data.length === 0) {
@@ -46,7 +92,7 @@ export function UserApartmentTable() {
           <Button onClick={clearFilters}>Đặt lại bộ lọc</Button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -60,30 +106,54 @@ export function UserApartmentTable() {
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
         onClickRow={(_, userApartment) => {
-          router.push(`/building-information/links/${userApartment.userApartmentMappingId}`)
+          router.push(
+            `/building-information/links/${userApartment.userApartmentMappingId}`
+          )
         }}
       />
-      {/* <Dialog
-        open={!!residentToDelete}
-        onOpenChange={(open) => !open && setResidentToDelete(null)}
+      <Dialog
+        open={!!userApartmentToUpdate}
+        onOpenChange={(open) => !open && setUserApartmentToUpdate(null)}
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Xác nhận xoá cư dân</DialogTitle>
+            <DialogTitle>Xác nhận thay đổi trạng thái liên kết</DialogTitle>
             <DialogDescription>
-              Bạn có chắc chắn muốn xoá cư dân này?
+              {userApartmentToUpdate?.newStatus === 1
+                ? "Bạn có chắc chắn muốn phê duyệt?"
+                : null}
             </DialogDescription>
+            {userApartmentToUpdate?.newStatus === 0 ? (
+              <>
+                <Label className="after:content-['*'] after:text-red-500 after:ml-0.5">
+                  Vui lòng nhập lý do
+                </Label>
+                <Input
+                  value={rejectReason}
+                  onChange={(e) => setRejectReason(e.target.value.trim())}
+                />
+              </>
+            ) : null}
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setResidentToDelete(null)}>
+            <Button
+              variant="outline"
+              onClick={() => setUserApartmentToUpdate(null)}
+            >
               Hủy
             </Button>
-            <Button variant="destructive" onClick={confirmDelete}>
-              Xác nhận
+            <Button
+              disabled={userApartmentToUpdate?.newStatus === 0 && !rejectReason}
+              onClick={confirmUpdate}
+              variant={
+                userApartmentToUpdate?.newStatus === 1 ? "default" : "warning"
+              }
+            >
+              {userApartmentToUpdate?.newStatus === 1 ? "Đồng ý" : "Từ chối"}
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
     </div>
-  );
+  )
 }
