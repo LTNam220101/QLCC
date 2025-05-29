@@ -93,7 +93,7 @@ export function ReportFilters() {
       filter.createTimeTo ? new Date(filter.createTimeTo) : undefined
     )
   }, [filter])
-
+console.log(`${statusList?.[0]}`)
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
@@ -101,7 +101,7 @@ export function ReportFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={`${statusList?.[0]}` || "all"}
+            value={statusList?.[0] ? `${statusList?.[0]}` : "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setStatusList([+value])
