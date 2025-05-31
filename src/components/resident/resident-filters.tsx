@@ -107,7 +107,7 @@ export function ResidentFilters() {
           <div>
             <Label className="mb-2">Trạng thái</Label>
             <Select
-              value={`${statusList?.[0]}` || "all"}
+              value={statusList?.[0] ? `${statusList?.[0]}` : "all"}
               onValueChange={(value) => {
                 if (value !== "all") {
                   setStatusList([+value])
@@ -120,7 +120,7 @@ export function ResidentFilters() {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Tất cả trạng thái</SelectItem>
+                <SelectItem value="all">Tất cả</SelectItem>
                 {Object.entries(ResidentStatus).map(([id, status]) => (
                   <SelectItem key={id} value={id}>
                     {status.name}

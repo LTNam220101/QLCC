@@ -93,7 +93,7 @@ export function DocumentFilters() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Tất cả trạng thái</SelectItem>
+              <SelectItem value="all">Tất cả</SelectItem>
               {documentStatuses.map((status) => (
                 <SelectItem key={status.id} value={status.id}>
                   {status.name}

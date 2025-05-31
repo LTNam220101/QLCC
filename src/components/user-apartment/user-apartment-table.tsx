@@ -57,14 +57,14 @@ export function UserApartmentTable() {
         await unlinkUserApartmentMutation.mutateAsync({
           id: userApartmentToUpdate?.userApartment?.userApartmentMappingId,
           data: {
-            rejectReason
+            rejectReason: rejectReason?.trim()
           }
         })
       } else if (userApartmentToUpdate?.newStatus === -1) {
         await rejectUserApartmentMutation.mutateAsync({
           id: userApartmentToUpdate?.userApartment?.userApartmentMappingId,
           data: {
-            rejectReason
+            rejectReason: rejectReason?.trim()
           }
         })
       }
@@ -139,7 +139,7 @@ export function UserApartmentTable() {
                 </Label>
                 <Input
                   value={rejectReason}
-                  onChange={(e) => setRejectReason(e.target.value.trim())}
+                  onChange={(e) => setRejectReason(e.target.value)}
                 />
               </>
             ) : null}
