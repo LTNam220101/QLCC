@@ -145,7 +145,7 @@ function TableData<T>({
             <Button
               variant="outline"
               size="icon"
-              onClick={() => setFilter({ page: Math.max(filters.page, 0) })}
+              onClick={() => setFilter({ page: Math.max(filters.page-1, 0) })}
               disabled={filters.page === 0}
             >
               <ChevronLeft className="h-4 w-4" />

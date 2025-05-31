@@ -104,11 +104,11 @@ export default function RegisterPage() {
           deviceId: data?.uuid
         }
       })
-
+      setShowOTPModal(true)
       if (otpSent) {
         // Hiển thị modal xác thực OTP
-        setShowOTPModal(true)
       } else {
+        setShowOTPModal(false)
         setLoginError("Không thể gửi mã OTP. Vui lòng thử lại sau.")
       }
     } catch (error) {
@@ -317,6 +317,7 @@ export default function RegisterPage() {
       {showOTPModal && registrationData && (
         <OTPVerification
           phoneNumber={registrationData.phoneNumber}
+          deviceId={registrationData.uuid}
           onVerificationSuccess={handleOTPVerificationSuccess}
           onCancel={() => setShowOTPModal(false)}
           onVerify={verifyOTP}

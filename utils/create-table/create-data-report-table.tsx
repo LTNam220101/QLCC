@@ -26,9 +26,8 @@ export const generateData = ({
     render: (_, index) => startIndex + index + 1
   },
   {
-    dataIndex: "reportId",
+    dataIndex: "reportCode",
     name: "Mã phản ánh",
-    render: (report) => report?.reportId?.split("-")?.at(-1)
   },
   {
     dataIndex: "reportContent",
@@ -41,7 +40,7 @@ export const generateData = ({
     textAlign: 'text-center'
   },
   {
-    dataIndex: "residentName",
+    dataIndex: "apartmentName",
     name: "Căn hộ"
   },
   {

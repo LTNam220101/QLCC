@@ -51,7 +51,7 @@ export function NewsFilters() {
   // Áp dụng bộ lọc
   const applyFilter = () => {
     queryClient.invalidateQueries({ queryKey: newsKeys.lists() })
-setFilter({
+    setFilter({
       title: title || "",
       manageBuildingList: manageBuildingList || undefined,
       sentTimeFrom: sentTimeFrom ? sentTimeFrom.getTime() : undefined,
@@ -85,6 +85,12 @@ setFilter({
     )
     setToDate(filter.createTimeTo ? new Date(filter.createTimeTo) : undefined)
   }, [filter])
+
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
 
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
@@ -156,7 +162,7 @@ setFilter({
                       setSentFromDate(range?.from)
                     }
                     if (range?.to) {
-                      setSentToDate(range?.to)
+                      setSentToDate(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) => date < new Date("1900-01-01")}
@@ -198,7 +204,7 @@ setFilter({
                       setFromDate(range?.from)
                     }
                     if (range?.to) {
-                      setToDate(range?.to)
+                      setToDate(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) => date < new Date("1900-01-01")}

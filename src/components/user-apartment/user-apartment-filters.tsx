@@ -100,6 +100,12 @@ export function UserApartmentFilters() {
     setToDate(filters.createTimeTo ? new Date(filters.createTimeTo) : undefined)
   }, [filters])
 
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
+
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[14px] gap-y-4">
@@ -177,7 +183,7 @@ export function UserApartmentFilters() {
         <div>
           <Label className="mb-2">Trạng thái</Label>
           <Select
-            value={`${statusList?.[0]}` || "all"}
+            value={statusList?.[0] ? `${statusList?.[0]}` : "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setStatusList([+value])
@@ -204,7 +210,7 @@ export function UserApartmentFilters() {
         <div>
           <Label className="mb-2">Vai trò</Label>
           <Select
-            value={`${userApartmentRoleName}` || "all"}
+            value={userApartmentRoleName ? `${userApartmentRoleName}` : "all"}
             onValueChange={(value) => {
               if (value !== "all") {
                 setUserApartmentRoleName(value)
@@ -256,7 +262,7 @@ export function UserApartmentFilters() {
                     setFromDate(range?.from)
                   }
                   if (range?.to) {
-                    setToDate(range?.to)
+                    setToDate(new Date(range?.to?.getTime()+86399))
                   }
                 }}
                 disabled={(date) =>

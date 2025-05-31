@@ -10,6 +10,7 @@ export const ReportStatus: {
 
 export interface Report {
   reportId: string
+  reportCode: string
   reportContent: string
   resultContent: string
   note?: string

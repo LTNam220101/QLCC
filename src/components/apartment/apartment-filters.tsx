@@ -72,6 +72,12 @@ export function ApartmentFilters() {
     setToDate(filters.createTimeTo ? new Date(filters.createTimeTo) : undefined)
   }, [filters])
 
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
+
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[14px] gap-y-4">
@@ -141,7 +147,7 @@ export function ApartmentFilters() {
                     setFromDate(range?.from)
                   }
                   if (range?.to) {
-                    setToDate(range?.to)
+                    setToDate(new Date(range?.to?.getTime()+86399))
                   }
                 }}
                 disabled={(date) =>

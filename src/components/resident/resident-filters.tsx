@@ -73,6 +73,12 @@ export function ResidentFilters() {
     setToDate(filters.createTimeTo ? new Date(filters.createTimeTo) : undefined)
   }, [filters])
 
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
+
   return (
     <>
       <div className="flex space-x-[14px] mt-5 mb-4">
@@ -157,7 +163,7 @@ export function ResidentFilters() {
                         setFromDate(range?.from)
                       }
                       if (range?.to) {
-                        setToDate(range?.to)
+                        setToDate(new Date(range?.to?.getTime()+86399))
                       }
                     }}
                     disabled={(date) =>

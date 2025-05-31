@@ -5,9 +5,11 @@ import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { sendRequest } from "../../../utils/api"
 
 interface OTPVerificationProps {
   phoneNumber: string
+  deviceId?: string
   onVerificationSuccess: () => void
   onCancel?: () => void
   onVerify?: (otpValue: string) => Promise<boolean>
@@ -15,6 +17,7 @@ interface OTPVerificationProps {
 
 export function OTPVerification({
   phoneNumber,
+  deviceId,
   onVerificationSuccess,
   onCancel,
   onVerify
@@ -120,8 +123,15 @@ export function OTPVerification({
         return
       }
 
-      // Simulate sending OTP
-      console.log(`Sending OTP to ${phoneNumber}`)
+      // Gửi OTP
+      const otpSent = await sendRequest<{ data: { exist: boolean } }>({
+        method: "POST",
+        url: "/auth/send-otp",
+        body: {
+          phoneNumber,
+          deviceId,
+        }
+      })
 
       // Reset timer and disable resend button
       setTimeLeft(180)

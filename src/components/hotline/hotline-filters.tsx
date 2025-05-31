@@ -50,6 +50,7 @@ export function HotlineFilters() {
       statusList: statusList || undefined,
       name: name || undefined,
       hotline: hotline || undefined,
+      manageBuildingList: manageBuildingList || undefined,
       createTimeFrom: createTimeFrom ? createTimeFrom.getTime() : undefined,
       createTimeTo: createTimeTo ? createTimeTo.getTime() : undefined,
       page: 0 // Reset về trang 1 khi lọc
@@ -75,6 +76,12 @@ export function HotlineFilters() {
     )
     setToDate(filter.createTimeTo ? new Date(filter.createTimeTo) : undefined)
   }, [filter])
+
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
 
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
@@ -145,7 +152,7 @@ export function HotlineFilters() {
                       setFromDate(range?.from)
                     }
                     if (range?.to) {
-                      setToDate(range?.to)
+                      setToDate(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) =>

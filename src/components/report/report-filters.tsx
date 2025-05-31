@@ -94,6 +94,12 @@ export function ReportFilters() {
     )
   }, [filter])
 
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
+
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
@@ -221,7 +227,7 @@ export function ReportFilters() {
                       setCreateTimeFrom(range?.from)
                     }
                     if (range?.to) {
-                      setCreateTimeTo(range?.to)
+                      setCreateTimeTo(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) =>

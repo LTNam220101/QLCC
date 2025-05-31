@@ -48,7 +48,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
               value={data?.data?.apartmentName}
               highlight
             />
-            <InfoRow label="Mã phản ánh" value={data?.data?.reportId} />
+            <InfoRow label="Mã phản ánh" value={data?.data?.reportCode} />
             <InfoRow label="Nội dung xử lý" value={data?.data?.resultContent} />
           </div>
         </div>

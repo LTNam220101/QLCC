@@ -98,6 +98,14 @@ export function MovingTicketFilters() {
       filter.movingDayTimeTo ? new Date(filter.movingDayTimeTo) : undefined
     )
   }, [filter])
+
+  
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
+
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
@@ -198,7 +206,7 @@ export function MovingTicketFilters() {
                       setMovingDayTimeFrom(range?.from)
                     }
                     if (range?.to) {
-                      setMovingDayTimeTo(range?.to)
+                      setMovingDayTimeTo(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) =>

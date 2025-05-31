@@ -108,6 +108,12 @@ export function NotificationFilters() {
     setToDate(filter.createTimeTo ? new Date(filter.createTimeTo) : undefined)
   }, [filter])
 
+  useEffect(() => {
+    return () => {
+      clearFilter()
+    }
+  }, [])
+
   return (
     <div className="flex space-x-[14px] mt-5 mb-4">
       <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
@@ -212,7 +218,7 @@ export function NotificationFilters() {
                       setSentFromDate(range?.from)
                     }
                     if (range?.to) {
-                      setSentToDate(range?.to)
+                      setSentToDate(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) => date < new Date("1900-01-01")}
@@ -254,7 +260,7 @@ export function NotificationFilters() {
                       setFromDate(range?.from)
                     }
                     if (range?.to) {
-                      setToDate(range?.to)
+                      setToDate(new Date(range?.to?.getTime()+86399))
                     }
                   }}
                   disabled={(date) => date < new Date("1900-01-01")}

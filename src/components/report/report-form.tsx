@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -32,6 +31,7 @@ import {
 import { toast } from "sonner";
 import { Check } from "lucide-react";
 import { ReportFormData } from "../../../types/reports";
+import { useApartments } from "@/lib/tanstack-query/apartments/queries";
 
 // Schema validation
 const formSchema = z.object({
@@ -64,6 +64,15 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
       note: "",
     },
   });
+  const watchBuilding = form.watch("buildingId")
+  const { data: apartments } = useApartments(
+    {
+      manageBuildingList: [watchBuilding],
+      page: 0,
+      size: 1000
+    },
+    !!watchBuilding
+  )
 
   // Cập nhật form khi có dữ liệu report
   useEffect(() => {
@@ -83,6 +92,14 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
       });
     }
   }, [form, report, isEdit]);
+
+  // Cập nhật form khi có dữ liệu apartments
+  useEffect(() => {
+    if (apartments) {
+      form.resetField("apartmentId")
+    }
+  }, [form, apartments])
+
   // Xử lý submit form
   const onSubmit = async (values: ReportFormData) => {
     try {
@@ -152,7 +169,7 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
               </FormItem>
             )}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="apartmentId"
             render={({ field }) => (
@@ -169,12 +186,9 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {buildings?.map((building) => (
-                      <SelectItem
-                        key={building.id}
-                        value={building.id.toString()}
-                      >
-                        {building.name}
+                    {apartments?.data?.data?.map((apartment) => (
+                      <SelectItem key={apartment.id} value={apartment?.id}>
+                        {apartment.apartmentName}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -182,7 +196,7 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
                 <FormMessage />
               </FormItem>
             )}
-          /> */}
+          />
 
           <FormField
             control={form.control}
