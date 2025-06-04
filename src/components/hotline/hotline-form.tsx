@@ -134,7 +134,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mt-5 relative"
+        className="space-y-6 pt-8 px-7 relative bg-white"
       >
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <FormField
@@ -228,13 +228,24 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
               Lưu tạm
             </Button>
           )}
+          {isEdit ? (
+            <Button
+              className="flex items-center my-[10px] border-green text-green"
+              variant={"outline"}
+              disabled={isSubmitting}
+              type="button"
+              onClick={()=>{form?.reset()}}
+            >
+              Huỷ bỏ
+            </Button>
+          ) : null}
           <Button
             className="flex items-center my-[10px] rounded-md"
             type="submit"
             disabled={isSubmitting}
           >
             <Check className="size-4" />
-            {isSubmitting ? "Đang xử lý..." : isEdit ? "Cập nhật" : "Lưu"}
+            {isSubmitting ? "Đang xử lý..." : isEdit ? "Lưu lại" : "Lưu"}
           </Button>
         </div>
       </form>

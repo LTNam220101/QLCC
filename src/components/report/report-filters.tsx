@@ -18,7 +18,9 @@ import {
   PopoverContent,
   PopoverTrigger
 } from "@/components/ui/popover"
-import { CalendarIcon, Search, Trash2 } from "lucide-react"
+import CalendarIcon from "@/icons/calendar.svg"
+import Search from "@/icons/search-normal.svg"
+import Trash2 from "@/icons/trash.svg"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
 import { cn } from "@/lib/utils"
@@ -227,7 +229,7 @@ export function ReportFilters() {
                       setCreateTimeFrom(range?.from)
                     }
                     if (range?.to) {
-                      setCreateTimeTo(new Date(range?.to?.getTime()+86399))
+                      setCreateTimeTo(new Date(range?.to?.getTime() + 86399))
                     }
                   }}
                   disabled={(date) =>
@@ -243,15 +245,16 @@ export function ReportFilters() {
       </div>
       {/* Nút tìm kiếm và xóa bộ lọc */}
       <div className="flex gap-2 mt-[21px]">
-        <Button onClick={applyFilter}>
-          <Search className="h-4 w-4" /> Tìm kiếm
+        <Button size={"xl"} onClick={applyFilter} className="font-bold">
+          <Search className="h-6 w-6 [&>path]:stroke-white" /> Tìm kiếm
         </Button>
         <Button
+          size={"xl"}
           variant="outline"
           onClick={clearFilter}
-          className="text-red hover:text-red"
+          className="border-red text-red hover:text-red font-bold"
         >
-          <Trash2 className="h-4 w-4" color="#FE0000" /> Xóa tìm kiếm
+          <Trash2 className="h-6 w-6 [&>path]:stroke-red" /> Xóa tìm kiếm
         </Button>
       </div>
     </div>

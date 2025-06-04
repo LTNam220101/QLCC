@@ -15,15 +15,15 @@ export default async function RootLayout({
     <>
       <SidebarProvider
         style={{
-          "--sidebar-width": "305px",
+          "--sidebar-width": "300px",
           "--sidebar-width-icon": "40px",
           "--sidebar-width-mobile": "20rem"
         }}
       >
         <div className="flex flex-1 h-screen overflow-hidden">
           <AppSidebar />
-          <div className="flex-1 flex flex-col overflow-hidden bg-[#F8F8F8]">
-            <header className="h-[98px] gap-2 bg-white flex items-center">
+          <div className="flex-1 flex flex-col overflow-hidden bg-[#F4F3F6]">
+            <header className="h-[100px] gap-2 bg-white flex items-center">
               <NavTrigger />
             </header>
             <NavBreadcrumb />

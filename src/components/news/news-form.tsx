@@ -140,7 +140,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 mt-5 relative"
+        className="space-y-6 pt-8 px-7 relative bg-white"
       >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <FormField
@@ -349,14 +349,24 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
           )}
         />
 
-        <div className="absolute -top-[80px] right-0 flex items-center justify-end space-x-2">
+        <div className="absolute -top-[60px] right-7 flex items-center justify-end space-x-2">
+          {isEdit ? (
+            <Button
+              className="flex items-center my-[10px] border-green text-green"
+              variant={"outline"}
+              disabled={isSubmitting}
+              type="button"
+              onClick={()=>{form?.reset()}}
+            >
+              Huỷ bỏ
+            </Button>
+          ) : null}
           <Button
-            className="flex items-center my-[10px] rounded-md"
+            className="flex items-center my-[10px]"
             type="submit"
             disabled={isSubmitting}
           >
-            <Check className="size-4" />
-            {isSubmitting ? "Đang xử lý..." : isEdit ? "Cập nhật" : "Lưu"}
+            {isSubmitting ? "Đang xử lý..." : isEdit ? "Lưu lại" : "Lưu"}
           </Button>
         </div>
       </form>

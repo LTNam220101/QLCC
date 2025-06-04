@@ -1,14 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { Bot, Command, Settings2, SquareTerminal } from "lucide-react"
+import Home from '@/icons/home.svg'
+import Building from '@/icons/building.svg'
+import Clipboard from '@/icons/clipboard-text.svg'
+import Notification from '@/icons/notification.svg'
 
 import {
   Sidebar,
   SidebarContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail
 } from "@/components/ui/sidebar"
@@ -21,12 +23,12 @@ const data = {
     {
       title: "TRANG CHỦ",
       url: "/",
-      icon: Settings2
+      icon: Home
     },
     {
       title: "Thông tin toà nhà",
       url: "/building-information",
-      icon: SquareTerminal,
+      icon: Building,
       items: [
         {
           title: "Quản lý cư dân",
@@ -53,7 +55,7 @@ const data = {
     {
       title: "Dịch vụ toà nhà",
       url: "/services",
-      icon: Bot,
+      icon: Clipboard,
       items: [
         // {
         //   title: "Quản lý khách thăm",
@@ -74,7 +76,7 @@ const data = {
         {
           title: "Quản lý hotline",
           url: "/hotlines"
-        },
+        }
         // {
         //   title: "Giao tiếp",
         //   url: "/hotlines"
@@ -84,7 +86,7 @@ const data = {
     {
       title: "Thông báo/Bảng tin",
       url: "/boards",
-      icon: Settings2,
+      icon: Notification,
       items: [
         {
           title: "Thông báo",
@@ -129,10 +131,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="bg-purple">
+      <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem className="flex items-center gap-2">
-            <div className="group-data-[collapsible=icon]:opacity-0 flex rounded-full size-[60px] items-center justify-center overflow-hidden">
+            <div className="group-data-[collapsible=icon]:opacity-0 flex rounded-full size-[56px] items-center justify-center overflow-hidden">
               <Image
                 alt="Công Ty Cổ Phần Sáng Tạo Văn Minh Số"
                 src={"/logo.jpg"}
@@ -141,8 +143,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               />
             </div>
             <div className="group-data-[collapsible=icon]:hidden grid flex-1 text-left text-sm leading-tight">
-              <span className="text-lg text-white">
-                Công Ty Cổ Phần Sáng Tạo Văn Minh Số
+              <span className="text-[16px] font-semibold w-[200px]">
+                CÔNG TY CỔ PHẦN SÁNG TẠO VĂN MINH SỐ
               </span>
             </div>
           </SidebarMenuItem>

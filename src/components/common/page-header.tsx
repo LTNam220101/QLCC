@@ -23,6 +23,7 @@ const PageHeader = ({
       <div
         className={cn("flex items-center h-[56px] px-7 bg-white rounded-t-lg", {
           "justify-between": !!children,
+          'h-[60px]': !!backUrl
         })}
       >
         <div className="flex items-center font-bold text-lg text-[#303438]">

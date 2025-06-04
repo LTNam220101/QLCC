@@ -1,44 +1,46 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { Calendar as CalendarComponent, Search, Trash2 } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react"
+import CalendarComponent from "@/icons/calendar.svg"
+import Search from "@/icons/search-normal.svg"
+import Trash2 from "@/icons/trash.svg"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  SelectValue
+} from "@/components/ui/select"
 import {
   useDocumentStore,
   buildings,
-  documentStatuses,
-} from "@/lib/store/use-document-store";
+  documentStatuses
+} from "@/lib/store/use-document-store"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { cn } from "@/lib/utils";
-import { Label } from "../ui/label";
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { cn } from "@/lib/utils"
+import { Label } from "../ui/label"
 
 export function DocumentFilters() {
-  const { filters, setFilter, clearFilters, applyFilters } = useDocumentStore();
+  const { filters, setFilter, clearFilters, applyFilters } = useDocumentStore()
 
   // Xử lý tìm kiếm
   const handleSearch = () => {
-    applyFilters();
-  };
+    applyFilters()
+  }
 
   // Áp dụng bộ lọc khi component được mount
   useEffect(() => {
-    applyFilters();
-  }, [applyFilters]);
+    applyFilters()
+  }, [applyFilters])
 
   return (
     <div className="flex space-x-[14px] py-4 px-7 bg-white rounded-b-lg">
@@ -57,9 +59,9 @@ export function DocumentFilters() {
             value={filters.building}
             onValueChange={(value) => {
               if (value !== "all") {
-                setFilter("building", value);
+                setFilter("building", value)
               } else {
-                setFilter("building", "");
+                setFilter("building", "")
               }
             }}
           >
@@ -83,9 +85,9 @@ export function DocumentFilters() {
             value={filters.status}
             onValueChange={(value) => {
               if (value !== "all") {
-                setFilter("status", value);
+                setFilter("status", value)
               } else {
-                setFilter("status", "");
+                setFilter("status", "")
               }
             }}
           >
@@ -121,17 +123,17 @@ export function DocumentFilters() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                captionLayout="dropdown-buttons"
+                fromYear={1960}
+                toYear={2030}
                 locale={vi}
                 onSelect={(range) => {
                   if (range?.from && range?.to) {
                     const dateRange = `${format(
                       range.from,
                       "dd/MM/yyyy"
-                    )} - ${format(range.to, "dd/MM/yyyy")}`;
-                    setFilter("effectiveDateRange", dateRange);
+                    )} - ${format(range.to, "dd/MM/yyyy")}`
+                    setFilter("effectiveDateRange", dateRange)
                   }
                 }}
               />
@@ -157,17 +159,17 @@ export function DocumentFilters() {
             <PopoverContent className="w-auto p-0" align="start">
               <Calendar
                 mode="range"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                captionLayout="dropdown-buttons"
+                fromYear={1960}
+                toYear={2030}
                 locale={vi}
                 onSelect={(range) => {
                   if (range?.from && range?.to) {
                     const dateRange = `${format(
                       range.from,
                       "dd/MM/yyyy"
-                    )} - ${format(range.to, "dd/MM/yyyy")}`;
-                    setFilter("createdDateRange", dateRange);
+                    )} - ${format(range.to, "dd/MM/yyyy")}`
+                    setFilter("createdDateRange", dateRange)
                   }
                 }}
               />
@@ -177,17 +179,18 @@ export function DocumentFilters() {
       </div>
       {/* Nút tìm kiếm và xóa bộ lọc */}
       <div className="flex gap-2 mt-[21px]">
-        <Button onClick={handleSearch}>
-          <Search className="h-4 w-4" /> Tìm kiếm
+        <Button size={"xl"} onClick={handleSearch} className="font-bold">
+        <Search className="h-6 w-6 [&>path]:stroke-white" /> Tìm kiếm
         </Button>
         <Button
+          size={"xl"}
           variant="outline"
           onClick={clearFilters}
-          className="text-red hover:text-red"
+          className="border-red text-red hover:text-red font-bold"
         >
-          <Trash2 className="h-4 w-4" color="#FE0000" /> Xóa tìm kiếm
+          <Trash2 className="h-6 w-6 [&>path]:stroke-red" /> Xóa tìm kiếm
         </Button>
       </div>
     </div>
-  );
+  )
 }

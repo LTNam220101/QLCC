@@ -1,11 +1,11 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Manrope } from "next/font/google"
 import "./globals.css"
 import { SessionProvider } from "next-auth/react"
 import { TanStackQueryProvider } from "@/lib/tanstack-query/provider"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
-const inter = Inter({
+const inter = Manrope({
   variable: "--font-inter-sans",
   subsets: ["latin"]
 })
