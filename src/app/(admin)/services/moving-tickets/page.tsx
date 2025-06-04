@@ -13,14 +13,14 @@ export const metadata: Metadata = {
 
 export default function MovingTicketsPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Quản lý đăng ký chuyển đồ">
         <Button size={"lg"} variant={"green"} className="my-[10px]">
           <Link
             href="/services/moving-tickets/add"
             className="flex items-center"
           >
-            <Plus className="mr-2 size-6" />
+            <Plus className="mr-2 size-5" />
             Thêm mới
           </Link>
         </Button>

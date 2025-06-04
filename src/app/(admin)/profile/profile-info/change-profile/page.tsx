@@ -89,7 +89,7 @@ const ChangeProfile = () => {
     alert("Thông tin đã được lưu thành công!")
   }
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title="Sửa thông tin tài khoản"
         backUrl="/profile/profile-info"

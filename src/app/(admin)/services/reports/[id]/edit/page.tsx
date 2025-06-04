@@ -12,7 +12,7 @@ export default function EditReportPage({
   const { id } = use(params);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Sửa phản ánh" backUrl={`/services/reports/${id}`} />
       <ReportForm reportId={id} isEdit />
     </div>

@@ -43,7 +43,7 @@ const ChangePassword = () => {
     alert("Thông tin đã được lưu thành công!")
   }
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Đổi mật khẩu" backUrl="/profile/profile-info">
         <Button
           className="flex items-center my-[10px]"

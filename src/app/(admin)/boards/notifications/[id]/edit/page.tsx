@@ -17,7 +17,7 @@ export default function EditNotificationPage({
   const { data: notification } = useNotification(id)
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>

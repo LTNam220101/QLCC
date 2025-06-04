@@ -18,7 +18,7 @@ const ProfileInfo = () => {
     push("/profile/change-password");
   };
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Thông tin tài khoản" backUrl="/">
         <Button className="flex items-center my-[10px]" onClick={changeProfile}>
           <Pencil />

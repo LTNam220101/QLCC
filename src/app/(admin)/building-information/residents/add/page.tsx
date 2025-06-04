@@ -81,7 +81,7 @@ export default function AddResidentPage() {
     form.formState.isSubmitting || addResidentMutation.isPending
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={<>Thêm mới cư dân</>}
         backUrl={`/building-information/residents`}

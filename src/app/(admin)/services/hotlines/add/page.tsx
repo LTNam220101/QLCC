@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AddHotlinePage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title={"Thêm mới hotline"} backUrl={`/services/hotlines`} />
       <HotlineForm />
     </div>

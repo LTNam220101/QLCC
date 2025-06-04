@@ -131,7 +131,7 @@ export default function EditResidentPage({
     form.formState.isSubmitting || updateResidentMutation.isPending
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>

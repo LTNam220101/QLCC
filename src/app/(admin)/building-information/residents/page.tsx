@@ -9,14 +9,14 @@ import { Plus } from "lucide-react";
 
 export default function ResidentsPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Quản lý cư dân">
         <Button size={"lg"} variant={"green"} className="my-[10px]">
           <Link
             href="/building-information/residents/add"
             className="flex items-center"
           >
-            <Plus className="mr-2 size-6" />
+            <Plus className="mr-2 size-5" />
             Thêm mới
           </Link>
         </Button>

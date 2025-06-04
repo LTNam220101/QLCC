@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AddReportPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={"Thêm mới phản ánh"}
         backUrl={`/services/reports`}

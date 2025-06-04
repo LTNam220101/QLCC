@@ -26,16 +26,15 @@ const buttonVariants = cva(
           "text-primary-foreground underline-offset-4 hover:underline bg-primary hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground"
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-11 rounded-md px-[15px] has-[>svg]:px-4",
-        xl: "h-[52px] rounded-md px-8 has-[>svg]:px-6 text-[22px]",
-        icon: "size-9"
+        sm: "h-8 rounded-lg gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-lg px-4 py-2 has-[>svg]:px-3",
+        xl: "h-[52px] rounded-lg px-8 has-[>svg]:px-6 text-[22px]",
+        icon: "size-8"
       }
     },
     defaultVariants: {
       variant: "default",
-      size: "default"
+      size: "lg"
     }
   }
 )

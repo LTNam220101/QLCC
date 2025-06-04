@@ -20,7 +20,7 @@ export default function ReportDetailPage({
   const { data: report } = useReport(id);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>

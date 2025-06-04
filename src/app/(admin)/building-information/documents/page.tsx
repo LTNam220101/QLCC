@@ -99,14 +99,14 @@ export default function ApartmentDocumentsPage() {
   }, [applyFilters]);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Quản lý tài liệu căn hộ">
         <Button size={"lg"} variant={"green"} className="my-[10px]">
           <Link
             href="/building-information/documents/add"
             className="flex items-center"
           >
-            <Plus className="mr-2 size-6" />
+            <Plus className="mr-2 size-5" />
             Thêm mới
           </Link>
         </Button>

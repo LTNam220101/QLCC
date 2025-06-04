@@ -21,11 +21,11 @@ const PageHeader = ({
   return (
     <>
       <div
-        className={cn("flex items-center h-[60px]", {
+        className={cn("flex items-center h-[56px] px-7 bg-white rounded-t-lg", {
           "justify-between": !!children,
         })}
       >
-        <div className="flex items-center font-medium text-lg">
+        <div className="flex items-center font-bold text-lg text-[#303438]">
           {!!backUrl && (
             <div
               className="mr-3 flex items-center font-normal text-sm text-[#666] cursor-pointer hover:text-[#3779F4]"
@@ -39,7 +39,6 @@ const PageHeader = ({
         </div>
         {children}
       </div>
-      <Separator className="bg-[#D9D9D9]" />
     </>
   );
 };

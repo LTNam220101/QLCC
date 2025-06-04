@@ -103,7 +103,8 @@ export function HotlineTable() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="mt-[22px] bg-white rounded-lg px-8 flex-1">
+      <div className="text-lg font-semibold text-[#303438] my-[16.5px]">Danh sách</div>
       <TableData<Hotline>
         datas={data?.data?.data}
         columns={columns}

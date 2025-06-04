@@ -12,14 +12,14 @@ export default function ApartmentsPage() {
   const { openDrawer } = useApartmentStore();
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={"Quản lý căn hộ"}
       >
         <div className="flex items-center gap-4">
           <Button
             variant="outline"
-            className="my-[10px] rounded-sm border-green text-green hover:text-green flex items-center gap-2"
+            className="my-[10px] border-green text-green hover:text-green flex items-center gap-2"
             onClick={() => openDrawer("import")}
           >
             <FileSpreadsheet className="h-4 w-4" />
@@ -27,7 +27,7 @@ export default function ApartmentsPage() {
           </Button>
           <Button
             variant="green"
-            className="my-[10px] rounded-sm flex items-center gap-2"
+            className="my-[10px] flex items-center gap-2"
             onClick={() => openDrawer("add")}
           >
             <Plus className="h-4 w-4" />

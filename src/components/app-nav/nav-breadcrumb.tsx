@@ -84,7 +84,7 @@ const NavBreadcrumb = () => {
     }
   })
   return (
-    <Breadcrumb className="ml-[14px] mt-[14px] mb-[10px]">
+    <Breadcrumb className="ml-5 my-5">
       <BreadcrumbList>
         <BreadcrumbItem className="hidden md:block">
           <BreadcrumbLink href="/">Trang chủ</BreadcrumbLink>

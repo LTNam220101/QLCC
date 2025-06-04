@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AddMovingTicketPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={"Thêm mới đăng ký chuyển đồ"}
         backUrl={`/services/moving-tickets`}

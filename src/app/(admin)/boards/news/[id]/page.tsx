@@ -20,7 +20,7 @@ export default function NewsDetailPage({
   const { data: news } = useNews(id)
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>

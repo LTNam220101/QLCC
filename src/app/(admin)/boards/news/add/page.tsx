@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AddNewsPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title={"Thêm mới bảng tin"} backUrl={`/boards/news`} />
       <NewsForm />
     </div>

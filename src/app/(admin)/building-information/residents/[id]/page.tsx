@@ -36,7 +36,7 @@ export default function ResidentDetailPage({
     );
   }
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>
@@ -63,7 +63,7 @@ export default function ResidentDetailPage({
       </PageHeader>
 
       {/* Thông tin chung */}
-      <div className="space-y-4 mt-5 mb-[30px]">
+      <div className="mt-[22px] bg-white rounded-lg px-8 flex-1 mb-[30px]">
         <h2 className="font-bold">Thông tin chung</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>

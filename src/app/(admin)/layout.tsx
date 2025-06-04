@@ -22,12 +22,12 @@ export default async function RootLayout({
       >
         <div className="flex flex-1 h-screen overflow-hidden">
           <AppSidebar />
-          <div className="flex-1 flex flex-col overflow-hidden bg-[#F4F3F6]">
+          <div className="flex-1 flex flex-col overflow-hidden bg-[#F8F8F8]">
             <header className="h-[98px] gap-2 bg-white flex items-center">
               <NavTrigger />
             </header>
             <NavBreadcrumb />
-            <main className="flex-1 mx-[15px] mb-[20px] bg-white px-5 overflow-auto">
+            <main className="flex-1 mx-5 mb-[20px] overflow-auto">
               {children}
             </main>
             <Toaster />

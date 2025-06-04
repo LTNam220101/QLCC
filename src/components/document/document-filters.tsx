@@ -41,7 +41,7 @@ export function DocumentFilters() {
   }, [applyFilters]);
 
   return (
-    <div className="flex space-x-[14px] mt-5 mb-4">
+    <div className="flex space-x-[14px] py-4 px-7 bg-white rounded-b-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
           <Label className="mb-2">Tên tài liệu căn hộ</Label>

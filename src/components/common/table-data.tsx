@@ -54,18 +54,18 @@ function TableData<T>({
   recordsTotal,
   filters,
   setFilter,
-  onClickRow = () => {}
+  onClickRow = () => { }
 }: ListingTableDataProps<T>) {
   const totalPages = Math.ceil((recordsTotal || 0) / filters.size)
   return (
     <>
-      <Table className="text-sm overflow-auto w-full table-auto border">
+      <Table className="text-sm overflow-auto w-full table-auto rounded-lg">
         <TableHeader>
-          <TableRow className="bg-[#FAFAFA] hover:bg-[#FAFAFA]">
+          <TableRow>
             {columns?.map((column, index) => (
               <TableHead
                 className={cn(
-                  "whitespace-nowrap last:rounded-tr-[4px] first:rounded-tl-[4px]",
+                  "whitespace-nowrap last:rounded-tr-lg first:rounded-tl-lg",
                   column?.textAlign,
                   column?.className
                 )}
@@ -79,57 +79,57 @@ function TableData<T>({
         <TableBody className="whitespace-nowrap">
           {isLoading
             ? Array.from({ length: 6 }).map((_, rowIndex) => (
-                <TableRow key={`skeleton-${rowIndex}`} className="border-b">
-                  {columns?.map((column, colIndex) => (
-                    <TableCell
-                      key={colIndex}
-                      className={cn(column?.textAlign, column.className, "h-1")}
-                    >
-                      <Skeleton className="h-[20px] w-[60%]" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              <TableRow key={`skeleton-${rowIndex}`} className="">
+                {columns?.map((column, colIndex) => (
+                  <TableCell
+                    key={colIndex}
+                    className={cn(column?.textAlign, column.className, "h-[50px]")}
+                  >
+                    <Skeleton className="h-[20px] w-[60%]" />
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
             : datas?.map((data, rowIndex) => (
-                <TableRow
-                  key={rowIndex}
-                  onClick={() => {
-                    onClickRow(rowIndex, data)
-                  }}
-                  className="border-b cursor-pointer"
-                >
-                  {columns?.map((column, colIndex) => {
-                    return (
-                      <TableCell
-                        key={`${rowIndex}${column.dataIndex}${colIndex}`}
-                        className={cn(
-                          column?.textAlign,
-                          column.className,
-                          "h-1 group-hover:bg-[#F4F4F4]"
-                        )}
-                      >
-                        {column.render
-                          ? column.render(data, rowIndex)
-                          : data?.[column.dataIndex] ?? "-"}
-                      </TableCell>
-                    )
-                  })}
-                </TableRow>
-              ))}
+              <TableRow
+                key={rowIndex}
+                onClick={() => {
+                  onClickRow(rowIndex, data)
+                }}
+                className=" cursor-pointer"
+              >
+                {columns?.map((column, colIndex) => {
+                  return (
+                    <TableCell
+                      key={`${rowIndex}${column.dataIndex}${colIndex}`}
+                      className={cn(
+                        column?.textAlign,
+                        column.className,
+                        "h-[50px] group-hover:bg-[#F4F4F4]"
+                      )}
+                    >
+                      {column.render
+                        ? column.render(data, rowIndex)
+                        : data?.[column.dataIndex] ?? "-"}
+                    </TableCell>
+                  )
+                })}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
       {/* Phân trang */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-500">
-          Tổng số {recordsTotal} bản ghi
-        </div>
+      <div className="flex items-center justify-between my-2">
         <div className="flex items-center gap-2">
+          <div className="text-sm text-[#79828B] font-semibold">
+            Tổng số {recordsTotal} bản ghi
+          </div>
           <div className="flex items-center">
             <Select
               value={filters?.size?.toString()}
               onValueChange={(value) => setFilter({ size: Number(value) })}
             >
-              <SelectTrigger className="w-[100px]">
+              <SelectTrigger className="w-[100px] p-2" size="sm">
                 <SelectValue placeholder={`${filters.size}/trang`} />
               </SelectTrigger>
               <SelectContent>
@@ -140,56 +140,55 @@ function TableData<T>({
               </SelectContent>
             </Select>
           </div>
+        </div>
+        <div className="flex items-center gap-1">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() => setFilter({ page: Math.max(filters.page - 1, 0) })}
+            disabled={filters.page === 0}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
 
           <div className="flex items-center gap-1">
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() => setFilter({ page: Math.max(filters.page-1, 0) })}
-              disabled={filters.page === 0}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
+            {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+              let pageNum = i
 
-            <div className="flex items-center gap-1">
-              {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
-                let pageNum = i
+              // Nếu có nhiều trang và đang ở trang sau
+              if (totalPages > 5 && filters.page > 3) {
+                pageNum = filters.page - 3 + i
 
-                // Nếu có nhiều trang và đang ở trang sau
-                if (totalPages > 5 && filters.page > 3) {
-                  pageNum = filters.page - 3 + i
-
-                  // Đảm bảo không vượt quá tổng số trang
-                  if (pageNum > totalPages) {
-                    pageNum = totalPages - (4 - i)
-                  }
+                // Đảm bảo không vượt quá tổng số trang
+                if (pageNum > totalPages) {
+                  pageNum = totalPages - (4 - i)
                 }
-
-                return (
-                  <Button
-                    key={i}
-                    variant={filters.page === pageNum ? "default" : "outline"}
-                    size="icon"
-                    onClick={() => setFilter({ page: pageNum })}
-                    className="w-8 h-8"
-                  >
-                    {pageNum + 1}
-                  </Button>
-                )
-              })}
-            </div>
-
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={() =>
-                setFilter({ page: Math.min(filters.page + 1, totalPages) })
               }
-              disabled={filters.page === totalPages || totalPages === 0}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
+
+              return (
+                <Button
+                  key={i}
+                  variant={filters.page === pageNum ? "default" : "outline"}
+                  size="icon"
+                  onClick={() => setFilter({ page: pageNum })}
+                  className="w-8 h-8"
+                >
+                  {pageNum + 1}
+                </Button>
+              )
+            })}
           </div>
+
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={() =>
+              setFilter({ page: Math.min(filters.page + 1, totalPages) })
+            }
+            disabled={filters.page === totalPages || totalPages === 0}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
         </div>
       </div>
     </>

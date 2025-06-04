@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AddNotificationPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title={"Thêm mới thông báo"} backUrl={`/boards/notifications`} />
       <NotificationForm />
     </div>

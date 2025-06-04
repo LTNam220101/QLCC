@@ -20,7 +20,7 @@ export default function MovingTicketDetailPage({
   const { data: movingTicket } = useMovingTicket(id);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>

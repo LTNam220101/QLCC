@@ -115,8 +115,8 @@ export function NotificationFilters() {
   }, [])
 
   return (
-    <div className="flex space-x-[14px] mt-5 mb-4">
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-[14px] gap-y-4">
+    <div className="flex space-x-[14px] py-4 px-7 bg-white rounded-b-lg">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-x-7 gap-y-3">
         {/* Tiêu đề thông báo */}
         <div>
           <Label className="mb-2">Tiêu đề thông báo</Label>

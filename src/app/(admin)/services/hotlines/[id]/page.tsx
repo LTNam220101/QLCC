@@ -18,7 +18,7 @@ export default function HotlineDetailPage({ params }: HotlineDetailPageProps) {
   const { data: hotline } = useHotline(id);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={
           <>

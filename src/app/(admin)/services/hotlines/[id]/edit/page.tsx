@@ -10,7 +10,7 @@ export default function EditHotlinePage({ params }: EditHotlinePageProps) {
   const { id } = use(params);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Sửa hotline" backUrl={`/services/hotlines/${id}`}/>
       <HotlineForm hotlineId={id} isEdit />
     </div>

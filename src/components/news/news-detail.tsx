@@ -31,7 +31,7 @@ export function NewsDetail({ newsId }: NewsDetailProps) {
 
   return (
     <>
-      <div className="space-y-4 mt-5 mb-[30px]">
+      <div className="mt-[22px] bg-white rounded-lg px-8 flex-1 mb-[30px]">
         <div className="grid md:grid-cols-2 gap-x-10 gap-y-4">
           <div>
             <InfoRow label="Tiêu đề" value={data?.data?.title} />

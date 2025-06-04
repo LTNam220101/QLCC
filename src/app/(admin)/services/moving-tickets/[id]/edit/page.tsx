@@ -12,7 +12,7 @@ export default function EditMovingTicketPage({
   const { id } = use(params);
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Sửa đăng ký chuyển đồ" backUrl={`/services/moving-tickets/${id}`} />
       <MovingTicketForm movingTicketId={id} isEdit />
     </div>

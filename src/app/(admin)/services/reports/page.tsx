@@ -13,14 +13,14 @@ export const metadata: Metadata = {
 
 export default function ReportsPage() {
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader title="Quản lý phản ánh">
         <Button size={"lg"} variant={"green"} className="my-[10px]">
           <Link
             href="/services/reports/add"
             className="flex items-center"
           >
-            <Plus className="mr-2 size-6" />
+            <Plus className="mr-2 size-5" />
             Thêm mới
           </Link>
         </Button>

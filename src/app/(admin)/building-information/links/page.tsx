@@ -12,7 +12,7 @@ export default function UserApartmentsPage() {
   const { openDrawer } = useUserApartmentStore();
 
   return (
-    <div>
+    <div className="flex flex-col h-full">
       <PageHeader
         title={"Quản lý căn hộ"}
       >
