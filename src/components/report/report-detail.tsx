@@ -53,7 +53,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
           </div>
         </div>
       </div>
-      <div className="space-y-4 mb-[30px]">
+      <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
@@ -82,7 +82,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
           </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 bg-white px-8 rounded-b-lg pb-4">
         <div className="flex items-center space-x-5">
           <h2 className="font-bold">Đánh giá</h2>
           <Rating

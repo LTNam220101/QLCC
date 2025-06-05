@@ -111,7 +111,7 @@ export default function DocumentDetailPage({
         <Button asChild className="bg-blue-600 hover:bg-blue-700">
           <Link href={`/building-information/documents/${document.id}/edit`}>
             <Edit className="h-4 w-4 mr-2" />
-            Sửa
+            Chỉnh sửa
           </Link>
         </Button>
       </div>

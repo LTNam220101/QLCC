@@ -2,6 +2,7 @@ export interface Hotline {
   hotlineId: string
   name: string
   hotline: string
+  buildingName: string
   buildingId: string
   note?: string
   status: number

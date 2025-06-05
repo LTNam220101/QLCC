@@ -13,7 +13,7 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
-import { Pencil } from "lucide-react"
+import Edit from "@/icons/edit.svg";
 import CalendarIcon from "@/icons/calendar.svg"
 import React from "react"
 import { Input } from "@/components/ui/input"
@@ -99,7 +99,7 @@ const ChangeProfile = () => {
           className="flex items-center my-[10px]"
           onClick={form.handleSubmit(onSubmit)}
         >
-          <Pencil />
+          <Edit />
           Lưu
         </Button>
       </PageHeader>

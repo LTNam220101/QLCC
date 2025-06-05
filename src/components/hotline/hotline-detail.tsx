@@ -42,7 +42,7 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
           </div>
           <div>
             <InfoRow label="Tên hiển thị" value={data?.data?.name} highlight />
-            <InfoRow label="Tòa nhà" value={data?.data?.buildingId} />
+            <InfoRow label="Tòa nhà" value={data?.data?.buildingName} />
           </div>
         </div>
       </div>

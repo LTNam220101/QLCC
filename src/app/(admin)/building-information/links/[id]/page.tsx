@@ -32,7 +32,7 @@ export default function UserApartmentDetailPage({
       >
         <Button className="my-[10px] rounded-md" onClick={handleEdit}>
           <Edit className="mr-2 size-5" />
-          Sửa
+          Chỉnh sửa
         </Button>
       </PageHeader>
       <UserApartmentDetail userApartmentId={id} />

@@ -1,23 +1,24 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { MovingTicketDetail } from "@/components/moving-ticket/moving-ticket-detail";
-import Edit from "@/icons/edit.svg";;
-import PageHeader from "@/components/common/page-header";
-import { use } from "react";
-import { Badge } from "@/components/ui/badge";
-import { useMovingTicket } from "@/lib/tanstack-query/moving-tickets/queries";
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { MovingTicketDetail } from "@/components/moving-ticket/moving-ticket-detail"
+import Edit from "@/icons/edit.svg"
+import PageHeader from "@/components/common/page-header"
+import { use } from "react"
+import { Badge } from "@/components/ui/badge"
+import { useMovingTicket } from "@/lib/tanstack-query/moving-tickets/queries"
+import { MovingStatus } from "../../../../../../types/moving-tickets"
 
 interface MovingTicketDetailPageProps {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }
 
 export default function MovingTicketDetailPage({
-  params,
+  params
 }: MovingTicketDetailPageProps) {
-  const { id } = use(params);
-  const { data: movingTicket } = useMovingTicket(id);
+  const { id } = use(params)
+  const { data: movingTicket } = useMovingTicket(id)
 
   return (
     <div className="flex flex-col h-full">
@@ -28,15 +29,13 @@ export default function MovingTicketDetailPage({
             {movingTicket?.data && (
               <Badge
                 variant={
-                  movingTicket?.data?.status === 1
-                    ? "green_outline"
-                    : "destructive_outline"
+                  `${
+                    MovingStatus?.[movingTicket?.data?.status]?.color
+                  }_outline` as any
                 }
-                className="ml-3"
+                className="ml-2"
               >
-                {movingTicket?.data?.status === 1
-                  ? "Đang hoạt động"
-                  : "Đã khóa"}
+                {MovingStatus?.[movingTicket?.data?.status]?.name}
               </Badge>
             )}
           </>
@@ -55,5 +54,5 @@ export default function MovingTicketDetailPage({
       </PageHeader>
       <MovingTicketDetail movingTicketId={id} />
     </div>
-  );
+  )
 }

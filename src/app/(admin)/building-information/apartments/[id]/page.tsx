@@ -6,7 +6,7 @@ import PageHeader from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { useApartmentStore } from "@/lib/store/use-apartment-store";
 import { useApartment } from "@/lib/tanstack-query/apartments/queries";
-import Edit from "@/icons/edit.svg";;
+import Edit from "@/icons/edit.svg";
 import { use } from "react";
 
 export default function ApartmentDetailPage({
@@ -32,7 +32,7 @@ export default function ApartmentDetailPage({
       >
         <Button className="my-[10px] rounded-md" onClick={handleEdit}>
           <Edit className="mr-2 size-5" />
-          Sửa
+          Chỉnh sửa
         </Button>
       </PageHeader>
       <ApartmentDetail apartmentId={id} />

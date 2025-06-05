@@ -6,6 +6,7 @@ import InfoRow from "../common/info-row";
 import { format } from "date-fns";
 import { vi } from "date-fns/locale";
 import { Rating, RatingValue } from "../ui/rating";
+import { TransferType } from "@/enum";
 
 interface MovingTicketDetailProps {
   movingTicketId: string;
@@ -36,7 +37,7 @@ export function MovingTicketDetail({
       <div className="space-y-4 pt-[22px] bg-white px-8 pb-[30px]">
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
-            <InfoRow label="Căn hộ" value={data?.data?.apartmentId} />
+            <InfoRow label="Căn hộ" value={data?.data?.apartmentName} />
             <InfoRow
               label="Mã đăng ký"
               value={data?.data?.ticketCode?.split("-")?.at(-1)}
@@ -58,7 +59,7 @@ export function MovingTicketDetail({
               }
               highlight
             />
-            <InfoRow label="Hình thức" value={data?.data?.transferType} />
+            <InfoRow label="Hình thức" value={TransferType?.[data?.data?.transferType]} />
             <InfoRow
               label="Nội dung xác nhận"
               value={data?.data?.evaluateContent}
@@ -66,7 +67,7 @@ export function MovingTicketDetail({
           </div>
         </div>
       </div>
-      <div className="space-y-4 mb-[30px]">
+      <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
@@ -95,7 +96,7 @@ export function MovingTicketDetail({
           </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 bg-white px-8 rounded-b-lg pb-4">
         <div className="flex items-center space-x-5">
           <h2 className="font-bold">Đánh giá</h2>
           <Rating

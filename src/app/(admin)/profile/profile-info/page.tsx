@@ -4,9 +4,10 @@ import PageHeader from "@/components/common/page-header";
 import DeleteAccountModal from "@/components/profile/delete-account-modal";
 import { Button } from "@/components/ui/button";
 import { useProfile } from "@/lib/tanstack-query/profiles/queries";
-import { KeyRound, Pencil } from "lucide-react";
+import Edit from "@/icons/edit.svg";
 import { useRouter } from "next/navigation";
 import React from "react";
+import Lock from "@/icons/lock.svg"
 
 const ProfileInfo = () => {
   const { push } = useRouter();
@@ -21,11 +22,11 @@ const ProfileInfo = () => {
     <div className="flex flex-col h-full">
       <PageHeader title="Thông tin tài khoản" backUrl="/">
         <Button className="flex items-center my-[10px]" onClick={changeProfile}>
-          <Pencil />
-          Sửa
+          <Edit />
+          Chỉnh sửa
         </Button>
       </PageHeader>
-      <div className="space-y-8 mt-5 my-20">
+      <div className="space-y-8 py-5 px-7 bg-white rounded-b-lg">
         <div className="space-y-4">
           <h2 className="text-lg font-bold">Thông tin chung</h2>
           <div className="grid md:grid-cols-2 gap-x-10">
@@ -44,7 +45,7 @@ const ProfileInfo = () => {
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-4 bg-white px-8 rounded-b-lg pb-4">
           <h2 className="text-lg font-bold">Thông tin khác</h2>
           <div className="grid md:grid-cols-2 gap-x-10">
             <div>
@@ -58,16 +59,16 @@ const ProfileInfo = () => {
           </div>
         </div>
 
-        <div className="flex flex-col w-[136px] gap-[30px] mt-[30px]">
-          <DeleteAccountModal />
+        <div className="flex w-[136px] gap-[30px] mt-[30px]">
           <Button
             variant="default"
-            className="bg-blue-600 hover:bg-blue-700 flex items-center gap-2 font-medium"
+            className="flex items-center gap-2 font-medium"
             onClick={changePassword}
           >
-            <KeyRound />
+            <Lock />
             Đổi mật khẩu
           </Button>
+          <DeleteAccountModal />
         </div>
       </div>
     </div>

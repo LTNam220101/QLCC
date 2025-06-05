@@ -356,7 +356,7 @@ export default function EditResidentPage({
             />
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-4 bg-white px-8 rounded-b-lg pb-4">
             <h2 className="font-bold">Thông tin khác</h2>
             <div className="grid md:grid-cols-2 gap-x-10">
               <div>

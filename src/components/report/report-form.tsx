@@ -29,7 +29,6 @@ import {
   useReport
 } from "@/lib/tanstack-query/reports/queries"
 import { toast } from "sonner"
-import { Check } from "lucide-react"
 import { ReportFormData } from "../../../types/reports"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 
