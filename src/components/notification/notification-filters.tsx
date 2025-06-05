@@ -202,6 +202,7 @@ export function NotificationFilters() {
                     "w-full justify-start text-left font-normal",
                     !sentTimeFrom && !sentTimeTo && "text-muted-foreground"
                   )}
+                  size="xl"
                 >
                   {sentTimeFrom ? format(sentTimeFrom, "dd/MM/yyyy") : "-"} -
                   {sentTimeTo ? format(sentTimeTo, "dd/MM/yyyy") : " -"}
@@ -244,6 +245,7 @@ export function NotificationFilters() {
                     "w-full justify-start text-left font-normal",
                     !createTimeFrom && !createTimeTo && "text-muted-foreground"
                   )}
+                  size="xl"
                 >
                   {createTimeFrom ? format(createTimeFrom, "dd/MM/yyyy") : "-"}{" "}
                   -{createTimeTo ? format(createTimeTo, "dd/MM/yyyy") : " -"}

@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import Link from "next/link";
-import { Edit } from "lucide-react";
+import Edit from "@/icons/edit.svg";
 import { Button } from "@/components/ui/button";
 import PageHeader from "@/components/common/page-header";
 import InfoRow from "@/components/common/info-row";
@@ -44,7 +44,7 @@ export default function ResidentDetailPage({
             {resident?.data?.status ? (
               <StatusBadge
                 status={resident?.data?.status}
-                className="ml-[14px]"
+                className="ml-2"
               />
             ) : null}
           </>
@@ -56,14 +56,14 @@ export default function ResidentDetailPage({
             href={`/building-information/residents/${id}/edit`}
             className="flex items-center"
           >
-            <Edit className="mr-2 size-4" />
-            Sửa
+            <Edit className="mr-2 size-5" />
+            Chỉnh sửa
           </Link>
         </Button>
       </PageHeader>
 
       {/* Thông tin chung */}
-      <div className="mt-[22px] bg-white rounded-lg px-8 flex-1 mb-[30px]">
+      <div className="space-y-4 pt-[22px] bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin chung</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
@@ -112,7 +112,7 @@ export default function ResidentDetailPage({
           </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>

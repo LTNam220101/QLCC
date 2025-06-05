@@ -73,8 +73,8 @@ export const generateData = ({
         <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="icon">
-                <EllipsisVertical className="h-4 w-4" color="#194FFF" />
+              <Button variant="ghost" size="icon">
+                <EllipsisVertical className="h-4 w-4" color="#303438" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

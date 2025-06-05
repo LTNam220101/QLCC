@@ -13,7 +13,8 @@ import {
   FormLabel,
   FormMessage
 } from "@/components/ui/form"
-import { Pencil, Calendar as CalendarIcon } from "lucide-react"
+import { Pencil } from "lucide-react"
+import CalendarIcon from "@/icons/calendar.svg"
 import React from "react"
 import { Input } from "@/components/ui/input"
 import {

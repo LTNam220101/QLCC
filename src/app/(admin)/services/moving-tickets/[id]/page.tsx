@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MovingTicketDetail } from "@/components/moving-ticket/moving-ticket-detail";
-import { Edit } from "lucide-react";
+import Edit from "@/icons/edit.svg";;
 import PageHeader from "@/components/common/page-header";
 import { use } from "react";
 import { Badge } from "@/components/ui/badge";
@@ -48,8 +48,8 @@ export default function MovingTicketDetailPage({
             href={`/services/moving-tickets/${id}/edit`}
             className="flex items-center"
           >
-            <Edit className="mr-2 size-4" />
-            Sửa
+            <Edit className="mr-2 size-5" />
+            Chỉnh sửa
           </Link>
         </Button>
       </PageHeader>

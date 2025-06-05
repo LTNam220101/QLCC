@@ -22,7 +22,7 @@ export default function UserApartmentsPage() {
             className="my-[10px] rounded-sm flex items-center gap-2"
             onClick={() => openDrawer("add")}
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="!h-4 !w-4" />
             Thêm mới
           </Button>
         </div>

@@ -29,7 +29,7 @@ import {
   useNews
 } from "@/lib/tanstack-query/news/queries"
 import { toast } from "sonner"
-import { Calendar, Check } from "lucide-react"
+import Calendar from "@/icons/calendar.svg"
 import { NewsFormData } from "../../../types/news"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { cn } from "@/lib/utils"
@@ -204,6 +204,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
+                        size="xl"
                         className={cn(
                           "w-full justify-start text-left font-normal",
                           !field.value && "text-muted-foreground"
@@ -239,7 +240,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                                     size="icon"
                                     variant={
                                       field.value &&
-                                      new Date(field.value).getHours() % 12 ===
+                                        new Date(field.value).getHours() % 12 ===
                                         hour % 12
                                         ? "black"
                                         : "transparent"
@@ -267,7 +268,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                                     size="icon"
                                     variant={
                                       field.value &&
-                                      new Date(field.value).getMinutes() ===
+                                        new Date(field.value).getMinutes() ===
                                         minute
                                         ? "black"
                                         : "transparent"
@@ -298,10 +299,10 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
                                   size="icon"
                                   variant={
                                     field.value &&
-                                    ((ampm === "AM" &&
-                                      new Date(field.value).getHours() < 12) ||
-                                      (ampm === "PM" &&
-                                        new Date(field.value).getHours() >= 12))
+                                      ((ampm === "AM" &&
+                                        new Date(field.value).getHours() < 12) ||
+                                        (ampm === "PM" &&
+                                          new Date(field.value).getHours() >= 12))
                                       ? "black"
                                       : "transparent"
                                   }
@@ -356,7 +357,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
               variant={"outline"}
               disabled={isSubmitting}
               type="button"
-              onClick={()=>{form?.reset()}}
+              onClick={() => { form?.reset() }}
             >
               Huỷ bỏ
             </Button>

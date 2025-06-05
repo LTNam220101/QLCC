@@ -30,7 +30,7 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
 
   return (
     <>
-      <div className="mt-[22px] bg-white rounded-lg px-8 flex-1 mb-[30px]">
+      <div className="space-y-4 pt-[22px] bg-white px-8 pb-[30px]">
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
             <InfoRow label="Số hotline" value={data?.data?.hotline} />
@@ -46,7 +46,7 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
           </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>

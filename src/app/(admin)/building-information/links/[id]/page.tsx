@@ -6,7 +6,7 @@ import PageHeader from "@/components/common/page-header";
 import { Button } from "@/components/ui/button";
 import { useUserApartmentStore } from "@/lib/store/use-user-apartment-store";
 import { useUserApartment } from "@/lib/tanstack-query/user-apartments/queries";
-import { Edit } from "lucide-react";
+import Edit from "@/icons/edit.svg";;
 import { use } from "react";
 
 export default function UserApartmentDetailPage({
@@ -31,7 +31,7 @@ export default function UserApartmentDetailPage({
         backUrl="/building-information/links"
       >
         <Button className="my-[10px] rounded-md" onClick={handleEdit}>
-          <Edit className="mr-2 size-4" />
+          <Edit className="mr-2 size-5" />
           Sửa
         </Button>
       </PageHeader>

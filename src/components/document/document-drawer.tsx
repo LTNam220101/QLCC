@@ -196,12 +196,12 @@ export function DocumentDrawer() {
     drawerType === "add"
       ? "Thêm mới tài liệu căn hộ"
       : drawerType === "edit"
-      ? "Sửa tài liệu căn hộ"
-      : drawerType === "view"
-      ? "Chi tiết tài liệu căn hộ"
-      : drawerType === "upload"
-      ? "Tải file lên"
-      : "Xem file";
+        ? "Sửa tài liệu căn hộ"
+        : drawerType === "view"
+          ? "Chi tiết tài liệu căn hộ"
+          : drawerType === "upload"
+            ? "Tải file lên"
+            : "Xem file";
 
   // Render nội dung drawer
   const renderDrawerContent = () => {
@@ -278,19 +278,20 @@ export function DocumentDrawer() {
                         "w-full justify-start text-left font-normal",
                         !field.value && "text-muted-foreground"
                       )}
+                      size="xl"
                     >
                       {field.value
                         ? format(field.value, "dd/MM/yyyy", { locale: vi })
                         : "Chọn ngày hiệu lực"}
-                        <CalendarIcon className="ml-auto h-4 w-4" />
+                      <CalendarIcon className="ml-auto h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <Calendar
                       mode="single"
-                        captionLayout="dropdown-buttons"
-                        fromYear={1960}
-                        toYear={2030}
+                      captionLayout="dropdown-buttons"
+                      fromYear={1960}
+                      toYear={2030}
                       selected={field.value}
                       onSelect={field.onChange}
                       locale={vi}
@@ -388,10 +389,10 @@ export function DocumentDrawer() {
                     <TableCell>
                       {selectedDocument
                         ? selectedDocument.files.filter(
-                            (f) => !removedFileIds.includes(f.id)
-                          ).length +
-                          index +
-                          1
+                          (f) => !removedFileIds.includes(f.id)
+                        ).length +
+                        index +
+                        1
                         : index + 1}
                     </TableCell>
                     <TableCell>{file.name}</TableCell>
@@ -450,15 +451,15 @@ export function DocumentDrawer() {
               selectedDocument.status === "active"
                 ? "bg-green-100 text-green-800"
                 : selectedDocument.status === "expired"
-                ? "bg-red-100 text-red-800"
-                : "bg-gray-100 text-gray-800"
+                  ? "bg-red-100 text-red-800"
+                  : "bg-gray-100 text-gray-800"
             }
           >
             {selectedDocument.status === "active"
               ? "Đang hiệu lực"
               : selectedDocument.status === "inactive"
-              ? "Chưa hiệu lực"
-              : "Hết hiệu lực"}
+                ? "Chưa hiệu lực"
+                : "Hết hiệu lực"}
           </Badge>
         </div>
 

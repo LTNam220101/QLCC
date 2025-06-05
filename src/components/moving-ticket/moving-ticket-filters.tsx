@@ -181,9 +181,10 @@ export function MovingTicketFilters() {
                   className={cn(
                     "w-full justify-start text-left font-normal",
                     !movingDayTimeFrom &&
-                      !movingDayTimeTo &&
-                      "text-muted-foreground"
+                    !movingDayTimeTo &&
+                    "text-muted-foreground"
                   )}
+                  size="xl"
                 >
                   {movingDayTimeFrom
                     ? format(movingDayTimeFrom, "dd/MM/yyyy")

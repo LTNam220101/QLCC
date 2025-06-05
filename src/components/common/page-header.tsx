@@ -1,8 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { MoveLeft } from "lucide-react";
 import React from "react";
-import { Separator } from "../ui/separator";
+import Arrow from "@/icons/arrow-up.svg";
 import { useRouter } from "next/navigation";
 
 const PageHeader = ({
@@ -23,16 +22,16 @@ const PageHeader = ({
       <div
         className={cn("flex items-center h-[56px] px-7 bg-white rounded-t-lg", {
           "justify-between": !!children,
-          'h-[60px]': !!backUrl
+          'h-[60px] pl-4': !!backUrl
         })}
       >
         <div className="flex items-center font-bold text-lg text-[#303438]">
           {!!backUrl && (
             <div
-              className="mr-3 flex items-center font-normal text-sm text-[#666] cursor-pointer hover:text-[#3779F4]"
+              className="mr-9 flex items-center font-medium text-green cursor-pointer"
               onClick={handleBack}
             >
-              <MoveLeft color="#3779F4" className="mr-2" />
+              <Arrow className="mr-2 [&_path]:stroke-green -rotate-90" />
               Quay lại
             </div>
           )}

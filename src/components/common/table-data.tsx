@@ -110,7 +110,7 @@ function TableData<T>({
                     >
                       {column.render
                         ? column.render(data, rowIndex)
-                        : data?.[column.dataIndex] ?? "-"}
+                        : data?.[column.dataIndex] ?? "---"}
                     </TableCell>
                   )
                 })}

@@ -30,7 +30,7 @@ import {
   useMovingTicket
 } from "@/lib/tanstack-query/moving-tickets/queries"
 import { toast } from "sonner"
-import { Calendar, Check } from "lucide-react"
+import Calendar from "@/icons/calendar.svg"
 import { MovingTicketFormData } from "../../../types/moving-tickets"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { cn } from "@/lib/utils"
@@ -166,6 +166,7 @@ export function MovingTicketForm({
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
+                        size="xl"
                         className={cn(
                           "w-full justify-start text-left font-normal",
                           !field.value && "text-muted-foreground"
@@ -325,7 +326,7 @@ export function MovingTicketForm({
               variant={"outline"}
               disabled={isSubmitting}
               type="button"
-              onClick={()=>{form?.reset()}}
+              onClick={() => { form?.reset() }}
             >
               Huỷ bỏ
             </Button>

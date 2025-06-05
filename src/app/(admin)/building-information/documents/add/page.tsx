@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ArrowLeft, Calendar, Check, Trash, Upload } from "lucide-react";
+import { ArrowLeft, Check, Trash, Upload } from "lucide-react";
+import Calendar from "@/icons/calendar.svg"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -132,8 +133,7 @@ export default function AddDocumentPage() {
             <span>Đang lưu...</span>
           ) : (
             <>
-              <Check className="h-4 w-4 mr-2" />
-              Lưu
+               lại
             </>
           )}
         </Button>
@@ -208,11 +208,12 @@ export default function AddDocumentPage() {
                           "w-full justify-start text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
+                        size="xl"
                       >
                         {field.value
                           ? format(field.value, "dd/MM/yyyy", { locale: vi })
                           : "Chọn ngày hiệu lực"}
-                          <Calendar className="ml-auto h-4 w-4" />
+                        <Calendar className="ml-auto h-4 w-4" />
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">

@@ -29,7 +29,7 @@ import {
   useNotification
 } from "@/lib/tanstack-query/notifications/queries"
 import { toast } from "sonner"
-import { Calendar, Check } from "lucide-react"
+import Calendar from "@/icons/calendar.svg"
 import { NotificationFormData } from "../../../types/notifications"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
@@ -262,11 +262,12 @@ export function NotificationForm({
                           "w-full justify-start text-left font-normal",
                           !field.value && "text-muted-foreground"
                         )}
+                        size="xl"
                       >
                         {field.value
                           ? format(field.value, "dd/MM/yyyy hh:mm aa", {
-                              locale: vi
-                            })
+                            locale: vi
+                          })
                           : null}
                         <Calendar className="ml-auto h-4 w-4" />
                       </Button>
@@ -295,7 +296,7 @@ export function NotificationForm({
                                     size="icon"
                                     variant={
                                       field.value &&
-                                      new Date(field.value).getHours() % 12 ===
+                                        new Date(field.value).getHours() % 12 ===
                                         hour % 12
                                         ? "black"
                                         : "transparent"
@@ -323,7 +324,7 @@ export function NotificationForm({
                                     size="icon"
                                     variant={
                                       field.value &&
-                                      new Date(field.value).getMinutes() ===
+                                        new Date(field.value).getMinutes() ===
                                         minute
                                         ? "black"
                                         : "transparent"
@@ -354,10 +355,10 @@ export function NotificationForm({
                                   size="icon"
                                   variant={
                                     field.value &&
-                                    ((ampm === "AM" &&
-                                      new Date(field.value).getHours() < 12) ||
-                                      (ampm === "PM" &&
-                                        new Date(field.value).getHours() >= 12))
+                                      ((ampm === "AM" &&
+                                        new Date(field.value).getHours() < 12) ||
+                                        (ampm === "PM" &&
+                                          new Date(field.value).getHours() >= 12))
                                       ? "black"
                                       : "transparent"
                                   }
@@ -412,7 +413,7 @@ export function NotificationForm({
               variant={"outline"}
               disabled={isSubmitting}
               type="button"
-              onClick={()=>{form?.reset()}}
+              onClick={() => { form?.reset() }}
             >
               Huỷ bỏ
             </Button>

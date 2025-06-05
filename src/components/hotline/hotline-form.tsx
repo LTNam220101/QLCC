@@ -234,7 +234,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
               variant={"outline"}
               disabled={isSubmitting}
               type="button"
-              onClick={()=>{form?.reset()}}
+              onClick={() => { form?.reset() }}
             >
               Huỷ bỏ
             </Button>
@@ -244,7 +244,6 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
             type="submit"
             disabled={isSubmitting}
           >
-            <Check className="size-4" />
             {isSubmitting ? "Đang xử lý..." : isEdit ? "Lưu lại" : "Lưu"}
           </Button>
         </div>

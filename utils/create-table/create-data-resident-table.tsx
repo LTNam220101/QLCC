@@ -55,7 +55,7 @@ export const generateData = ({
             size="icon"
             onClick={() => handleUpdateClick?.(resident, 4)}
           >
-            <LockKeyholeOpen className="h-6 w-6" color="blue" />
+            <LockKeyholeOpen className="!h-4 !w-4" color="green" />
           </Button>
         ) : null}
         {resident.status === 2 ? (
@@ -64,7 +64,7 @@ export const generateData = ({
             size="icon"
             onClick={() => handleUpdateClick?.(resident, 3)}
           >
-            <CheckCheck className="h-6 w-6" color="blue" />
+            <CheckCheck className="!h-4 !w-4" color="green" />
           </Button>
         ) : null}
         {[0, 1, 2]?.includes(resident.status) ? (
@@ -73,7 +73,7 @@ export const generateData = ({
             size="icon"
             onClick={() => handleDeleteClick?.(resident)}
           >
-            <Trash2 className="h-4 w-4" color="#FE0000" />
+            <Trash2 className="!h-4 !w-4" color="#FE0000" />
           </Button>
         ) : null}
 
@@ -83,7 +83,7 @@ export const generateData = ({
             size="icon"
             onClick={() => handleUpdateClick?.(resident, 0)}
           >
-            <LockKeyhole className="h-6 w-6" color="blue" />
+            <LockKeyhole className="!h-4 !w-4" color="green" />
           </Button>
         ) : null}
       </div>

@@ -142,9 +142,10 @@ export function ResidentFilters() {
                     className={cn(
                       "w-full justify-start text-left font-normal",
                       !createTimeFrom &&
-                        !createTimeTo &&
-                        "text-muted-foreground"
+                      !createTimeTo &&
+                      "text-muted-foreground"
                     )}
+                    size="xl"
                   >
                     {createTimeFrom
                       ? format(createTimeFrom, "dd/MM/yyyy")
@@ -183,7 +184,7 @@ export function ResidentFilters() {
         {/* Nút tìm kiếm và xóa bộ lọc */}
         <div className="flex gap-2 mt-[21px]">
           <Button size={"xl"} onClick={handleSearch} className="font-bold">
-          <Search className="h-6 w-6 [&>path]:stroke-white" /> Tìm kiếm
+            <Search className="h-6 w-6 [&>path]:stroke-white" /> Tìm kiếm
           </Button>
           <Button
             size={"xl"}

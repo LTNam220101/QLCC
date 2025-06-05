@@ -211,6 +211,7 @@ export function ReportFilters() {
                     "w-full justify-start text-left font-normal",
                     !createTimeFrom && !createTimeTo && "text-muted-foreground"
                   )}
+                  size="xl"
                 >
                   {createTimeFrom ? format(createTimeFrom, "dd/MM/yyyy") : "-"}{" "}
                   -{createTimeTo ? format(createTimeTo, "dd/MM/yyyy") : " -"}

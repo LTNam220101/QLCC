@@ -8,7 +8,8 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ArrowLeft, Calendar, Check, Eye, Trash, Upload } from "lucide-react";
+import { ArrowLeft, Check, Eye, Trash, Upload } from "lucide-react";
+import Calendar from "@/icons/calendar.svg"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -204,8 +205,7 @@ export default function EditDocumentPage({
             <span>Đang lưu...</span>
           ) : (
             <>
-              <Check className="h-4 w-4 mr-2" />
-              Lưu
+              Lưu lại
             </>
           )}
         </Button>
@@ -276,6 +276,7 @@ export default function EditDocumentPage({
                     <PopoverTrigger asChild>
                       <Button
                         variant="outline"
+                        size="xl"
                         className={cn(
                           "w-full justify-start text-left font-normal",
                           !field.value && "text-muted-foreground"

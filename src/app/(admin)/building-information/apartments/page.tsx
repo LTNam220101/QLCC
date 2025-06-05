@@ -1,6 +1,7 @@
 "use client";
 
-import { FileSpreadsheet, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
+import FileSpreadsheet from "@/icons/document-text.svg"
 import { Button } from "@/components/ui/button";
 import { ApartmentFilters } from "@/components/apartment/apartment-filters";
 import { ApartmentTable } from "@/components/apartment/apartment-table";
@@ -20,7 +21,7 @@ export default function ApartmentsPage() {
           <Button
             variant="outline"
             className="my-[10px] border-green text-green hover:text-green flex items-center gap-2"
-            onClick={() => openDrawer("import")}
+            onClick={() =>  ("import")}
           >
             <FileSpreadsheet className="h-4 w-4" />
             Thêm mới từ Excel
@@ -30,7 +31,7 @@ export default function ApartmentsPage() {
             className="my-[10px] flex items-center gap-2"
             onClick={() => openDrawer("add")}
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="!h-4 !w-4" />
             Thêm mới
           </Button>
         </div>

@@ -7,6 +7,7 @@ import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import FileUp from "@/icons/document-text.svg"
 import {
   Form,
   FormControl,
@@ -31,7 +32,7 @@ import {
 } from "@/components/ui/sheet"
 import { useApartmentStore } from "@/lib/store/use-apartment-store"
 import { toast } from "sonner"
-import { FileUp, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useRouter } from "next/navigation"
 import {
   useAddApartment,
@@ -293,10 +294,10 @@ function ImportExcelForm() {
       <div className="space-y-4 px-4">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-md font-medium">Hướng dẫn</h3>
+            <h3 className="text-lg text-[#303438] font-bold">Hướng dẫn thêm</h3>
             <Button
               variant="outline"
-              className="border-blue text-blue hover:text-blue"
+              className="border-green text-green hover:text-green"
               onClick={handleDownloadTemplate}
             >
               <FileUp />
@@ -365,7 +366,7 @@ function ImportExcelForm() {
                 </p>
                 <Button
                   variant="outline"
-                  className="mt-4 border-blue text-blue hover:text-blue"
+                  className="mt-4 border-green text-green hover:text-green"
                   onClick={() =>
                     document.getElementById("file-upload")?.click()
                   }

@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Calendar, Check } from "lucide-react"
+import { Check } from "lucide-react"
+import Calendar from "@/icons/calendar.svg"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -86,18 +87,28 @@ export default function AddResidentPage() {
         title={<>Thêm mới cư dân</>}
         backUrl={`/building-information/residents`}
       >
-        <Button
-          className="flex items-center my-[10px] rounded-md"
-          onClick={form.handleSubmit(onSubmit)}
-          disabled={isSubmitting}
-        >
-          <Check className="size-4" />
-          {isSubmitting ? "Đang xử lý..." : "Lưu"}
-        </Button>
+        <div className="flex items-center gap-3">
+          <Button
+            className="flex items-center my-[10px] text-green border-green"
+            onClick={() => form.reset()}
+            disabled={isSubmitting}
+            variant="outline"
+            type="button"
+          >
+            Huỷ bỏ
+          </Button>
+          <Button
+            className="flex items-center my-[10px]"
+            onClick={form.handleSubmit(onSubmit)}
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Đang xử lý..." : "Lưu lại"}
+          </Button>
+        </div>
       </PageHeader>
 
       <Form {...form}>
-        <form id="resident-form" className="space-y-4 my-[30px]">
+        <form id="resident-form" className="space-y-4 py-4 bg-white px-7">
           <h2 className="font-bold">Thông tin chung</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-4">
             <FormField
@@ -142,6 +153,7 @@ export default function AddResidentPage() {
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
+                          size="xl"
                           disabled={isSubmitting}
                           variant="outline"
                           className="w-full justify-start text-left font-normal"
@@ -213,6 +225,7 @@ export default function AddResidentPage() {
                     <Popover>
                       <PopoverTrigger asChild>
                         <Button
+                          size="xl"
                           disabled={isSubmitting}
                           variant="outline"
                           className="w-full justify-start text-left font-normal"

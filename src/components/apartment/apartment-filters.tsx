@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Search, Trash2, Calendar as CalendarComponent } from "lucide-react"
+import { Search, Trash2 } from "lucide-react"
+import CalendarComponent from "@/icons/calendar.svg"
 import { Button } from "@/components/ui/button"
 import { useApartmentStore } from "@/lib/store/use-apartment-store"
 import {
@@ -80,7 +81,7 @@ export function ApartmentFilters() {
 
   return (
     <div className="flex space-x-[14px] py-4 px-7 bg-white rounded-b-lg">
-      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-7 gap-y-3">
+      <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-x-7 gap-y-3">
         <div>
           <Label className="mb-2">Tòa nhà</Label>
           <Select
@@ -128,6 +129,7 @@ export function ApartmentFilters() {
                   "w-full justify-start text-left font-normal",
                   !createTimeFrom && !createTimeTo && "text-muted-foreground"
                 )}
+                size="xl"
               >
                 {createTimeFrom ? format(createTimeFrom, "dd/MM/yyyy") : "-"} -
                 {createTimeTo ? format(createTimeTo, "dd/MM/yyyy") : " -"}
@@ -147,7 +149,7 @@ export function ApartmentFilters() {
                     setFromDate(range?.from)
                   }
                   if (range?.to) {
-                    setToDate(new Date(range?.to?.getTime()+86399))
+                    setToDate(new Date(range?.to?.getTime() + 86399))
                   }
                 }}
                 disabled={(date) =>

@@ -31,13 +31,19 @@ export function NewsDetail({ newsId }: NewsDetailProps) {
 
   return (
     <>
-      <div className="mt-[22px] bg-white rounded-lg px-8 flex-1 mb-[30px]">
+      <div className="space-y-4 pt-[22px] bg-white px-8 pb-[30px]">
         <div className="grid md:grid-cols-2 gap-x-10 gap-y-4">
           <div>
             <InfoRow label="Tiêu đề" value={data?.data?.title} />
             <InfoRow
               label="Tòa nhà"
               value={data?.data?.buildingName || data?.data?.buildingId}
+            />
+            <InfoRow
+              label="Nội dung"
+              value={
+                <div dangerouslySetInnerHTML={{ __html: data?.data?.content }}></div>
+              }
             />
           </div>
           <div>
@@ -51,16 +57,9 @@ export function NewsDetail({ newsId }: NewsDetailProps) {
               }
             />
           </div>
-          <div className="col-span-2">
-            <Label className="mb-2 text-md">Nội dung</Label>
-            <div
-              dangerouslySetInnerHTML={{ __html: data?.data?.content }}
-              className="border-[#D9D9D9] bg-[#F5F5F5] border rounded p-3"
-            />
-          </div>
         </div>
       </div>
-      <div className="space-y-4">
+      <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>

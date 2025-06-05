@@ -245,6 +245,7 @@ export function UserApartmentFilters() {
                   "w-full justify-start text-left font-normal",
                   !createTimeFrom && !createTimeTo && "text-muted-foreground"
                 )}
+                size="xl"
               >
                 {createTimeFrom ? format(createTimeFrom, "dd/MM/yyyy") : "-"} -
                 {createTimeTo ? format(createTimeTo, "dd/MM/yyyy") : " -"}
@@ -264,7 +265,7 @@ export function UserApartmentFilters() {
                     setFromDate(range?.from)
                   }
                   if (range?.to) {
-                    setToDate(new Date(range?.to?.getTime()+86399))
+                    setToDate(new Date(range?.to?.getTime() + 86399))
                   }
                 }}
                 disabled={(date) =>

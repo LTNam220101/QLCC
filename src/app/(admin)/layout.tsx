@@ -16,7 +16,7 @@ export default async function RootLayout({
       <SidebarProvider
         style={{
           "--sidebar-width": "300px",
-          "--sidebar-width-icon": "40px",
+          "--sidebar-width-icon": "72px",
           "--sidebar-width-mobile": "20rem"
         }}
       >
