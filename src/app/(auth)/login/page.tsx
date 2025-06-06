@@ -71,8 +71,8 @@ export default function LoginPage() {
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-[#666] mb-2">Đăng nhập hệ thống</h1>
-        <h2 className="text-[28px] text-purple">
+        <h1 className="text-[#79828B] mb-2">Đăng nhập hệ thống</h1>
+        <h2 className="text-[28px] text-green font-semibold">
           Quản lý tòa nhà [Tên tòa nhà/Khu chung cư]
         </h2>
       </div>
@@ -108,7 +108,7 @@ export default function LoginPage() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tài khoản</FormLabel>
+                <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">Tài khoản</FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Số điện thoại hoặc email"
@@ -125,7 +125,7 @@ export default function LoginPage() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Mật khẩu</FormLabel>
+                <FormLabel className="after:content-['*'] after:text-red-500 after:ml-0.5">Mật khẩu</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <PasswordInput
@@ -140,12 +140,12 @@ export default function LoginPage() {
             )}
           />
           <div className="flex items-center justify-between mb-10">
-            <div className="flex items-center text-[#666]">
-              <Checkbox className="border-[#d9d9d9] mr-2" /> Nhớ cho lần sau
+            <div className="flex items-center text-[#666] font-semibold">
+              <Checkbox className="border-[#d9d9d9] mr-2" /> Ghi nhớ đăng nhập
             </div>
             <Link
               href="/forgot-password"
-              className="text-blue-600 hover:underline text-sm"
+              className="text-[#EF5F5F] hover:underline text-sm font-semibold"
             >
               Quên mật khẩu?
             </Link>
@@ -154,20 +154,20 @@ export default function LoginPage() {
           <Button
             type="submit"
             disabled={!form.formState.isValid || isSubmitting}
-            className="w-full"
+            className="w-full text-[16px]"
             size={"xl"}
-            variant={form.formState.isValid ? "purple" : "ghost"}
+            variant={form.formState.isValid ? "green" : "ghost"}
           >
             {isSubmitting ? "Đang xử lý..." : "Đăng Nhập"}
           </Button>
         </form>
       </Form>
 
-      <div className="text-start">
-        <span className="text-sm text-gray-600">Chưa có tài khoản? </span>
+      <div className="text-center text-[16px]">
+        <div className="text-[#79828B] font-semibold">Bạn chưa có tài khoản? </div>
         <Link
           href="/register"
-          className="text-blue-600 hover:underline text-sm"
+          className="text-green hover:underline font-semibold"
         >
           Đăng ký
         </Link>

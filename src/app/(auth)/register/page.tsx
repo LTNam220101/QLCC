@@ -194,8 +194,8 @@ export default function RegisterPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-[#666] mb-2">Đăng ký tài khoản</h1>
-        <h2 className="text-[28px] text-purple">
+        <h1 className="text-[#79828B] mb-2">Đăng ký tài khoản</h1>
+        <h2 className="text-[28px] text-green font-semibold">
           Quản lý tòa nhà [Tên tòa nhà/Khu chung cư]
         </h2>
       </div>
@@ -284,7 +284,7 @@ export default function RegisterPage() {
                     Tôi đã đọc và đồng ý với{" "}
                     <Link
                       href="/terms"
-                      className="text-blue-600 hover:underline"
+                      className="text-green hover:underline"
                     >
                       Điều khoản sử dụng
                     </Link>
@@ -297,18 +297,18 @@ export default function RegisterPage() {
 
           <Button
             type="submit"
-            className="w-full rounded-[3px]"
+            className="w-full rounded-[3px] text-[16px]"
             disabled={!form.formState.isValid || isSubmitting}
             size={"xl"}
-            variant={form.formState.isValid ? "purple" : "ghost"}
+            variant={form.formState.isValid ? "green" : "ghost"}
           >
             {isSubmitting ? "Đang xử lý..." : "Đăng Ký"}
           </Button>
         </form>
       </Form>
 
-      <div className="text-start -mt-1">
-        <Link href="/login" className="text-blue-600 hover:underline text-sm">
+      <div className="text-center -mt-1">
+        <Link href="/login" className="text-green hover:underline text-[16px] font-semibold">
           Đăng nhập
         </Link>
       </div>

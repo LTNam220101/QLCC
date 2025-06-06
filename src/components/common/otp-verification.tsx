@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { sendRequest } from "../../../utils/api"
+import { cn } from "@/lib/utils"
 
 interface OTPVerificationProps {
   phoneNumber: string
@@ -129,7 +130,7 @@ export function OTPVerification({
         url: "/auth/send-otp",
         body: {
           phoneNumber,
-          deviceId,
+          deviceId
         }
       })
 
@@ -186,10 +187,12 @@ export function OTPVerification({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-        <h2 className="text-xl font-bold text-center mb-4">XÁC THỰC MÃ OTP</h2>
+      <div className="bg-white rounded-lg py-[48.5px] px-10 w-full max-w-[500px] mx-4">
+        <h2 className="text-[28px] text-[#303438] font-bold text-center">
+          XÁC THỰC MÃ OTP
+        </h2>
 
-        <p className="text-center mb-6">
+        <p className="text-center text-[#303438] mb-8">
           Mã OTP đã được gửi qua số điện thoại:
           <br />
           <span className="font-medium">{maskedPhone}</span>
@@ -207,7 +210,12 @@ export function OTPVerification({
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
-              className="w-12 h-12 text-center text-xl font-bold"
+              className={cn(
+                `w-14 h-14 text-center !text-[28px] font-bold text-green`,
+                {
+                  "border-green": digit !== ""
+                }
+              )}
               autoFocus={index === 0}
             />
           ))}
@@ -218,12 +226,15 @@ export function OTPVerification({
 
         {/* Resend Section */}
         <div className="text-center mb-6">
-          <p className="text-sm text-gray-600 mb-2">Bạn chưa nhận được mã?</p>
+          <p className="text-[16px] text-[#303438] mb-2">
+            Bạn chưa nhận được mã?
+          </p>
 
           {canResend && !resendLimitReached ? (
             <Button
               variant="outline"
-              className="text-purple-600 border-purple-200 hover:bg-purple-50"
+              size="xl"
+              className="text-green border-none hover:text-green w-full"
               onClick={handleResendOTP}
             >
               Gửi lại OTP
@@ -243,18 +254,13 @@ export function OTPVerification({
 
         {/* Action Buttons */}
         <Button
-          className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded"
+          className="w-full text-white py-2 rounded"
           onClick={handleVerify}
+          size="xl"
           disabled={isVerifying || otp.some((digit) => digit === "")}
         >
           {isVerifying ? "Đang xác thực..." : "Xác nhận"}
         </Button>
-
-        {onCancel && (
-          <Button variant="ghost" className="w-full mt-2" onClick={onCancel}>
-            Hủy
-          </Button>
-        )}
       </div>
     </div>
   )
