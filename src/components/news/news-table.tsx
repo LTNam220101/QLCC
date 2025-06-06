@@ -20,9 +20,11 @@ import {
 } from "../ui/dialog"
 import { News } from "../../../types/news"
 import { useRouter } from "next/navigation"
+import { useProfile } from "@/lib/tanstack-query/profiles/queries"
 
 export function NewsTable() {
   const router = useRouter()
+  const { data: profile } = useProfile()
   const { filter, setFilter, resetFilter } = useNewsFilterStore()
   const { data, isLoading, isError, isRefetching } = useNewss(filter)
   const deleteNewsMutation = useDeleteNews()
@@ -44,12 +46,12 @@ export function NewsTable() {
       toast("Đã xảy ra lỗi khi xóa news")
     }
   }
-
   const columns = generateData({
+    profile: profile,
     startIndex: filter?.size * filter?.page || 0,
     handleDeleteClick: (news) => {
       setNewsToDelete(news)
-    }
+    },
   })
 
   // Render lỗi
@@ -85,7 +87,7 @@ export function NewsTable() {
         filters={filter}
         setFilter={setFilter}
         recordsTotal={data?.data?.recordsTotal}
-        onClickRow={(_, news)=>{
+        onClickRow={(_, news) => {
           router.push(`/boards/news/${news.newsId}`)
         }}
       />

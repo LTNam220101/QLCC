@@ -41,15 +41,17 @@ export default function NewsDetailPage({
         }
         backUrl="/boards/news"
       >
-        <Button className="my-[10px] rounded-md">
-          <Link
-            href={`/boards/news/${id}/edit`}
-            className="flex items-center"
-          >
-            <Edit className="mr-2 size-5" />
-            Chỉnh sửa
-          </Link>
-        </Button>
+        {news?.data?.status === 0 &&
+          <Button className="my-[10px] rounded-md">
+            <Link
+              href={`/boards/news/${id}/edit`}
+              className="flex items-center"
+            >
+              <Edit className="mr-2 size-5" />
+              Chỉnh sửa
+            </Link>
+          </Button>
+        }
       </PageHeader>
       <NewsDetail newsId={id} />
     </div>

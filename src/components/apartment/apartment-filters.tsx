@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Search, Trash2 } from "lucide-react"
+import Search from "@/icons/search-normal.svg"
+import Trash2 from "@/icons/trash.svg"
 import CalendarComponent from "@/icons/calendar.svg"
 import { Button } from "@/components/ui/button"
 import { useApartmentStore } from "@/lib/store/use-apartment-store"

@@ -34,6 +34,7 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
             <InfoRow label="Số hotline" value={data?.data?.hotline} />
+            <InfoRow label="Tòa nhà" value={data?.data?.buildingName} />
             <InfoRow
               className="col-span-2"
               label="Ghi chú"
@@ -42,7 +43,10 @@ export function HotlineDetail({ hotlineId }: HotlineDetailProps) {
           </div>
           <div>
             <InfoRow label="Tên hiển thị" value={data?.data?.name} highlight />
-            <InfoRow label="Tòa nhà" value={data?.data?.buildingName} />
+            <InfoRow label="Ngày hiệu lực" value={data?.data?.effectiveDate &&
+              format(new Date(data?.data?.effectiveDate), "dd/MM/yyyy", {
+                locale: vi,
+              })} highlight />
           </div>
         </div>
       </div>

@@ -4,8 +4,10 @@ export interface Hotline {
   hotline: string
   buildingName: string
   buildingId: string
+  buildingName?: string
   note?: string
   status: number
+  effectiveDate: number
   createTime: number
   createBy: string
   updateTime?: number
@@ -30,6 +32,7 @@ export interface HotlineFormData {
   buildingId: string
   note?: string
   status?: number
+  effectiveDate: number
 }
 
 export interface HotlinePaginatedResponse {

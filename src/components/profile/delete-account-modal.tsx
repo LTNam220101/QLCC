@@ -1,7 +1,7 @@
 import React from "react"
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog"
 import { Button } from "../ui/button"
-import { Router, Trash2 } from "lucide-react"
+import Trash2 from "@/icons/trash.svg"
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form"
 import { z } from "zod"
 import { useForm } from "react-hook-form"

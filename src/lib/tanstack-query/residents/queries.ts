@@ -19,10 +19,14 @@ const ResidentService = {
       const queryParams = {
         page: filters.page,
         size: filters.size,
-        ...(filters.statusList !== undefined && { statusList: filters.statusList }),
+        ...(filters.statusList !== undefined && {
+          statusList: filters.statusList,
+        }),
         ...(filters.fullName && { fullName: filters.fullName }),
         ...(filters.phoneNumber && { phoneNumber: filters.phoneNumber }),
-        ...(filters.identifyId !== undefined && { identifyId: filters.identifyId }),
+        ...(filters.identifyId !== undefined && {
+          identifyId: filters.identifyId,
+        }),
         ...(filters.createTimeFrom && {
           createTimeFrom: filters.createTimeFrom,
         }),
@@ -130,6 +134,40 @@ const ResidentService = {
       throw error;
     }
   },
+
+  // Kích hoạt nhiều cư dân
+  async activeResidents(ids: string[]): Promise<boolean> {
+    try {
+      // Gọi API sử dụng sendRequest
+      const response = await apiRequest<boolean>({
+        url: `/resident/active`,
+        method: "POST",
+        useCredentials: true,
+        body: ids,
+      });
+      return response;
+    } catch (error) {
+      console.error("Error fetching hotlines:", error);
+      throw error;
+    }
+  },
+
+  // Huỷ kích hoạt nhiều cư dân
+  async deActiveResidents(ids: string[]): Promise<boolean> {
+    try {
+      // Gọi API sử dụng sendRequest
+      const response = await apiRequest<boolean>({
+        url: `/resident/deactivate`,
+        method: "POST",
+        useCredentials: true,
+        body: ids,
+      });
+      return response;
+    } catch (error) {
+      console.error("Error fetching hotlines:", error);
+      throw error;
+    }
+  },
 };
 
 // Query keys
@@ -203,6 +241,42 @@ export function useDeleteResident() {
 
   return useMutation({
     mutationFn: (id: string) => ResidentService.deleteResident(id),
+    onSuccess: () => {
+      // Invalidate và refetch danh sách cư dân
+      queryClient.invalidateQueries({ queryKey: residentKeys.lists() });
+
+      toast("Đã xóa cư dân khỏi hệ thống");
+    },
+    onError: (error: any) => {
+      toast(error.message || "Có lỗi xảy ra khi xóa cư dân");
+    },
+  });
+}
+
+// Hook xóa cư dân
+export function useActiveResidents() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => ResidentService.activeResidents(ids),
+    onSuccess: () => {
+      // Invalidate và refetch danh sách cư dân
+      queryClient.invalidateQueries({ queryKey: residentKeys.lists() });
+
+      toast("Đã xóa cư dân khỏi hệ thống");
+    },
+    onError: (error: any) => {
+      toast(error.message || "Có lỗi xảy ra khi xóa cư dân");
+    },
+  });
+}
+
+// Hook xóa cư dân
+export function useDeActiveResidents() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (ids: string[]) => ResidentService.deActiveResidents(ids),
     onSuccess: () => {
       // Invalidate và refetch danh sách cư dân
       queryClient.invalidateQueries({ queryKey: residentKeys.lists() });

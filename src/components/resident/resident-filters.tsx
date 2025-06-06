@@ -14,7 +14,6 @@ import {
   SelectValue
 } from "@/components/ui/select"
 import { useResidentStore } from "@/lib/store/use-resident-store"
-import { Separator } from "../ui/separator"
 import { Label } from "../ui/label"
 import { ResidentStatus } from "../../../types/residents"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"

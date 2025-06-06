@@ -30,8 +30,13 @@ import {
   useHotline,
 } from "@/lib/tanstack-query/hotlines/queries";
 import { toast } from "sonner";
-import { Check } from "lucide-react";
 import { HotlineFormData } from "../../../types/hotlines";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import CalendarComponent from "@/icons/calendar.svg"
+import { format } from "date-fns";
+import { vi } from "date-fns/locale";
+import { cn } from "@/lib/utils";
 
 // Schema validation
 const formSchema = z.object({
@@ -41,6 +46,7 @@ const formSchema = z.object({
     .min(1, "Số hotline không được để trống")
     .regex(/^[0-9]+$/, "Số hotline chỉ được chứa số"),
   buildingId: z.string(),
+  effectiveDate: z.number().min(0, { message: "Ngày hiệu lực không được để trống" }),
   note: z.string().optional(),
   status: z.number().optional(),
 });
@@ -65,6 +71,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
       hotline: "",
       buildingId: "",
       note: "",
+      effectiveDate: undefined,
     },
   });
 
@@ -77,6 +84,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
         hotline: "",
         buildingId: "",
         note: "",
+        effectiveDate: undefined,
         ...draft,
       });
     } else if (isEdit && hotline) {
@@ -85,6 +93,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
         hotline: hotline.data?.hotline,
         buildingId: hotline.data?.buildingId,
         note: hotline.data?.note || "",
+        effectiveDate: hotline.data?.effectiveDate,
       });
     }
   }, [form, hotline, isEdit]);
@@ -98,6 +107,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
         buildingId: values.buildingId ?? "",
         note: values.note ?? "",
         status: values.status ?? 1,
+        effectiveDate: values.effectiveDate ?? undefined,
       };
 
       if (isEdit && hotlineId) {
@@ -115,14 +125,6 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
     }
   };
 
-  // Xử lý lưu tạm
-  const handleSaveDraft = () => {
-    const values = form.getValues();
-    // Lưu vào localStorage hoặc xử lý lưu tạm khác
-    localStorage.setItem("hotline-draft", JSON.stringify(values));
-    toast("Thông tin hotline đã được lưu tạm");
-  };
-
   // Loading state
   const isLoading = isLoadingBuildings || (isEdit && isLoadingHotline);
   const isSubmitting =
@@ -136,7 +138,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-6 pt-8 px-7 relative bg-white"
       >
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <FormField
             control={form.control}
             name="hotline"
@@ -196,6 +198,53 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="effectiveDate"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Ngày hiệu lực</FormLabel>
+                <FormControl>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                        size="xl"
+                      >
+                        {field.value ? format(field.value, "dd/MM/yyyy") : "-"}
+                        <CalendarComponent className="ml-auto h-4 w-4" />
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        captionLayout="dropdown-buttons"
+                        fromYear={1960}
+                        toYear={2030}
+                        locale={vi}
+                        selected={field.value ? new Date(field.value) : undefined}
+                        onSelect={(date) => {
+                          if (date) {
+                            field.onChange(date.getTime())
+                          }
+                        }}
+                        disabled={(date) =>
+                          date < new Date("1900-01-01")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
 
         <FormField
@@ -216,18 +265,7 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
           )}
         />
 
-        <div className="absolute -top-[80px] right-0 flex items-center justify-end space-x-2">
-          {!isEdit && (
-            <Button
-              type="button"
-              onClick={handleSaveDraft}
-              className="rounded-md"
-              disabled={isSubmitting}
-            >
-              <Check className="size-4" />
-              Lưu tạm
-            </Button>
-          )}
+        <div className="absolute -top-[60px] right-7 flex items-center justify-end space-x-2">
           {isEdit ? (
             <Button
               className="flex items-center my-[10px] border-green text-green"

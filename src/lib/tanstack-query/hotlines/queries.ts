@@ -101,6 +101,7 @@ const HotlineService = {
           buildingId: data?.buildingId,
           note: data?.note,
           status: data?.status,
+          effectiveDate: data?.effectiveDate,
         },
       });
       // Kiểm tra lỗi từ API (nếu có)

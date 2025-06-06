@@ -17,6 +17,8 @@ import {
   useUpdateResident,
   useResidents,
   useDeleteResident,
+  useActiveResidents,
+  useDeActiveResidents,
 } from "@/lib/tanstack-query/residents/queries";
 import { useState } from "react";
 import { Resident } from "../../../types/residents";
@@ -28,6 +30,9 @@ export function ResidentTable() {
   const { data, isLoading, isError, isRefetching } = useResidents(filters);
   const updateResidentMutation = useUpdateResident();
   const deleteResidentMutation = useDeleteResident();
+  const activeResidentsMutation = useActiveResidents();
+  const deActiveResidentsMutation = useDeActiveResidents();
+  const [selectedResidents, setSelectedResidents] = useState<string[]>([]);
 
   const [residentToUpdate, setResidentToUpdate] = useState<{
     resident: Resident;
@@ -78,10 +83,33 @@ export function ResidentTable() {
     }
   };
 
+  const handleActiveResidents = () => {
+    activeResidentsMutation.mutate(selectedResidents);
+  }
+
+  const handleDeActiveResidents = () => {
+    deActiveResidentsMutation.mutate(selectedResidents);
+  }
+
   const columns = generateData({
     startIndex: filters?.size * filters?.page || 0,
     handleDeleteClick,
     handleUpdateClick,
+    handleSelectAll: (checked) => {
+      if (checked || !checked && data?.data?.data && data?.data?.data?.length > selectedResidents?.length) {
+        setSelectedResidents(data?.data?.data?.map((r) => r.id) || [])
+      } else {
+        setSelectedResidents([])
+      }
+    },
+    handleSelect: (resident, checked) => {
+      if (checked) {
+        setSelectedResidents([...selectedResidents, resident.id])
+      } else {
+        setSelectedResidents(selectedResidents.filter((r) => r !== resident.id))
+      }
+    },
+    selectedResidents: selectedResidents
   });
 
   // Render lỗi
@@ -109,7 +137,16 @@ export function ResidentTable() {
 
   return (
     <div className="mt-[22px] bg-white rounded-lg px-8 flex-1">
-      <div className="text-lg font-semibold text-[#303438] my-[16.5px]">Danh sách</div>
+      <div className="flex justify-between items-center mt-4 mb-6">
+        <div className="flex gap-3 items-center">
+          <div className="text-lg font-semibold text-[#303438]">Danh sách</div>
+          <Button disabled={selectedResidents.length === 0} className="text-green border-green hover:text-green" variant="outline">Kết xuất</Button>
+        </div>
+        <div className="flex gap-3">
+          <Button disabled={selectedResidents.length === 0} className="text-green border-green hover:text-green" variant="outline" onClick={handleActiveResidents}>Kích hoạt</Button>
+          <Button disabled={selectedResidents.length === 0} className="text-red border-red hover:text-red" variant="outline" onClick={handleDeActiveResidents}>Huỷ kích hoạt</Button>
+        </div>
+      </div>
       {/* Danh sách cư dân */}
       <TableData<Resident>
         columns={columns}
