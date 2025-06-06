@@ -7,7 +7,7 @@ import Search from "@/icons/search-normal.svg";
 import { Input } from "../ui/input";
 import NavAvatar from "./nav-avatar";
 const NavTrigger = () => {
-  console.log(Search)
+
   return (
     <div className="flex items-center flex-1 justify-between ml-8 mr-[35px]">
       <div className="flex items-center gap-3">

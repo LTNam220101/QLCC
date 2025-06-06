@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -29,8 +29,13 @@ import {
   useReport
 } from "@/lib/tanstack-query/reports/queries"
 import { toast } from "sonner"
-import { ReportFormData } from "../../../types/reports"
+import {
+  FeedbackImage,
+  ReportFormData,
+  UploadedImage
+} from "../../../types/reports"
 import { useApartments } from "@/lib/tanstack-query/apartments/queries"
+import { ImageUpload } from "../ui/image-upload"
 
 // Schema validation
 const formSchema = z.object({
@@ -52,6 +57,8 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
   const { data: report, isLoading: isLoadingReport } = useReport(reportId)
   const createReportMutation = useCreateReport()
   const updateReportMutation = useUpdateReport(reportId)
+
+  const [images, setImages] = useState<(FeedbackImage | UploadedImage)[]>([])
 
   // Form
   const form = useForm<ReportFormData>({
@@ -90,7 +97,7 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
         note: report.data?.note || ""
       })
     }
-  }, [form, report, isEdit])
+  }, [form, report, isEdit, buildings, apartments])
 
   // Cập nhật form khi có dữ liệu apartments
   useEffect(() => {
@@ -121,6 +128,18 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
     } catch (error) {
       toast("Đã xảy ra lỗi, vui lòng thử lại")
     }
+  }
+
+  const handleImagesChange = (newImages: UploadedImage[]) => {
+    // Kết hợp ảnh đã có và ảnh mới upload
+    const existingImages = images.filter(
+      (img: FeedbackImage) => !("file" in img)
+    )
+    setImages([...existingImages, ...newImages])
+  }
+
+  const handleRemoveImage = (imageId: string) => {
+    setImages(images.filter((img: FeedbackImage) => img.id !== imageId))
   }
 
   // Loading state
@@ -232,6 +251,68 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
               </FormItem>
             )}
           />
+
+          <div className="col-span-2">
+            <h3 className="text-base font-medium mb-4">File đính kèm</h3>
+            {/* Hiển thị ảnh đã có */}
+            {images.filter((img: FeedbackImage) => !("file" in img)).length >
+              0 && (
+              <div className="mt-4">
+                <h4 className="text-sm font-medium mb-2">Ảnh đã tải lên</h4>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  {images
+                    .filter((img: FeedbackImage) => !("file" in img))
+                    .map((image: FeedbackImage) => (
+                      <div
+                        key={image.id}
+                        className="relative group rounded-lg overflow-hidden border border-gray-200"
+                      >
+                        <div className="aspect-square relative">
+                          <img
+                            src={image.url || "/placeholder.svg"}
+                            alt={image.name}
+                            className="object-cover w-full h-full"
+                          />
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="destructive"
+                            className="absolute top-2 right-2 h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => handleRemoveImage(image.id)}
+                          >
+                            <span className="sr-only">Xóa</span>
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="16"
+                              height="16"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            >
+                              <path d="M18 6 6 18"></path>
+                              <path d="m6 6 12 12"></path>
+                            </svg>
+                          </Button>
+                        </div>
+                        <div className="p-2">
+                          <p className="text-xs text-gray-600 truncate">
+                            {image.name}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+            <ImageUpload
+              onImagesChange={handleImagesChange}
+              maxImages={10}
+              maxFileSize={5}
+            />
+          </div>
         </div>
 
         <div className="absolute -top-[60px] right-7 flex items-center justify-end space-x-2">
@@ -241,7 +322,9 @@ export function ReportForm({ reportId, isEdit = false }: ReportFormProps) {
               variant={"outline"}
               disabled={isSubmitting}
               type="button"
-              onClick={()=>{form?.reset()}}
+              onClick={() => {
+                form?.reset()
+              }}
             >
               Huỷ bỏ
             </Button>

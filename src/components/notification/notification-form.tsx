@@ -119,7 +119,7 @@ export function NotificationForm({
         sentTime: notification.data?.sentTime
       })
     }
-  }, [form, notification, isEdit])
+  }, [form, notification, isEdit, buildings, apartments])
 
   // Cập nhật form khi có dữ liệu apartments
   useEffect(() => {

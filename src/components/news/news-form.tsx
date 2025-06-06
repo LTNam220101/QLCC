@@ -103,7 +103,7 @@ export function NewsForm({ newsId, isEdit = false }: NewsFormProps) {
         sentTime: news.data?.sentTime
       })
     }
-  }, [form, news, isEdit])
+  }, [form, news, isEdit, buildings])
   // Xử lý submit form
   const onSubmit = async (values: NewsFormData) => {
     try {

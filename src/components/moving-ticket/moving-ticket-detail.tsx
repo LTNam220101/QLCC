@@ -1,24 +1,26 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { useMovingTicket } from "@/lib/tanstack-query/moving-tickets/queries";
-import InfoRow from "../common/info-row";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { Rating, RatingValue } from "../ui/rating";
-import { TransferType } from "@/enum";
+import { Button } from "@/components/ui/button"
+import { useMovingTicket } from "@/lib/tanstack-query/moving-tickets/queries"
+import InfoRow from "../common/info-row"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { Rating, RatingValue } from "../ui/rating"
+import { TransferType } from "@/enum"
+import { ImageGallery } from "../ui/image-gallery"
 
 interface MovingTicketDetailProps {
-  movingTicketId: string;
+  movingTicketId: string
 }
 
 export function MovingTicketDetail({
-  movingTicketId,
+  movingTicketId
 }: MovingTicketDetailProps) {
-  const { data, isLoading, isError, isRefetching } = useMovingTicket(movingTicketId);
+  const { data, isLoading, isError, isRefetching } =
+    useMovingTicket(movingTicketId)
 
   if (isLoading) {
-    return <div className="container mx-auto p-4">Đang tải...</div>;
+    return <div className="container mx-auto p-4">Đang tải...</div>
   }
 
   if (isError || !data) {
@@ -29,7 +31,7 @@ export function MovingTicketDetail({
           <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -54,12 +56,15 @@ export function MovingTicketDetail({
               value={
                 data?.data?.movingDayTime &&
                 format(new Date(data?.data?.movingDayTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
               highlight
             />
-            <InfoRow label="Hình thức" value={TransferType?.[data?.data?.transferType]} />
+            <InfoRow
+              label="Hình thức"
+              value={TransferType?.[data?.data?.transferType]}
+            />
             <InfoRow
               label="Nội dung xác nhận"
               value={data?.data?.evaluateContent}
@@ -80,7 +85,7 @@ export function MovingTicketDetail({
               value={
                 data?.data?.createTime &&
                 format(new Date(data?.data?.createTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -89,7 +94,7 @@ export function MovingTicketDetail({
               value={
                 data?.data?.updateTime &&
                 format(new Date(data?.data?.updateTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -114,7 +119,17 @@ export function MovingTicketDetail({
           </div>
           <div></div>
         </div>
+        <ImageGallery
+          images={
+            data?.data?.evaluateImages?.map((image) => ({
+              id: image,
+              url: image,
+              alt: image,
+              name: image
+            })) || []
+          }
+        />
       </div>
     </>
-  );
+  )
 }

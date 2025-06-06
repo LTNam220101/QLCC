@@ -25,6 +25,7 @@ export interface MovingTicket {
   expectedTime: string
   evaluate?: number
   evaluateContent?: string
+  evaluateImages?: string[]
   transferType: number
   note?: string
   status: number

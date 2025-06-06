@@ -91,7 +91,7 @@ export function ApartmentDrawer() {
         note: ""
       })
     }
-  }, [selectedApartment, drawerType, form])
+  }, [selectedApartment, drawerType, form, buildings])
   // Xử lý submit form
   const onSubmit = async (values: ApartmentFormData) => {
     try {

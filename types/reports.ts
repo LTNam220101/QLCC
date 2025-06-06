@@ -12,6 +12,7 @@ export interface Report {
   reportId: string
   reportCode: string
   reportContent: string
+  reportImages?: string[]
   resultContent: string
   note?: string
   buildingId: string
@@ -27,6 +28,7 @@ export interface Report {
   updateBy?: string
   evaluate?: number
   evaluateContent?: string
+  evaluateImages?: string[]
 }
 
 export interface ReportFilter {
@@ -59,4 +61,26 @@ export interface ReportDetailResponse {
   data: Report
   status: string
   message: string
+}
+
+export interface FeedbackImage {
+  id: string
+  url: string
+  name: string
+}
+
+export interface FeedbackFormData {
+  buildingId: string
+  apartmentId: string
+  code: string
+  content: string
+  note: string
+  images: (FeedbackImage | UploadedImage)[]
+}
+
+export interface UploadedImage {
+  id: string
+  file: File
+  url: string
+  name: string
 }

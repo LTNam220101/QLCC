@@ -1,42 +1,46 @@
-"use client";
+"use client"
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
+import { useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import * as z from "zod"
+import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+  FormMessage
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
+  SelectValue
+} from "@/components/ui/select"
+import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
 import {
   useCreateHotline,
   useUpdateHotline,
-  useHotline,
-} from "@/lib/tanstack-query/hotlines/queries";
-import { toast } from "sonner";
-import { HotlineFormData } from "../../../types/hotlines";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+  useHotline
+} from "@/lib/tanstack-query/hotlines/queries"
+import { toast } from "sonner"
+import { HotlineFormData } from "../../../types/hotlines"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from "@/components/ui/popover"
+import { Calendar } from "@/components/ui/calendar"
 import CalendarComponent from "@/icons/calendar.svg"
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { cn } from "@/lib/utils";
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { cn } from "@/lib/utils"
 
 // Schema validation
 const formSchema = z.object({
@@ -46,23 +50,24 @@ const formSchema = z.object({
     .min(1, "Số hotline không được để trống")
     .regex(/^[0-9]+$/, "Số hotline chỉ được chứa số"),
   buildingId: z.string(),
-  effectiveDate: z.number().min(0, { message: "Ngày hiệu lực không được để trống" }),
+  effectiveDate: z
+    .number()
+    .min(0, { message: "Ngày hiệu lực không được để trống" }),
   note: z.string().optional(),
-  status: z.number().optional(),
-});
+  status: z.number().optional()
+})
 
 interface HotlineFormProps {
-  hotlineId?: string;
-  isEdit?: boolean;
+  hotlineId?: string
+  isEdit?: boolean
 }
 
 export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
-  const router = useRouter();
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings();
-  const { data: hotline, isLoading: isLoadingHotline } = useHotline(hotlineId);
-  const createHotlineMutation = useCreateHotline();
-  const updateHotlineMutation = useUpdateHotline(hotlineId);
-
+  const router = useRouter()
+  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
+  const { data: hotline, isLoading: isLoadingHotline } = useHotline(hotlineId)
+  const createHotlineMutation = useCreateHotline()
+  const updateHotlineMutation = useUpdateHotline(hotlineId)
   // Form
   const form = useForm<HotlineFormData>({
     resolver: zodResolver(formSchema),
@@ -71,32 +76,22 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
       hotline: "",
       buildingId: "",
       note: "",
-      effectiveDate: undefined,
-    },
-  });
+      effectiveDate: undefined
+    }
+  })
 
   // Cập nhật form khi có dữ liệu hotline
   useEffect(() => {
-    if (!isEdit) {
-      const draft = JSON.parse(localStorage.getItem("hotline-draft") || "{}");
-      form.reset({
-        name: "",
-        hotline: "",
-        buildingId: "",
-        note: "",
-        effectiveDate: undefined,
-        ...draft,
-      });
-    } else if (isEdit && hotline) {
+    if (isEdit && hotline) {
       form.reset({
         name: hotline.data?.name,
         hotline: hotline.data?.hotline,
         buildingId: hotline.data?.buildingId,
         note: hotline.data?.note || "",
-        effectiveDate: hotline.data?.effectiveDate,
-      });
+        effectiveDate: hotline.data?.effectiveDate
+      })
     }
-  }, [form, hotline, isEdit]);
+  }, [form, hotline, isEdit, buildings])
 
   // Xử lý submit form
   const onSubmit = async (values: HotlineFormData) => {
@@ -107,30 +102,30 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
         buildingId: values.buildingId ?? "",
         note: values.note ?? "",
         status: values.status ?? 1,
-        effectiveDate: values.effectiveDate ?? undefined,
-      };
+        effectiveDate: values.effectiveDate ?? undefined
+      }
 
       if (isEdit && hotlineId) {
-        await updateHotlineMutation.mutateAsync(data);
-        toast("Thông tin hotline đã được cập nhật");
-        router.push("/services/hotlines");
+        await updateHotlineMutation.mutateAsync(data)
+        toast("Thông tin hotline đã được cập nhật")
+        router.push("/services/hotlines")
       } else {
-        await createHotlineMutation.mutateAsync(data);
-        localStorage.removeItem("hotline-draft");
-        toast("Hotline mới đã được tạo");
-        router.push("/services/hotlines");
+        await createHotlineMutation.mutateAsync(data)
+        localStorage.removeItem("hotline-draft")
+        toast("Hotline mới đã được tạo")
+        router.push("/services/hotlines")
       }
     } catch (error) {
-      toast("Đã xảy ra lỗi, vui lòng thử lại");
+      toast("Đã xảy ra lỗi, vui lòng thử lại")
     }
-  };
+  }
 
   // Loading state
-  const isLoading = isLoadingBuildings || (isEdit && isLoadingHotline);
+  const isLoading = isLoadingBuildings || (isEdit && isLoadingHotline)
   const isSubmitting =
     form.formState.isSubmitting ||
     createHotlineMutation.isPending ||
-    updateHotlineMutation.isPending;
+    updateHotlineMutation.isPending
 
   return (
     <Form {...form}>
@@ -227,15 +222,15 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
                         fromYear={1960}
                         toYear={2030}
                         locale={vi}
-                        selected={field.value ? new Date(field.value) : undefined}
+                        selected={
+                          field.value ? new Date(field.value) : undefined
+                        }
                         onSelect={(date) => {
                           if (date) {
                             field.onChange(date.getTime())
                           }
                         }}
-                        disabled={(date) =>
-                          date < new Date("1900-01-01")
-                        }
+                        disabled={(date) => date < new Date("1900-01-01")}
                         initialFocus
                       />
                     </PopoverContent>
@@ -272,7 +267,9 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
               variant={"outline"}
               disabled={isSubmitting}
               type="button"
-              onClick={() => { form?.reset() }}
+              onClick={() => {
+                form?.reset()
+              }}
             >
               Huỷ bỏ
             </Button>
@@ -287,5 +284,5 @@ export function HotlineForm({ hotlineId, isEdit = false }: HotlineFormProps) {
         </div>
       </form>
     </Form>
-  );
+  )
 }

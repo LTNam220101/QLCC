@@ -33,6 +33,14 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
+  },
   reactStrictMode: false,
   eslint: {
     // Bỏ qua kiểm tra ESLint khi chạy `next build`

@@ -111,7 +111,7 @@ export function MovingTicketForm({
         note: movingTicket.data?.note || ""
       })
     }
-  }, [form, movingTicket, isEdit])
+  }, [form, movingTicket, isEdit, buildings, apartments])
   // Xử lý submit form
   const onSubmit = async (values: MovingTicketFormData) => {
     try {

@@ -15,10 +15,12 @@ import { UserApartmentStatus } from "../../types/user-apartments"
 
 export const generateData = ({
   startIndex,
-  handleUpdateClick
+  handleUpdateClick,
+  inDetail
 }: {
   startIndex: number
   handleUpdateClick?: (userApartment: UserApartment, status: number) => void
+  inDetail?: boolean
 }): Column<UserApartment>[] => [
   {
     dataIndex: "index",
@@ -91,10 +93,10 @@ export const generateData = ({
                     Phê duyệt
                   </DropdownMenuItem>
                   {/* <DropdownMenuItem
-                    onClick={() => handleUpdateClick?.(userApartment, -1)}
-                  >
-                    Từ chối
-                  </DropdownMenuItem> */}
+                      onClick={() => handleUpdateClick?.(userApartment, -1)}
+                    >
+                      Từ chối
+                    </DropdownMenuItem> */}
                 </>
               ) : null}
               {userApartment?.status === 1 ? (

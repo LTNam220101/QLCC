@@ -35,7 +35,6 @@ import { toast } from "sonner"
 import PageHeader from "@/components/common/page-header"
 import InfoRow from "@/components/common/info-row"
 import StatusBadge from "@/components/common/status-badge"
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries"
 import {
   useResident,
   useUpdateResident
@@ -69,7 +68,6 @@ export default function EditResidentPage({
   const router = useRouter()
   const { id } = use(params)
 
-  const { data: buildings, isLoading: isLoadingBuildings } = useBuildings()
   const { data: resident, isLoading: isLoadingResident } = useResident(id)
   const updateResidentMutation = useUpdateResident()
 
@@ -126,7 +124,7 @@ export default function EditResidentPage({
   }
 
   // Loading state
-  const isLoading = isLoadingBuildings || isLoadingResident
+  const isLoading = isLoadingResident
   const isSubmitting =
     form.formState.isSubmitting || updateResidentMutation.isPending
 

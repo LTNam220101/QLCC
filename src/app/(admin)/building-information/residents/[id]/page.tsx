@@ -1,28 +1,46 @@
-"use client";
+"use client"
 
-import { use } from "react";
-import Link from "next/link";
-import Edit from "@/icons/edit.svg";
-import { Button } from "@/components/ui/button";
-import PageHeader from "@/components/common/page-header";
-import InfoRow from "@/components/common/info-row";
-import StatusBadge from "@/components/common/status-badge";
-import { useResident } from "@/lib/tanstack-query/residents/queries";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { Gender } from "@/enum";
-import { useBuildings } from "@/lib/tanstack-query/buildings/queries";
+import { use, useState } from "react"
+import Link from "next/link"
+import Edit from "@/icons/edit.svg"
+import { Button } from "@/components/ui/button"
+import PageHeader from "@/components/common/page-header"
+import InfoRow from "@/components/common/info-row"
+import StatusBadge from "@/components/common/status-badge"
+import { useResident } from "@/lib/tanstack-query/residents/queries"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { Gender } from "@/enum"
+import TableData from "@/components/common/table-data"
+import { generateData } from "../../../../../../utils/create-table/create-data-user-apartment-table2"
+import { useUserApartments } from "@/lib/tanstack-query/user-apartments/queries"
+
 export default function ResidentDetailPage({
-  params,
+  params
 }: {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string }>
 }) {
-  const { id } = use(params);
-  const { data: buildings } = useBuildings();
-  const { data: resident, isLoading, isError, isRefetching } = useResident(id);
+  const { id } = use(params)
+  const { data: resident, isLoading, isError, isRefetching } = useResident(id)
+
+  const [filters, setFilters] = useState({
+    page: 0,
+    size: 10
+  })
+  const { data } = useUserApartments({
+    ...filters,
+    userPhone: resident?.data?.phoneNumber
+  })
+  const columns = generateData({
+    startIndex: 0
+  })
+
+  const setFilter = (arg0: Record<string, any>) => {
+    setFilters({ ...filters, ...arg0 })
+  }
 
   if (isLoading) {
-    return <div className="container mx-auto p-4">Đang tải...</div>;
+    return <div className="container mx-auto p-4">Đang tải...</div>
   }
 
   if (isError || !resident) {
@@ -33,7 +51,7 @@ export default function ResidentDetailPage({
           <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
-    );
+    )
   }
   return (
     <div className="flex flex-col h-full">
@@ -42,10 +60,7 @@ export default function ResidentDetailPage({
           <>
             Chi tiết cư dân
             {resident?.data?.status ? (
-              <StatusBadge
-                status={resident?.data?.status}
-                className="ml-2"
-              />
+              <StatusBadge status={resident?.data?.status} className="ml-2" />
             ) : null}
           </>
         }
@@ -63,7 +78,7 @@ export default function ResidentDetailPage({
       </PageHeader>
 
       {/* Thông tin chung */}
-      <div className="space-y-4 pt-[22px] bg-white px-8 pb-[30px]">
+      <div className="space-y-4 pt-[22px] bg-white px-8 pb-4">
         <h2 className="font-bold">Thông tin chung</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
           <div>
@@ -88,7 +103,7 @@ export default function ResidentDetailPage({
               value={
                 resident?.data?.dateOfBirth &&
                 format(new Date(resident?.data?.dateOfBirth), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -100,7 +115,7 @@ export default function ResidentDetailPage({
                   new Date(resident?.data?.identifyIssueDate),
                   "dd/MM/yyyy",
                   {
-                    locale: vi,
+                    locale: vi
                   }
                 )
               }
@@ -111,6 +126,17 @@ export default function ResidentDetailPage({
             />
           </div>
         </div>
+      </div>
+      <div className="space-y-4 bg-white px-8 pb-4">
+        <h2 className="font-bold">Danh sách căn hộ liên kết</h2>
+        <TableData
+          columns={columns}
+          datas={data?.data?.data}
+          isLoading={isLoading || isRefetching}
+          filters={filters}
+          setFilter={setFilter}
+          recordsTotal={data?.data?.recordsTotal}
+        />
       </div>
       <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
@@ -125,7 +151,7 @@ export default function ResidentDetailPage({
               value={
                 resident?.data?.createTime &&
                 format(new Date(resident?.data?.createTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -134,7 +160,7 @@ export default function ResidentDetailPage({
               value={
                 resident?.data?.updateTime &&
                 format(new Date(resident?.data?.updateTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -142,5 +168,5 @@ export default function ResidentDetailPage({
         </div>
       </div>
     </div>
-  );
+  )
 }

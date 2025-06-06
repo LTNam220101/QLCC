@@ -1,21 +1,21 @@
-"use client";
+"use client"
 
-import { Button } from "@/components/ui/button";
-import { useReport } from "@/lib/tanstack-query/reports/queries";
-import InfoRow from "../common/info-row";
-import { format } from "date-fns";
-import { vi } from "date-fns/locale";
-import { Rating, RatingValue } from "../ui/rating";
-
+import { Button } from "@/components/ui/button"
+import { useReport } from "@/lib/tanstack-query/reports/queries"
+import InfoRow from "../common/info-row"
+import { format } from "date-fns"
+import { vi } from "date-fns/locale"
+import { Rating, RatingValue } from "../ui/rating"
+import { ImageGallery } from "../ui/image-gallery"
 interface ReportDetailProps {
-  reportId: string;
+  reportId: string
 }
 
 export function ReportDetail({ reportId }: ReportDetailProps) {
-  const { data, isLoading, isError, isRefetching } = useReport(reportId);
+  const { data, isLoading, isError, isRefetching } = useReport(reportId)
 
   if (isLoading) {
-    return <div className="container mx-auto p-4">Đang tải...</div>;
+    return <div className="container mx-auto p-4">Đang tải...</div>
   }
 
   if (isError || !data) {
@@ -26,7 +26,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
           <Button onClick={() => window.location.reload()}>Tải lại</Button>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -53,6 +53,21 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
           </div>
         </div>
       </div>
+      {data?.data?.reportImages?.length ? (
+        <div className="space-y-4 bg-white px-8 pb-[30px]">
+          <h2 className="font-bold">Ảnh đính kèm</h2>
+          <ImageGallery
+            images={
+              data?.data?.reportImages?.map((image) => ({
+                id: image,
+                url: image,
+                alt: image,
+                name: image
+              })) || []
+            }
+          />
+        </div>
+      ) : null}
       <div className="space-y-4 bg-white px-8 pb-[30px]">
         <h2 className="font-bold">Thông tin khác</h2>
         <div className="grid md:grid-cols-2 gap-x-10">
@@ -66,7 +81,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
               value={
                 data?.data?.createTime &&
                 format(new Date(data?.data?.createTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -75,7 +90,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
               value={
                 data?.data?.updateTime &&
                 format(new Date(data?.data?.updateTime), "dd/MM/yyyy", {
-                  locale: vi,
+                  locale: vi
                 })
               }
             />
@@ -92,7 +107,7 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
           />
         </div>
         <div className="grid md:grid-cols-2 gap-x-10">
-          <div className="col-span-2">
+          <div className="col-span-1">
             <InfoRow
               label="Nội dung đánh giá"
               value={data?.data?.evaluateContent}
@@ -100,7 +115,17 @@ export function ReportDetail({ reportId }: ReportDetailProps) {
           </div>
           <div></div>
         </div>
+        <ImageGallery
+          images={
+            data?.data?.evaluateImages?.map((image) => ({
+              id: image,
+              url: image,
+              alt: image,
+              name: image
+            })) || []
+          }
+        />
       </div>
     </>
-  );
+  )
 }
